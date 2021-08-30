@@ -1,14 +1,17 @@
 import {
-    createStyles,
-    Grid,
-    makeStyles,
-    Theme,
-    Typography,
-    Paper,
-  } from "@material-ui/core";
-  import { useEffect, useState } from "react";
-  import { history } from "../../helper/history";
-  import GoogleLogin from "react-google-login";
+  createStyles,
+  Grid,
+  makeStyles,
+  Theme,
+  Typography,
+  Paper,
+} from "@material-ui/core";
+import {useState, useEffect} from 'react';
+import { history } from "../../helper/history";
+import GoogleLogin from "react-google-login";
+
+  import { gql, useQuery } from '@apollo/client';
+  import useGuideApi from "../../hooks/guidehooks"
   
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,12 +54,14 @@ import {
     const [res, setRes] = useState<any>();
     const [token, setToken] = useState<string>();
   
-    // const { loginPatient } = usePatientApi();
+    const { loginGuide } = useGuideApi();
   
-    // const { loading, error, data } = useQuery(loginPatient, {
-    //   variables: { loginPatientToken: token },
-    //   fetchPolicy: "network-only"
-    // });
+    const { loading, error, data } = useQuery(loginGuide, {
+      variables: { loginGuideToken: token },
+      fetchPolicy: "network-only"
+    });
+    
+    console.log(data);
   
     // useEffect(() => {
     //   if (!loading && res !== undefined && token !== undefined) {
