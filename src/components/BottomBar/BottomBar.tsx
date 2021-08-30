@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Grid, IconButton } from "@material-ui/core";
-import { Event, Help, History, Person, Queue } from "@material-ui/icons";
+import { Business, Event, Help, History, Person, Queue } from "@material-ui/icons";
 import { history } from "../../helper/history";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -70,6 +70,12 @@ function BottomBar({ page }: BottomBarProps) {
               onClick={() => history.push(`/history&=${accessToken}`)}
             >
               <History />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => history.push(`/hospital&information&=${accessToken}`)}
+            >
+              <Business />
             </IconButton>
             <IconButton
               color="inherit"
