@@ -55,6 +55,12 @@ import GoogleLogin from "react-google-login";
     const [token, setToken] = useState<string>();
   
     const { loginGuide } = useGuideApi();
+
+    const responseGoogle = async (response: any) => {
+      console.log(response);
+      setRes(response);
+      setToken(response.tokenId);
+    };
   
     const { loading, error, data } = useQuery(loginGuide, {
       variables: { loginGuideToken: token },
@@ -63,26 +69,19 @@ import GoogleLogin from "react-google-login";
     
     console.log(data);
   
-    // useEffect(() => {
-    //   if (!loading && res !== undefined && token !== undefined) {
-    //     console.log(data.loginPatient);
-    //     if (data) {
-    //       localStorage.setItem("_id", data.loginPatient._id);
-    //       localStorage.setItem("accessToken", res.accessToken);
-    //       history.push(`/profile&=${localStorage.getItem("accessToken")}`);
-    //     } else {
-    //       localStorage.setItem("token", res.tokenId);
-    //       localStorage.setItem("gmail", res.profileObj.email);
-    //       history.push("/register");
-    //     }
-    //   }
-    // }, [loading]);
-  
-    const responseGoogle = async (response: any) => {
-      console.log(response);
-      setRes(response);
-      setToken(response.tokenId);
-    };
+    useEffect(() => {
+      if (!loading && res !== undefined && token !== undefined) {
+        if (data) {
+          localStorage.setItem("_id", data.loginGuide._id);
+          localStorage.setItem("accessToken", res.accessToken);
+          history.push(`/profile&=${localStorage.getItem("accessToken")}`);
+        } else {
+          localStorage.setItem("token", res.tokenId);
+          localStorage.setItem("gmail", res.profileObj.email);
+          history.push("/register");
+        }
+      }
+    }, [loading]);
   
     return (
       <Grid
