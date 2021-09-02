@@ -66,7 +66,7 @@ import GoogleLogin from "react-google-login";
     // useEffect(() => {
     //   if (!loading && res !== undefined && token !== undefined) {
     //     console.log(data.loginPatient);
-    //     if (data.loginPatient !== null) {
+    //     if (data) {
     //       localStorage.setItem("_id", data.loginPatient._id);
     //       localStorage.setItem("accessToken", res.accessToken);
     //       history.push(`/profile&=${localStorage.getItem("accessToken")}`);
