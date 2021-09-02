@@ -241,7 +241,7 @@ function RegisterPage() {
                                                     </MenuItem>
                                                     <MenuItem value="male">ชาย</MenuItem>
                                                     <MenuItem value="female">หญิง</MenuItem>
-                                                    <MenuItem value="trangender">ทรานสเจนเดอร์</MenuItem>
+                                                    <MenuItem value="others">อื่น ๆ</MenuItem>
                                                     </Select>
                                                 </FormControl>
                                             </Grid>

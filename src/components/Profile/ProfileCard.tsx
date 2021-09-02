@@ -61,7 +61,7 @@ function ProfileCard({name, id, img} : ProfileCardProps){
                 </CardContent>
                 <Grid container justify="flex-end" className={classes.logout}>
                     <GoogleLogout
-                    clientId="907374215732-b5mgla300uqrmlvkq4gstaq0de9osef7.apps.googleusercontent.com"
+                    clientId="907374215732-jc7l3sk84f05vlsf9e23ceo674ek0sbe.apps.googleusercontent.com"
                     buttonText="Logout"
                     onLogoutSuccess={logout}
                     icon={false}

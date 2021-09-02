@@ -265,7 +265,7 @@ const [appointment, setAppointment] = useState<Appointment[]>([]);
             </>
           ) : page === "Register" ? (
             <GoogleLogout
-              clientId="907374215732-b5mgla300uqrmlvkq4gstaq0de9osef7.apps.googleusercontent.com"
+              clientId="907374215732-jc7l3sk84f05vlsf9e23ceo674ek0sbe.apps.googleusercontent.com"
               buttonText="Login"
               render={(renderProps) => (
                 <Button

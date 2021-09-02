@@ -68,12 +68,10 @@ import GoogleLogin from "react-google-login";
     //     console.log(data.loginPatient);
     //     if (data.loginPatient !== null) {
     //       localStorage.setItem("_id", data.loginPatient._id);
-    //       localStorage.setItem("role", data.loginPatient.Role);
     //       localStorage.setItem("accessToken", res.accessToken);
     //       history.push(`/profile&=${localStorage.getItem("accessToken")}`);
     //     } else {
     //       localStorage.setItem("token", res.tokenId);
-    //       localStorage.setItem("role", "customer");
     //       localStorage.setItem("gmail", res.profileObj.email);
     //       history.push("/register");
     //     }
@@ -117,7 +115,7 @@ import GoogleLogin from "react-google-login";
                   className={classes.google}
                 >
                   <GoogleLogin
-                    clientId="907374215732-b5mgla300uqrmlvkq4gstaq0de9osef7.apps.googleusercontent.com"
+                    clientId="907374215732-jc7l3sk84f05vlsf9e23ceo674ek0sbe.apps.googleusercontent.com"
                     buttonText="Sign in with Google"
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
