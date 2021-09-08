@@ -1,6 +1,21 @@
 import Appointment from "../../models/Appointment";
 import { history } from "../../helper/history";
-import { makeStyles, Theme, createStyles, AppBar, Toolbar, Typography, Popper, Fade, Paper, Divider, IconButton, Button } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  createStyles,
+  AppBar,
+  Toolbar,
+  Typography,
+  Popper,
+  Fade,
+  Paper,
+  Divider,
+  IconButton,
+  Button,
+  Grid,
+  CircularProgress,
+} from "@material-ui/core";
 import { ViewList } from "@material-ui/icons";
 import React, { useState } from "react";
 import { GoogleLogout } from "react-google-login";
@@ -12,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     bar: {
-      height: "7vh",
+      height: "10vh",
     },
     icon: {
       // marginRight: theme.spacing(2),
@@ -26,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     customer: {
       backgroundColor: "#508F7F",
-    }
+    },
   })
 );
 
@@ -49,141 +64,141 @@ function TopBar({ page }: TopBarProps) {
 
   const accessToken = localStorage.getItem("accessToken");
 
-//   const QUERY_ALL_APPOINTMENT = gql`
-//     query Query(
-//       $getAllAppointmentByPatientPatientId: ID!
-//     ) {
-//       getAllAppointmentByPatient(
-//         PatientId: $getAllAppointmentByPatientPatientId
-//       ) {
-//         _id
-//         AppointTime
-//         BeginTime
-//         EndTime
-//         PatientId {
-//           _id
-//           FirstName
-//           LastName
-//           Gender
-//           DOB
-//           PhoneNumber
-//           Email
-//           Avatar
-//           Role
-//         }
-//         GuideId {
-//           _id
-//           FirstName
-//           LastName
-//           Gender
-//           PhoneNumber
-//           Email
-//           IsValidated
-//           Avatar
-//           Role
-//         }
-//         DepId {
-//           _id
-//           Name
-//           BuildingId {
-//             _id
-//             Name
-//           }
-//           HospitalId {
-//             _id
-//             Name
-//           }
-//         }
-//         Review {
-//           Star
-//           Comment
-//         }
-//         Record {
-//           At
-//           Title
-//           Description
-//         }
-//         OpenLink
-//         Note
-//         CreatedAt
-//         UpdatedAt
-//       }
-//       getAllAppointmentByGuide(GuideId: $getAllAppointmentByGuideGuideId) {
-//         _id
-//         AppointTime
-//         BeginTime
-//         EndTime
-//         PatientId {
-//           _id
-//           FirstName
-//           LastName
-//           Gender
-//           DOB
-//           PhoneNumber
-//           Email
-//           Avatar
-//           Role
-//         }
-//         GuideId {
-//           _id
-//           FirstName
-//           LastName
-//           Gender
-//           PhoneNumber
-//           Email
-//           IsValidated
-//           Avatar
-//           Role
-//         }
-//         DepId {
-//           _id
-//           Name
-//           BuildingId {
-//             _id
-//             Name
-//           }
-//           HospitalId {
-//             _id
-//             Name
-//           }
-//         }
-//         Review {
-//           Star
-//           Comment
-//         }
-//         Record {
-//           At
-//           Title
-//           Description
-//         }
-//         OpenLink
-//         Note
-//         CreatedAt
-//         UpdatedAt
-//       }
-//     }
-//   `;
+  //   const QUERY_ALL_APPOINTMENT = gql`
+  //     query Query(
+  //       $getAllAppointmentByPatientPatientId: ID!
+  //     ) {
+  //       getAllAppointmentByPatient(
+  //         PatientId: $getAllAppointmentByPatientPatientId
+  //       ) {
+  //         _id
+  //         AppointTime
+  //         BeginTime
+  //         EndTime
+  //         PatientId {
+  //           _id
+  //           FirstName
+  //           LastName
+  //           Gender
+  //           DOB
+  //           PhoneNumber
+  //           Email
+  //           Avatar
+  //           Role
+  //         }
+  //         GuideId {
+  //           _id
+  //           FirstName
+  //           LastName
+  //           Gender
+  //           PhoneNumber
+  //           Email
+  //           IsValidated
+  //           Avatar
+  //           Role
+  //         }
+  //         DepId {
+  //           _id
+  //           Name
+  //           BuildingId {
+  //             _id
+  //             Name
+  //           }
+  //           HospitalId {
+  //             _id
+  //             Name
+  //           }
+  //         }
+  //         Review {
+  //           Star
+  //           Comment
+  //         }
+  //         Record {
+  //           At
+  //           Title
+  //           Description
+  //         }
+  //         OpenLink
+  //         Note
+  //         CreatedAt
+  //         UpdatedAt
+  //       }
+  //       getAllAppointmentByGuide(GuideId: $getAllAppointmentByGuideGuideId) {
+  //         _id
+  //         AppointTime
+  //         BeginTime
+  //         EndTime
+  //         PatientId {
+  //           _id
+  //           FirstName
+  //           LastName
+  //           Gender
+  //           DOB
+  //           PhoneNumber
+  //           Email
+  //           Avatar
+  //           Role
+  //         }
+  //         GuideId {
+  //           _id
+  //           FirstName
+  //           LastName
+  //           Gender
+  //           PhoneNumber
+  //           Email
+  //           IsValidated
+  //           Avatar
+  //           Role
+  //         }
+  //         DepId {
+  //           _id
+  //           Name
+  //           BuildingId {
+  //             _id
+  //             Name
+  //           }
+  //           HospitalId {
+  //             _id
+  //             Name
+  //           }
+  //         }
+  //         Review {
+  //           Star
+  //           Comment
+  //         }
+  //         Record {
+  //           At
+  //           Title
+  //           Description
+  //         }
+  //         OpenLink
+  //         Note
+  //         CreatedAt
+  //         UpdatedAt
+  //       }
+  //     }
+  //   `;
 
-//   const { loading, error, data } = useQuery(QUERY_ALL_APPOINTMENT, {
-//     variables: {
-//       getAllAppointmentByPatientPatientId: id,
-//       getAllAppointmentByGuideGuideId: id,
-//     },
-//   });
+  //   const { loading, error, data } = useQuery(QUERY_ALL_APPOINTMENT, {
+  //     variables: {
+  //       getAllAppointmentByPatientPatientId: id,
+  //       getAllAppointmentByGuideGuideId: id,
+  //     },
+  //   });
 
-//   const [appointment, setAppointment] = useState<any[]>(
-//     data !== undefined ? data.getAllAppointmentByPatient : []
-//   );
+  //   const [appointment, setAppointment] = useState<any[]>(
+  //     data !== undefined ? data.getAllAppointmentByPatient : []
+  //   );
 
-//   useEffect(() => {
-//     if (!loading) {
-//         console.log(data);
-//         setAppointment(data.getAllAppointmentByPatient);
-//     }
-//     console.log(error);
-//   }, [loading]);
+  //   useEffect(() => {
+  //     if (!loading) {
+  //         console.log(data);
+  //         setAppointment(data.getAllAppointmentByPatient);
+  //     }
+  //     console.log(error);
+  //   }, [loading]);
 
-const [appointment, setAppointment] = useState<Appointment[]>([]);
+  const [appointment, setAppointment] = useState<Appointment[]>([]);
 
   const logout = () => {
     localStorage.clear();
@@ -192,10 +207,7 @@ const [appointment, setAppointment] = useState<Appointment[]>([]);
 
   return (
     <div className={classes.root}>
-      <AppBar
-        position="fixed"
-        className={classes.customer}
-      >
+      <AppBar position="fixed" className={classes.customer}>
         <Toolbar className={classes.bar}>
           <Typography variant="h4" className={classes.title}>
             {page}
@@ -211,50 +223,63 @@ const [appointment, setAppointment] = useState<Appointment[]>([]);
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={350}>
                     <Paper className={classes.typography}>
-                      {appointment !== undefined &&
-                      appointment.find((a) => a.EndTime === null) ? (
-                        appointment
-                          ?.filter((a) => a.EndTime === null)
-                          .slice()
-                          .sort((a, b) => {
-                            return (
-                              new Date(a.AppointTime).getTime() -
-                              new Date(b.AppointTime).getTime()
-                            );
-                          })
-                          .map((a) => {
-                            return (
-                              <>
-                                <Typography>
-                                  {moment(new Date(a.AppointTime)).format(
-                                    "DD MMMM YYYY"
-                                  )}
-                                </Typography>
-                                <Divider />
-                                <Typography>
-                                  Hospital: {a.Hospital.Name}
-                                </Typography>
-                                <Typography>
-                                  Department: {a.Department.Name}
-                                </Typography>
-                                <Typography>
-                                  Time:{" "}
-                                  {moment(new Date(a.AppointTime)).format(
-                                    "HH:mm"
-                                  )}
-                                </Typography>
-                              </>
-                            );
-                          })
-                      ) : (
-                        <Typography
-                          align="center"
-                          variant="subtitle1"
-                          color="textSecondary"
+                      {/* {!loading ? ( */}
+                        <>
+                          {appointment !== undefined &&
+                          appointment.find((a) => a.EndTime === null) ? (
+                            appointment
+                              ?.filter((a) => a.EndTime === null)
+                              .slice()
+                              .sort((a, b) => {
+                                return (
+                                  new Date(a.AppointTime).getTime() -
+                                  new Date(b.AppointTime).getTime()
+                                );
+                              })
+                              .map((a) => {
+                                return (
+                                  <>
+                                    <Typography>
+                                      {moment(new Date(a.AppointTime)).format(
+                                        "DD MMMM YYYY"
+                                      )}
+                                    </Typography>
+                                    <Divider />
+                                    <Typography>
+                                      โรงพยาบาล: {a.Hospital.Name}
+                                    </Typography>
+                                    <Typography>
+                                      แผนก: {a.Department.Name}
+                                    </Typography>
+                                    <Typography>
+                                      เวลานัดหมาย:{" "}
+                                      {moment(new Date(a.AppointTime)).format(
+                                        "HH:mm"
+                                      )}
+                                    </Typography>
+                                  </>
+                                );
+                              })
+                          ) : (
+                            <Typography
+                              align="center"
+                              variant="subtitle1"
+                              color="textSecondary"
+                            >
+                              ไม่มีการนัดหมาย
+                            </Typography>
+                          )}
+                        </>
+                      {/* ) : (
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justify="center"
                         >
-                          No Appointment
-                        </Typography>
-                      )}
+                          <CircularProgress disableShrink />
+                        </Grid>
+                      )} */}
                     </Paper>
                   </Fade>
                 )}
@@ -263,7 +288,7 @@ const [appointment, setAppointment] = useState<Appointment[]>([]);
                 <ViewList />
               </IconButton>
             </>
-          ) : page === "Register" ? (
+          ) : page === "ลงทะเบียน" ? (
             <GoogleLogout
               clientId="907374215732-jc7l3sk84f05vlsf9e23ceo674ek0sbe.apps.googleusercontent.com"
               buttonText="Login"
@@ -273,14 +298,14 @@ const [appointment, setAppointment] = useState<Appointment[]>([]);
                   onClick={renderProps.onClick}
                   className={classes.icon}
                 >
-                  login
+                  ลงชื่อเข้าระบบ
                 </Button>
               )}
               onLogoutSuccess={logout}
               icon={false}
             ></GoogleLogout>
           ) : (
-              <></>
+            <></>
           )}
         </Toolbar>
       </AppBar>

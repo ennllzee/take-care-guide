@@ -374,33 +374,6 @@ function ProfilePage() {
                       </Grid>
                     </Grid>
                   </div>
-                  {/* {role === "customer" && ( */}
-                    <div className={classes.margin}>
-                      <Grid
-                        container
-                        spacing={2}
-                        justify="center"
-                        alignItems="flex-end"
-                      >
-                        <Grid item>
-                          <Phone />
-                        </Grid>
-                        <Grid item xs={10}>
-                          <TextField
-                            id="input-with-icon-grid"
-                            label="เบอร์ติดต่อกรณีฉุกเฉิน"
-                            fullWidth={true}
-                            value={emerNum}
-                            onChange={(e) => setEmerNum(e.target.value)}
-                            InputProps={{
-                              readOnly: !edit,
-                            }}
-                            type="text"
-                          />
-                        </Grid>
-                      </Grid>
-                    </div>
-                  {/* )} */}
                   <br />
                   <Grid
                     container
