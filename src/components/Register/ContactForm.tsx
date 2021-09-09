@@ -109,7 +109,7 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
         Email: email,
         ContactAddress: address,
       });
-      setStep(4);
+      setStep(5);
     }
   };
 
