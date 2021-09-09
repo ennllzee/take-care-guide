@@ -20,7 +20,6 @@ interface GuideForm {
     IdCard?: string
     FaceWithIdCard?: any
     Avatar?: any
-    CongenitalDisorders?: string
     Token: string | null
 }
 

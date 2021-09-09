@@ -54,7 +54,7 @@ import GoogleLogin from "react-google-login";
     const [res, setRes] = useState<any>();
     const [token, setToken] = useState<string>();
   
-    const { loginGuide } = useGuideApi();
+    const { LOGIN_GUIDE } = useGuideApi();
 
     const responseGoogle = async (response: any) => {
       console.log(response);
@@ -62,7 +62,7 @@ import GoogleLogin from "react-google-login";
       setToken(response.tokenId);
     };
   
-    const { loading, error, data } = useQuery(loginGuide, {
+    const { loading, error, data } = useQuery(LOGIN_GUIDE, {
       variables: { loginGuideToken: token },
       fetchPolicy: "network-only"
     });

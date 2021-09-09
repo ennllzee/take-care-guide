@@ -38,6 +38,7 @@ import RegisterSubmit from "./RegisterSubmit";
 import { gql, useMutation } from "@apollo/client";
 import EducationForm from "./EducationForm";
 import WorkForm from "./WorkForm";
+import useGuideApi from "../../hooks/guidehooks";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -80,9 +81,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RegisterPage() {
   const classes = useStyles();
-  // const [username,setUsername] = useState<string>()
-  // const [password,setPassword] = useState<string>()
-  // const [confirmedPassword,setConfirmedPassword] = useState<string>()
 
   const accessToken = localStorage.getItem("accessToken");
   const gmail = localStorage.getItem("gmail");
@@ -112,17 +110,18 @@ function RegisterPage() {
 
   const [submit, setSubmit] = useState<boolean>(false);
 
-  // const { SIGNUP_GUIDE } = useGuideApi();
+  const { SIGNUP_GUIDE } = useGuideApi();
 
-  // const [
-  //   createCustomer,
-  //   { data: mutationData, loading: mutationLoading, error: mutationError },
-  // ] = useMutation(SIGNUP_GUIDE);
+  const [
+    createGuide,
+    { data: mutationData, loading: mutationLoading, error: mutationError },
+  ] = useMutation(SIGNUP_GUIDE);
 
   //NEEDED BACKEND
   const onSubmit = async () => {
     console.log(user);
-    // await createGuide({ variables: { createdGuideInput: { ...user } } });
+    await createGuide({ variables: { createdGuideInput: { ...user } } });
+    
     signOut();
   };
 

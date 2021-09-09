@@ -61,9 +61,7 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
   const [lastName, setLastName] = useState<string | undefined>(user.LastName);
   const [dob, setDOB] = useState<string | undefined>(user.DOB);
   const [address, setAddress] = useState<string | undefined>(user.Address);
-  const [disorder, setDisorder] = useState<string | undefined>(
-    user.CongenitalDisorders
-  );
+
   const [gender, setGender] = useState<string | undefined>(user.Gender);
   //   const [imgName, setImgName] = useState<any | undefined>(user.FirstName);
   const [baseImage, setBaseImage] = useState<any | undefined>(user.Avatar);
@@ -104,7 +102,6 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
         Gender: gender,
         DOB: dob,
         Address: address,
-        CongenitalDisorders: disorder,
         Avatar: baseImage,
       });
       setStep(2);
@@ -318,23 +315,6 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
                 onChange={(e) => setAddress(e.target.value)}
                 type="text"
                 required
-              />
-            </Grid>
-          </Grid>
-        </div>
-        <div className={classes.margin}>
-          <Grid container spacing={2} justify="center" alignItems="flex-end">
-            <Grid item>
-              <Healing />
-            </Grid>
-            <Grid item xs={10}>
-              <TextField
-                id="input-with-icon-grid"
-                label="โรคประจำตัว (ตัวเลือก)"
-                fullWidth={true}
-                value={disorder}
-                onChange={(e) => setDisorder(e.target.value)}
-                type="text"
               />
             </Grid>
           </Grid>

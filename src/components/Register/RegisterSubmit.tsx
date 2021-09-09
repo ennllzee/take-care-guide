@@ -258,29 +258,6 @@ function RegisterSubmit({
         <div className={classes.margin}>
           <Grid container spacing={2} justify="center" alignItems="flex-end">
             <Grid item>
-              <Healing />
-            </Grid>
-            <Grid item xs={10}>
-              <TextField
-                id="input-with-icon-grid"
-                label="โรคประจำตัว"
-                fullWidth={true}
-                value={
-                  user.CongenitalDisorders !== undefined
-                    ? user.CongenitalDisorders
-                    : "-"
-                }
-                type="text"
-                inputProps={{
-                  readOnly: true,
-                }}
-              />
-            </Grid>
-          </Grid>
-        </div>
-        <div className={classes.margin}>
-          <Grid container spacing={2} justify="center" alignItems="flex-end">
-            <Grid item>
               <Book />
             </Grid>
             <Grid item xs={10}>

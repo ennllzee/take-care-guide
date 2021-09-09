@@ -1,9 +1,8 @@
 import { gql, useQuery, useMutation } from "@apollo/client";
 
 const useGuideApi = () => {
-
-  const getSingleGuide = gql`
-    query Query($getGuideId: ID!) {
+  const GET_SINGLE_GUIDE = gql`
+    query GET_SINGLE_GUIDE($getGuideId: ID!) {
       getGuide(_id: $getGuideId) {
         _id
         FirstName
@@ -42,8 +41,8 @@ const useGuideApi = () => {
     }
   `;
 
-  const createGuide = gql`
-    mutation CreatedGuideMutation($createdGuideInput: GuideSigninInput!) {
+  const SIGNUP_GUIDE = gql`
+    mutation SIGNUP_GUIDE($createdGuideInput: GuideSigninInput!) {
       createdGuide(input: $createdGuideInput) {
         _id
         FirstName
@@ -54,7 +53,6 @@ const useGuideApi = () => {
         ContactAddress
         PhoneNumber
         Email
-        IsValidated
         Education {
           Degree
           Acadamy
@@ -63,7 +61,6 @@ const useGuideApi = () => {
         WorkExp {
           JobTitle
           WorkPlace
-          JobPosition
         }
         LangSkill {
           Languages
@@ -71,19 +68,23 @@ const useGuideApi = () => {
         }
         IdCard
         FaceWithIdCard
-        ValidatedDate
         GoogleId
         Avatar
-        CongenitalDisorders
         Role
         CreatedAt
         UpdatedAt
+        IsVerified
+        VerifyDate
+        Status {
+          Tag
+          Details
+        }
       }
     }
   `;
 
-  const updateGuide = gql`
-    mutation UpdateGuideMutation(
+  const UPDATE_GUIDE = gql`
+    mutation UPDATE_GUIDE(
       $updateGuideId: ID!
       $updateGuideInput: GuideUpdateInput!
     ) {
@@ -125,8 +126,8 @@ const useGuideApi = () => {
     }
   `;
 
-  const deleteGuide = gql`
-    mutation DeleteGuideMutation($deleteGuideId: ID!) {
+  const DELETE_GUIDE = gql`
+    mutation DELETE_GUIDE($deleteGuideId: ID!) {
       deleteGuide(_id: $deleteGuideId) {
         _id
         FirstName
@@ -165,8 +166,8 @@ const useGuideApi = () => {
     }
   `;
 
-  const loginGuide = gql`
-    query Login($loginGuideToken: String!) {
+  const LOGIN_GUIDE = gql`
+    query LOGIN_GUIDE($loginGuideToken: String!) {
       loginGuide(Token: $loginGuideToken) {
         _id
         FirstName
@@ -206,11 +207,11 @@ const useGuideApi = () => {
   `;
 
   return {
-    getSingleGuide,
-    createGuide,
-    updateGuide,
-    deleteGuide,
-    loginGuide,
+    GET_SINGLE_GUIDE,
+    SIGNUP_GUIDE,
+    UPDATE_GUIDE,
+    DELETE_GUIDE,
+    LOGIN_GUIDE,
   };
 };
 
