@@ -51,9 +51,10 @@ interface ProfileFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
+  setNext: any
 }
 
-function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
+function ProfileForm({ user, setUser, setStep, setNext }: ProfileFormProps) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState<string | undefined>(
     user.FirstName
@@ -107,6 +108,8 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
       setStep(2);
     }
   };
+
+  setNext(next)
 
   return (
     <Grid>
@@ -320,7 +323,7 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
           </Grid>
         </div>
 
-        <Grid
+        {/* <Grid
           container
           direction="row"
           justify="flex-end"
@@ -338,7 +341,7 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
               ถัดไป
             </Button>
           </Grid>
-        </Grid>
+        </Grid> */}
       </form>
     </Grid>
   );

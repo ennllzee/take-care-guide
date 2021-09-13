@@ -65,9 +65,11 @@ interface WorkFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
+  setNext: any;
+  setBack: any
 }
 
-function WorkForm({ user, setUser, setStep }: WorkFormProps) {
+function WorkForm({ user, setUser, setStep, setNext, setBack }: WorkFormProps) {
   const classes = useStyles();
   const [workExp, setWorkExp] = useState<WorkExp[]>(
     user.WorkExp !== undefined ? user.WorkExp : []
@@ -90,6 +92,9 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
     });
     setStep(2);
   };
+
+  setNext(next)
+  setBack(back)
 
   const [duplicate, setDuplicate] = useState<boolean>(false);
   const [hasExp, setHasExp] = useState<boolean>(user.WorkExp?.length !== 0);

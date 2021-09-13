@@ -77,22 +77,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface RegisterSubmitProps {
   user: GuideForm;
-  setUser: any;
   setStep: any;
-  setSubmit: any;
+  setBack: any
 }
 
 function RegisterSubmit({
   user,
-  setUser,
   setStep,
-  setSubmit,
+  setBack,
 }: RegisterSubmitProps) {
   const classes = useStyles();
 
   const back = (step: number) => {
     setStep(step);
   };
+
+  setBack(back)
 
   return (
     <Grid>
@@ -166,9 +166,7 @@ function RegisterSubmit({
                 fullWidth={true}
                 value={user.FirstName}
                 type="text"
-                InputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
             <Grid item xs={5}>
@@ -178,9 +176,7 @@ function RegisterSubmit({
                 fullWidth={true}
                 value={user.LastName}
                 type="text"
-                InputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
           </Grid>
@@ -199,9 +195,7 @@ function RegisterSubmit({
                   labelId="gender-label"
                   value={user.Gender}
                   fullWidth={true}
-                  inputProps={{
-                    readOnly: true,
-                  }}
+                  disabled={true}
                 >
                   <MenuItem value={undefined} disabled>
                     เพศ
@@ -229,9 +223,7 @@ function RegisterSubmit({
                   shrink: true,
                 }}
                 fullWidth={true}
-                inputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
           </Grid>
@@ -248,9 +240,7 @@ function RegisterSubmit({
                 fullWidth={true}
                 value={user.Address}
                 type="text"
-                inputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
           </Grid>
@@ -267,9 +257,7 @@ function RegisterSubmit({
                 fullWidth={true}
                 value={user.Education?.Degree}
                 type="text"
-                inputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
           </Grid>
@@ -286,9 +274,7 @@ function RegisterSubmit({
                 fullWidth={true}
                 value={user.Education?.Acadamy}
                 type="text"
-                inputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
           </Grid>
@@ -385,9 +371,7 @@ function RegisterSubmit({
                 fullWidth={true}
                 value={user.ContactAddress}
                 type="text"
-                inputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
           </Grid>
@@ -404,9 +388,7 @@ function RegisterSubmit({
                 fullWidth={true}
                 value={user.PhoneNumber}
                 type="text"
-                inputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
           </Grid>
@@ -423,14 +405,12 @@ function RegisterSubmit({
                 fullWidth={true}
                 value={user.Email}
                 type="text"
-                inputProps={{
-                  readOnly: true,
-                }}
+                disabled={true}
               />
             </Grid>
           </Grid>
         </div>
-        <Grid
+        {/* <Grid
           container
           direction="row"
           justify="space-between"
@@ -459,7 +439,7 @@ function RegisterSubmit({
               ยืนยัน
             </Button>
           </Grid>
-        </Grid>
+        </Grid> */}
       </form>
     </Grid>
   );
