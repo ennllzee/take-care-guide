@@ -67,11 +67,9 @@ interface ProfileFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
-  setNext: any;
-  setBack: any
 }
 
-function EducationForm({ user, setUser, setStep, setNext, setBack }: ProfileFormProps) {
+function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
   const classes = useStyles();
   const [degree, setDegree] = useState<string | undefined>(
     user.Education?.Degree
@@ -156,9 +154,6 @@ function EducationForm({ user, setUser, setStep, setNext, setBack }: ProfileForm
     });
     setStep(1);
   };
-
-  setNext(next)
-  setBack(back)
 
   return (
     <Grid>

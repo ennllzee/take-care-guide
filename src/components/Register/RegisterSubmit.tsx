@@ -77,22 +77,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface RegisterSubmitProps {
   user: GuideForm;
+  setUser: any;
   setStep: any;
-  setBack: any
+  setSubmit: any;
 }
 
 function RegisterSubmit({
   user,
+  setUser,
   setStep,
-  setBack,
+  setSubmit,
 }: RegisterSubmitProps) {
   const classes = useStyles();
 
   const back = (step: number) => {
     setStep(step);
   };
-
-  setBack(back)
 
   return (
     <Grid>
@@ -410,7 +410,7 @@ function RegisterSubmit({
             </Grid>
           </Grid>
         </div>
-        {/* <Grid
+        <Grid
           container
           direction="row"
           justify="space-between"
@@ -439,7 +439,7 @@ function RegisterSubmit({
               ยืนยัน
             </Button>
           </Grid>
-        </Grid> */}
+        </Grid>
       </form>
     </Grid>
   );

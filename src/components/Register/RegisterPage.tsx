@@ -76,9 +76,6 @@ const useStyles = makeStyles((theme: Theme) =>
     card: {
       padding: "2%",
     },
-    button: {
-      padding: "5%",
-    },
   })
 );
 
@@ -124,7 +121,7 @@ function RegisterPage() {
   const onSubmit = async () => {
     console.log(user);
     await createGuide({ variables: { createdGuideInput: { ...user } } });
-
+    
     signOut();
   };
 
@@ -134,9 +131,6 @@ function RegisterPage() {
     Token: token,
   });
 
-  const [next, setNext] = useState<any>();
-  const [back, setBack] = useState<any>();
-
   return (
     <Grid>
       <TopBar page="ลงทะเบียน" />
@@ -144,7 +138,7 @@ function RegisterPage() {
         container
         direction="column"
         alignItems="center"
-        justify="flex-start"
+        justify="space-between"
         className={classes.root}
       >
         <Grid item className={classes.sub}></Grid>
@@ -186,93 +180,24 @@ function RegisterPage() {
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
               {step === 1 && (
-                <ProfileForm
-                  user={user}
-                  setUser={setUser}
-                  setStep={setStep}
-                  setNext={setNext}
-                />
+                <ProfileForm user={user} setUser={setUser} setStep={setStep} />
               )}
               {step === 2 && (
-                <EducationForm
-                  user={user}
-                  setUser={setUser}
-                  setStep={setStep}
-                  setNext={setNext}
-                  setBack={setBack}
-                />
+                <EducationForm user={user} setUser={setUser} setStep={setStep} />
               )}
               {step === 3 && (
-                <WorkForm
-                  user={user}
-                  setUser={setUser}
-                  setStep={setStep}
-                  setNext={setNext}
-                  setBack={setBack}
-                />
+                <WorkForm user={user} setUser={setUser} setStep={setStep} />
               )}
               {step === 4 && (
-                <ContactForm
-                  user={user}
-                  setUser={setUser}
-                  setStep={setStep}
-                  setNext={setNext}
-                  setBack={setBack}
-                />
+                <ContactForm user={user} setUser={setUser} setStep={setStep} />
               )}
               {step === 5 && (
                 <RegisterSubmit
                   user={user}
+                  setUser={setUser}
                   setStep={setStep}
-                  setBack={setBack}
+                  setSubmit={setSubmit}
                 />
-              )}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item className={classes.sub}>
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-            className={classes.button}
-          >
-            <Grid item xs={4} md={3} lg={2}>
-              {step > 1 && (
-                <Button
-                  fullWidth={true}
-                  type="button"
-                  onClick={back}
-                  // color="primary"
-                  variant="contained"
-                >
-                  ก่อนหน้า
-                </Button>
-              )}
-            </Grid>
-            <Grid item xs={4} md={3} lg={2}>
-              {step < 5 && (
-                <Button
-                  fullWidth={true}
-                  type="submit"
-                  onClick={next}
-                  // color="primary"
-                  variant="contained"
-                >
-                  ถัดไป
-                </Button>
-              )}
-              {step === 5 && (
-                <Button
-                  fullWidth={true}
-                  type="button"
-                  onClick={() => setSubmit(true)}
-                  // color="primary"
-                  variant="contained"
-                >
-                  ยืนยัน
-                </Button>
               )}
             </Grid>
           </Grid>
