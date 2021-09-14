@@ -75,11 +75,9 @@ interface ContactFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
-  setNext: any;
-  setBack: any
 }
 
-function ContactForm({ user, setUser, setStep, setNext, setBack }: ContactFormProps) {
+function ContactForm({ user, setUser, setStep }: ContactFormProps) {
   const classes = useStyles();
   const [phoneNum, setPhoneNum] = useState<string | undefined>(
     user.PhoneNumber
@@ -114,9 +112,6 @@ function ContactForm({ user, setUser, setStep, setNext, setBack }: ContactFormPr
       setStep(5);
     }
   };
-
-  setNext(next)
-  setBack(back)
 
   const [same, setSame] = useState<boolean>(
     user.ContactAddress === user.Address ? true : false
@@ -248,7 +243,7 @@ function ContactForm({ user, setUser, setStep, setNext, setBack }: ContactFormPr
             </Grid>
           </Grid>
         </div>
-        {/* <Grid
+        <Grid
           container
           direction="row"
           justify="space-between"
@@ -277,7 +272,7 @@ function ContactForm({ user, setUser, setStep, setNext, setBack }: ContactFormPr
               ถัดไป
             </Button>
           </Grid>
-        </Grid> */}
+        </Grid>
       </form>
     </Grid>
   );
