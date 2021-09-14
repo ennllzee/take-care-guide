@@ -357,20 +357,28 @@ const useGuideApi = () => {
 
   const UPDATE_GUIDESCHEDULE_RESPONSE = gql`
     mutation UPDATE_GUIDESCHEDULE_RESPONSE(
-      $updateGuideScheduleAcceptAppointmentId: ID!
-      $updateGuideScheduleAcceptAppointmentWorkOnAppointmentId: ID!
+      $updateGuideScheduleResponseAppointmentId: ID!
+      $updateGuideScheduleResponseAppointmentResponse: Boolean!
+      $updateGuideScheduleResponseAppointmentWorkOnAppointmentId: ID!
     ) {
-      updateGuideScheduleAcceptAppointment(
-        _id: $updateGuideScheduleAcceptAppointmentId
-        WorkOnAppointmentId: $updateGuideScheduleAcceptAppointmentWorkOnAppointmentId
+      updateGuideScheduleResponseAppointment(
+        _id: $updateGuideScheduleResponseAppointmentId
+        response: $updateGuideScheduleResponseAppointmentResponse
+        WorkOnAppointmentId: $updateGuideScheduleResponseAppointmentWorkOnAppointmentId
       ) {
         _id
+        ScheduleDate
         Available
+        Period
         WorkOnAppointment {
           _id
         }
-        ScheduleDate
-        Period
+        Status {
+          Tag
+          Details
+        }
+        CreatedAt
+        UpdatedAt
       }
     }
   `;
@@ -398,7 +406,7 @@ const useGuideApi = () => {
       }
     }
   `;
-  
+
   return {
     GET_SINGLE_GUIDE,
     SIGNUP_GUIDE,
@@ -415,7 +423,7 @@ const useGuideApi = () => {
     UPDATE_GUIDESCHEDULE,
     UPDATE_GUIDESCHEDULE_RESPONSE,
     DELETE_GUIDESCHEDULE,
-    CREATE_REPORT
+    CREATE_REPORT,
   };
 };
 
