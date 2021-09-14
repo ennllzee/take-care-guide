@@ -70,8 +70,9 @@ function ProfilePage() {
   );
 
   useEffect(() => {
-    if (!loading) {
-      setUser(data.getCugetGuidestomer);
+    console.log(data)
+    if (!loading && data !== undefined) {
+      setUser(data.getGuide);
       setFirstName(data.getGuide?.FirstName);
       setLastName(data.getGuide?.LastName);
       setDOB(data.getGuide?.DOB);

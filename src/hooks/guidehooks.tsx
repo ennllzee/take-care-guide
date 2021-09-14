@@ -13,7 +13,6 @@ const useGuideApi = () => {
         ContactAddress
         PhoneNumber
         Email
-        IsValidated
         Education {
           Degree
           Acadamy
@@ -22,21 +21,25 @@ const useGuideApi = () => {
         WorkExp {
           JobTitle
           WorkPlace
-          JobPosition
         }
         LangSkill {
-          Languages
           Level
+          Language
         }
         IdCard
         FaceWithIdCard
-        ValidatedDate
         GoogleId
         Avatar
-        CongenitalDisorders
         Role
         CreatedAt
         UpdatedAt
+        Gmail
+        IsVerified
+        VerifyDate
+        Status {
+          Tag
+          Details
+        }
       }
     }
   `;
@@ -170,38 +173,6 @@ const useGuideApi = () => {
     query LOGIN_GUIDE($loginGuideToken: String!) {
       loginGuide(Token: $loginGuideToken) {
         _id
-        FirstName
-        LastName
-        Gender
-        DOB
-        Address
-        ContactAddress
-        PhoneNumber
-        Email
-        IsValidated
-        Education {
-          Degree
-          Acadamy
-          Certificate
-        }
-        WorkExp {
-          JobTitle
-          WorkPlace
-          JobPosition
-        }
-        LangSkill {
-          Languages
-          Level
-        }
-        IdCard
-        FaceWithIdCard
-        ValidatedDate
-        GoogleId
-        Avatar
-        CongenitalDisorders
-        Role
-        CreatedAt
-        UpdatedAt
       }
     }
   `;

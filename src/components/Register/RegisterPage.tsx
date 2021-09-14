@@ -255,7 +255,7 @@ function RegisterPage() {
               {step < 5 && (
                 <Button
                   fullWidth={true}
-                  type="submit"
+                  type="button"
                   onClick={next}
                   // color="primary"
                   variant="contained"
