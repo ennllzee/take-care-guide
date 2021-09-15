@@ -80,6 +80,7 @@ interface RegisterSubmitProps {
   setUser: any;
   setStep: any;
   setSubmit: any;
+  displayImg: any;
 }
 
 function RegisterSubmit({
@@ -87,6 +88,7 @@ function RegisterSubmit({
   setUser,
   setStep,
   setSubmit,
+  displayImg,
 }: RegisterSubmitProps) {
   const classes = useStyles();
 
@@ -138,7 +140,7 @@ function RegisterSubmit({
             className={classes.card}
           >
             <Grid item xs={4}>
-              <CardMedia image={user.Avatar} className={classes.img} />
+              <CardMedia image={displayImg} className={classes.img} />
             </Grid>
           </Grid>
         </div>
@@ -315,35 +317,35 @@ function RegisterSubmit({
             </Grid>
           </Grid>
           <Grid container spacing={1} justify="center" alignItems="center">
-            {user.WorkExp?.length !== 0 ? (user.WorkExp?.map((m) => {
-              return (
-                <>
-                  <Grid item xs={5}>
-                    <TextField
-                      id="input-with-icon-grid"
-                      label="ตำแหน่งงาน"
-                      fullWidth={true}
-                      value={m.JobTitle}
-                      disabled={true}
-                      type="text"
-                    />
-                  </Grid>
-                  <Grid item xs={5}>
-                    <TextField
-                      id="input-with-icon-grid"
-                      label="สถานที่ทำงาน"
-                      fullWidth={true}
-                      value={m.WorkPlace}
-                      disabled={true}
-                      type="text"
-                    />
-                  </Grid>
-                </>
-              );
-            })) : (
-              <Typography variant="body2">
-                ไม่มีประสบการณ์การทำงาน
-              </Typography>
+            {user.WorkExp?.length !== 0 ? (
+              user.WorkExp?.map((m) => {
+                return (
+                  <>
+                    <Grid item xs={5}>
+                      <TextField
+                        id="input-with-icon-grid"
+                        label="ตำแหน่งงาน"
+                        fullWidth={true}
+                        value={m.JobTitle}
+                        disabled={true}
+                        type="text"
+                      />
+                    </Grid>
+                    <Grid item xs={5}>
+                      <TextField
+                        id="input-with-icon-grid"
+                        label="สถานที่ทำงาน"
+                        fullWidth={true}
+                        value={m.WorkPlace}
+                        disabled={true}
+                        type="text"
+                      />
+                    </Grid>
+                  </>
+                );
+              })
+            ) : (
+              <Typography variant="body2">ไม่มีประสบการณ์การทำงาน</Typography>
             )}
           </Grid>
         </div>

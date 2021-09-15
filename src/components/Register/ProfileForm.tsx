@@ -75,6 +75,7 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
   const uploadImage = async (e: any) => {
     const file = e.target.files[0];
     setavatar(file);
+    console.log(avatar);
 
     const base64 = await convertBase64(file);
     setdisplayImg(base64);

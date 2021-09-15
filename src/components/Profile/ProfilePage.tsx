@@ -81,7 +81,11 @@ function ProfilePage() {
       setPhoneNum(data.getGuide?.PhoneNumber);
       setEmail(data.getGuide?.Email);
       setGender(data.getGuide?.Gender);
-      setAvatar(data.getGuide?.Avatar);
+      setAvatar(
+        data.getGuide?.Avatar !== null
+          ? `data:${data.getGuide?.Avatar?.mimetype};base64,${data.getGuide?.Avatar?.data}`
+          : undefined
+      );
     }
   }, [loading]);
 
@@ -143,7 +147,7 @@ function ProfilePage() {
                 <ProfileCard
                   name={user?.FirstName + " " + user?.LastName}
                   gmail={user?.Gmail}
-                  img={user?.Avatar}
+                  img={avatar}
                 />
               </Grid>
               <Grid item xs={12} md={10} lg={8}>

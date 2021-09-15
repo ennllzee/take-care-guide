@@ -108,8 +108,8 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
 
   const uploadFile = async (e: any) => {
     const file = e.target.files[0];
-    const base64 = await convertBase64(file);
-    setCertificate(base64);
+    // const base64 = await convertBase64(file);
+    setCertificate(file);
   };
 
   const convertBase64 = (file: any) => {

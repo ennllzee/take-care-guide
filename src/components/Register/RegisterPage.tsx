@@ -109,19 +109,44 @@ function RegisterPage() {
 
   const [submit, setSubmit] = useState<boolean>(false);
 
-  const { SIGNUP_GUIDE } = useGuideApi();
+  const { SIGNUP_GUIDE, UPLOAD_PROFILE, UPLOAD_MOREFILES } = useGuideApi();
 
-  const [
-    createGuide,
-    { data: mutationData, loading: mutationLoading, error: mutationError },
-  ] = useMutation(SIGNUP_GUIDE);
+  const [createGuide] = useMutation(SIGNUP_GUIDE, {
+    onCompleted: (data) => {
+      console.log(data);
+      addProfile({
+        variables: {
+          addGuideProfileFile: user.Avatar,
+          addGuideProfileGuideId: data.createdGuide._id,
+        },
+      });
+    },
+  });
+
+  const [addProfile] = useMutation(UPLOAD_PROFILE, {
+    onCompleted: (data) => console.log(data),
+  });
 
   const [displayImg, setdisplayImg] = useState<any | undefined>("");
 
   //NEEDED BACKEND
   const onSubmit = async () => {
     console.log(user);
-    await createGuide({ variables: { createdGuideInput: { ...user, Avatar: null } } });
+    console.log({
+      ...user,
+      Avatar: null,
+      Education: { ...user.Education, Certificate: null },
+    });
+    
+    createGuide({
+      variables: {
+        createdGuideInput: {
+          ...user,
+          Avatar: null,
+          Education: { ...user.Education, Certificate: null },
+        },
+      },
+    });
 
     signOut();
   };
@@ -208,6 +233,7 @@ function RegisterPage() {
                   setUser={setUser}
                   setStep={setStep}
                   setSubmit={setSubmit}
+                  displayImg={displayImg}
                 />
               )}
             </Grid>

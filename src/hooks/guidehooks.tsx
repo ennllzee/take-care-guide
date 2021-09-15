@@ -16,7 +16,6 @@ const useGuideApi = () => {
         Education {
           Degree
           Acadamy
-          Certificate
         }
         WorkExp {
           JobTitle
@@ -27,7 +26,6 @@ const useGuideApi = () => {
           Language
         }
         IdCard
-        FaceWithIdCard
         GoogleId
         Avatar {
           filename
@@ -43,6 +41,11 @@ const useGuideApi = () => {
         Status {
           Tag
           Details
+        }
+        FaceWithIdCard {
+          filename
+          mimetype
+          data
         }
       }
     }
