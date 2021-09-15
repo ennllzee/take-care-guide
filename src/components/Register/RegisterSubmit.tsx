@@ -100,21 +100,9 @@ function RegisterSubmit({
         <Grid
           container
           direction="row"
-          alignItems="center"
+          alignItems="flex-start"
           justify="space-between"
         >
-          <Grid item xs={1}>
-            <Typography align="center">1</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center">2</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center">3</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center">4</Typography>
-          </Grid>
           <Grid item xs={8}>
             <Grid
               container

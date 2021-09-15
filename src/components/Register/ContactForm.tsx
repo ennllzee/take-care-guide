@@ -123,18 +123,9 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
         <Grid
           container
           direction="row"
-          alignItems="center"
+          alignItems="flex-start"
           justify="space-between"
         >
-          <Grid item xs={1}>
-            <Typography align="center">1</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center">2</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center">3</Typography>
-          </Grid>
           <Grid item xs={8}>
             <Grid
               container
@@ -158,12 +149,6 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
                 </Typography>
               </Grid>
             </Grid>
-          </Grid>
-
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              5
-            </Typography>
           </Grid>
         </Grid>
         {/* <Typography variant="h4">ช่องทางการติดต่อ</Typography> */}
@@ -193,7 +178,6 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
                   <Checkbox
                     checked={same}
                     onChange={() => {
-                      console.log(same);
                       if (!same) {
                         setAddress(user.Address);
                       }

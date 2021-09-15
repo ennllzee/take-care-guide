@@ -1,10 +1,13 @@
 import {
   Button,
+  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  makeStyles,
+  Theme,
 } from "@material-ui/core";
 
 interface AlertProps {
@@ -17,6 +20,14 @@ interface AlertProps {
   submitAction: any;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '100vw'
+    }
+  })
+);
+
 function Submit({
   submit,
   title,
@@ -26,12 +37,16 @@ function Submit({
   denyAction,
   submitAction,
 }: AlertProps) {
+
+  const classes = useStyles()
   return (
     <Dialog
       //   onClose={closeSubmit}
       aria-describedby="alert-dialog-description"
       aria-labelledby="alert-dialog-title"
       open={submit}
+      className={classes.root}
+      fullWidth={true}
     >
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>

@@ -125,15 +125,9 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
         <Grid
           container
           direction="row"
-          alignItems="center"
+          alignItems="flex-start"
           justify="space-between"
         >
-          <Grid item xs={1}>
-            <Typography align="center">1</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center">2</Typography>
-          </Grid>
           <Grid item xs={8}>
             <Grid
               container
@@ -157,16 +151,6 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                 </Typography>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              4
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              5
-            </Typography>
           </Grid>
         </Grid>
         {/* <Typography variant="h4">ข้อมูลส่วนตัว</Typography> */}

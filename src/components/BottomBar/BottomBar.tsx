@@ -55,15 +55,15 @@ function BottomBar({ page }: BottomBarProps) {
             </IconButton>
             <IconButton
               color="inherit"
-              onClick={() => history.push(`/appointment&=${accessToken}`)}
-            >
-              <Event />
-            </IconButton>
-            <IconButton
-              color="inherit"
               onClick={() => history.push(`/customer&request&=${accessToken}`)}
             >
               <Queue />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => history.push(`/appointment&=${accessToken}`)}
+            >
+              <Event />
             </IconButton>
             <IconButton
               color="inherit"
@@ -71,7 +71,7 @@ function BottomBar({ page }: BottomBarProps) {
             >
               <History />
             </IconButton>
-            <IconButton
+            {/* <IconButton
               color="inherit"
               onClick={() => history.push(`/hospital&information&=${accessToken}`)}
             >
@@ -82,7 +82,7 @@ function BottomBar({ page }: BottomBarProps) {
               onClick={() => history.push(`/customer&service&=${accessToken}`)}
             >
               <Help />
-            </IconButton>
+            </IconButton> */}
           </Grid>
         </Toolbar>
       </AppBar>

@@ -57,7 +57,7 @@ import GoogleLogin from "react-google-login";
     const { LOGIN_GUIDE } = useGuideApi();
 
     const responseGoogle = async (response: any) => {
-      console.log(response);
+      console.log(response.tokenId);
       setRes(response);
       setToken(response.tokenId);
     };

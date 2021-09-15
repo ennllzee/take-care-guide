@@ -1,11 +1,8 @@
-import Appointment from "./Appointment";
-import Guide from "./Guide";
-
 interface GuideScheduleForm {
-    Date: any
+    ScheduleDate: any
     Period: string
-    Guide: string
-    IsAvailable: boolean
+    Guide: string | null
+    Available: boolean
 }
 
 export default GuideScheduleForm

@@ -1,4 +1,13 @@
-import { makeStyles, Theme, createStyles, Grid, Typography, Button, Divider } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  createStyles,
+  Grid,
+  Typography,
+  Button,
+  Divider,
+  Checkbox,
+} from "@material-ui/core";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
@@ -31,7 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function AppointmentPage() {
-
   const classes = useStyles();
   const accessToken = localStorage.getItem("accessToken");
 
@@ -62,6 +70,8 @@ function AppointmentPage() {
   //   console.log(error);
   // }, [loading]);
 
+
+
   const [appointment, setAppointment] = useState<Appointment[]>([]);
 
   return (
@@ -77,66 +87,68 @@ function AppointmentPage() {
         <Grid item className={classes.sub}></Grid>
         <Grid item className={classes.main}>
           <Typography align="right">
-            <Button type="button" onClick={() => setManage(true)}>การจัดการตารางงาน</Button>
+            <Button type="button" onClick={() => setManage(true)}>
+              การจัดการตารางงาน
+            </Button>
           </Typography>
 
           {/* {!loading ? ( */}
-            <>
-              {appointment !== undefined &&
-              appointment.find((a) => a.EndTime === null) ? (
-                appointment
-                  ?.filter((a) => a.EndTime === null)
-                  .slice()
-                  .sort((a, b) => {
-                    return (
-                      new Date(a.AppointTime).getTime() -
-                      new Date(b.AppointTime).getTime()
-                    );
-                  })
-                  .map((a) => {
-                    return (
-                      <>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justify="flex-start"
-                          className={classes.line}
-                        >
-                          <Grid item xs={10} md={11} lg={11}>
-                            <Typography variant="h5">
-                              {moment(a.AppointTime).format("DD MMMM YYYY")}
-                            </Typography>
-                          </Grid>
+          <>
+            {appointment !== undefined &&
+            appointment.find((a) => a.EndTime === null) ? (
+              appointment
+                ?.filter((a) => a.EndTime === null)
+                .slice()
+                .sort((a, b) => {
+                  return (
+                    new Date(a.AppointTime).getTime() -
+                    new Date(b.AppointTime).getTime()
+                  );
+                })
+                .map((a) => {
+                  return (
+                    <>
+                      <Grid
+                        container
+                        direction="row"
+                        alignItems="center"
+                        justify="flex-start"
+                        className={classes.line}
+                      >
+                        <Grid item xs={10} md={11} lg={11}>
+                          <Typography variant="h5">
+                            {moment(a.AppointTime).format("DD MMMM YYYY")}
+                          </Typography>
                         </Grid>
-                        <Divider variant="middle" />
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justify="center"
-                          className={classes.card}
-                        >
-                          <Grid item xs={12} md={10} lg={8}>
-                            {/* <AppointmentCard
+                      </Grid>
+                      <Divider variant="middle" />
+                      <Grid
+                        container
+                        direction="row"
+                        alignItems="center"
+                        justify="center"
+                        className={classes.card}
+                      >
+                        <Grid item xs={12} md={10} lg={8}>
+                          {/* <AppointmentCard
                               appointment={a}
                               match={a.PatientId}
                             /> */}
-                          </Grid>
                         </Grid>
-                      </>
-                    );
-                  })
-              ) : (
-                <Typography
-                  align="center"
-                  variant="subtitle1"
-                  color="textSecondary"
-                >
-                  ไม่มีการนัดหมาย
-                </Typography>
-              )}
-            </>
+                      </Grid>
+                    </>
+                  );
+                })
+            ) : (
+              <Typography
+                align="center"
+                variant="subtitle1"
+                color="textSecondary"
+              >
+                ไม่มีการนัดหมาย
+              </Typography>
+            )}
+          </>
           {/* ) : (
              <Grid
               container

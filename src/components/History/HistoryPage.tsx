@@ -2,6 +2,7 @@ import { makeStyles, Theme, createStyles, Grid, Typography, Divider } from "@mat
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
+import convertToThaiDate from "../../hooks/convertToThaiDate";
 import Appointment from "../../models/Appointment";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
@@ -214,7 +215,7 @@ function HistoryPage() {
                         >
                           <Grid item xs={10} md={11} lg={11}>
                             <Typography variant="h5">
-                              {moment(a.AppointTime).format("DD MMMM YYYY")}
+                              {convertToThaiDate(new Date(a.AppointTime))}
                             </Typography>
                           </Grid>
                         </Grid>

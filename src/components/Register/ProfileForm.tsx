@@ -1,3 +1,4 @@
+import DateFnsUtils from "@date-io/date-fns";
 import {
   Button,
   CardMedia,
@@ -14,9 +15,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Person, Wc, Cake, Healing, Home } from "@material-ui/icons";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import moment from "moment";
 import { useState } from "react";
+import convertToThaiDate from "../../hooks/convertToThaiDate";
 import GuideForm from "../../models/GuideForm";
+import Alert from "../Alert/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,6 +80,8 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
     setdisplayImg(base64);
   };
 
+  const [alert,setAlert] = useState<boolean>(false)
+
   const convertBase64 = (file: any) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -109,6 +115,8 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
         Avatar: avatar,
       });
       setStep(2);
+    }else{
+      setAlert(true)
     }
   };
 
@@ -118,75 +126,32 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
         <Grid
           container
           direction="row"
-          alignItems="center"
+          alignItems="flex-start"
           justify="space-between"
         >
           <Grid item xs={8}>
-            <Grid container spacing={2} alignItems="center" justify="flex-start">            
-                <Grid item>
-                  <Fab
-                    variant="extended"
-                    style={{ background: "#6DB8A5", color: "white" }}
-                    disabled={true}
-                  >
-                    1
-                  </Fab>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography variant="h4">Profile</Typography>
-                  <Typography variant="subtitle2" color="textSecondary">
-                    ข้อมูลส่วนตัว
-                  </Typography>
-                </Grid>
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              justify="flex-start"
+            >
+              <Grid item>
+                <Fab
+                  variant="extended"
+                  style={{ background: "#6DB8A5", color: "white" }}
+                  disabled={true}
+                >
+                  1
+                </Fab>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h4">Profile</Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  ข้อมูลส่วนตัว
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              {/* <Fab
-                variant="extended"
-                style={{ background: "#7DC4B2" }}
-                disabled={true}
-              >
-                2
-              </Fab> */}
-              2
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              {/* <Fab
-                variant="extended"
-                style={{ background: "#7DC4B2" }}
-                disabled={true}
-              >
-                3
-              </Fab> */}
-              3
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              {/* <Fab
-                variant="extended"
-                style={{ background: "#7DC4B2" }}
-                disabled={true}
-              >
-                4
-              </Fab> */}
-              4
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              {/* <Fab
-                variant="extended"
-                style={{ background: "#7DC4B2" }}
-                disabled={true}
-              >
-                5
-              </Fab> */}
-              5
-            </Typography>
           </Grid>
         </Grid>
         {/* <Typography variant="h4">ข้อมูลส่วนตัว</Typography> */}
@@ -286,22 +251,18 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
               <Cake />
             </Grid>
             <Grid item xs={10}>
-              <TextField
-                id="date"
-                label="วันเกิด"
-                type="date"
-                defaultValue={
-                  dob === undefined
-                    ? undefined
-                    : moment(dob).format("YYYY-MM-DD")
-                }
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                fullWidth={true}
-                onChange={(e) => setDOB(new Date(e.target.value).toISOString())}
-                required
-              />
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  label="วันเกิด"
+                  value={dob !== undefined ? new Date(dob) : null}
+                  onChange={(e) => setDOB(e?.toISOString())}
+                  openTo="year"
+                  views={["year", "month", "date"]}
+                  required
+                  disableFuture
+                  fullWidth={true}
+                />
+              </MuiPickersUtilsProvider>
             </Grid>
           </Grid>
         </div>
@@ -334,7 +295,7 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
           <Grid item xs={4} md={3} lg={2}>
             <Button
               fullWidth={true}
-              type="submit"
+              type="button"
               // color="primary"
               onClick={next}
               variant="contained"
@@ -344,6 +305,15 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
           </Grid>
         </Grid>
       </form>
+      {alert && (
+        <Alert
+          closeAlert={() => setAlert(false)}
+          alert={alert}
+          title="ข้อมูลการนัดหมาย"
+          text="กรุณากรอกข้อมูลให้ครบ"
+          buttonText="ตกลง"
+        />
+      )}
     </Grid>
   );
 }
