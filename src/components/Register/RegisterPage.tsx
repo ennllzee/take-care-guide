@@ -117,11 +117,13 @@ function RegisterPage() {
     { data: mutationData, loading: mutationLoading, error: mutationError },
   ] = useMutation(SIGNUP_GUIDE);
 
+  const [displayImg, setdisplayImg] = useState<any | undefined>("");
+
   //NEEDED BACKEND
   const onSubmit = async () => {
     console.log(user);
-    await createGuide({ variables: { createdGuideInput: { ...user } } });
-    
+    await createGuide({ variables: { createdGuideInput: { ...user, Avatar: null } } });
+
     signOut();
   };
 
@@ -180,10 +182,20 @@ function RegisterPage() {
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
               {step === 1 && (
-                <ProfileForm user={user} setUser={setUser} setStep={setStep} />
+                <ProfileForm
+                  user={user}
+                  setUser={setUser}
+                  setStep={setStep}
+                  displayImg={displayImg}
+                  setdisplayImg={setdisplayImg}
+                />
               )}
               {step === 2 && (
-                <EducationForm user={user} setUser={setUser} setStep={setStep} />
+                <EducationForm
+                  user={user}
+                  setUser={setUser}
+                  setStep={setStep}
+                />
               )}
               {step === 3 && (
                 <WorkForm user={user} setUser={setUser} setStep={setStep} />

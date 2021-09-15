@@ -29,7 +29,11 @@ const useGuideApi = () => {
         IdCard
         FaceWithIdCard
         GoogleId
-        Avatar
+        Avatar {
+          filename
+          mimetype
+          data
+        }
         Role
         CreatedAt
         UpdatedAt
@@ -407,6 +411,30 @@ const useGuideApi = () => {
     }
   `;
 
+  const UPLOAD_PROFILE = gql`
+    mutation UPLOAD_PROFILE(
+      $addGuideProfileGuideId: ID!
+      $addGuideProfileFile: Upload
+    ) {
+      addGuideProfile(
+        guideId: $addGuideProfileGuideId
+        file: $addGuideProfileFile
+      )
+    }
+  `;
+
+  const UPLOAD_MOREFILES = gql`
+    mutation UPLOAD_MOREFILES(
+      $uploadfilesGuideGuideId: ID!
+      $uploadfilesGuideFile: [Upload]
+    ) {
+      uploadfilesGuide(
+        guideId: $uploadfilesGuideGuideId
+        file: $uploadfilesGuideFile
+      )
+    }
+  `;
+
   return {
     GET_SINGLE_GUIDE,
     SIGNUP_GUIDE,
@@ -424,6 +452,8 @@ const useGuideApi = () => {
     UPDATE_GUIDESCHEDULE_RESPONSE,
     DELETE_GUIDESCHEDULE,
     CREATE_REPORT,
+    UPLOAD_PROFILE,
+    UPLOAD_MOREFILES,
   };
 };
 

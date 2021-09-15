@@ -51,9 +51,11 @@ interface ProfileFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
+  displayImg: any;
+  setdisplayImg: any;
 }
 
-function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
+function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: ProfileFormProps) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState<string | undefined>(
     user.FirstName
@@ -64,12 +66,14 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
 
   const [gender, setGender] = useState<string | undefined>(user.Gender);
   //   const [imgName, setImgName] = useState<any | undefined>(user.FirstName);
-  const [baseImage, setBaseImage] = useState<any | undefined>(user.Avatar);
+  const [avatar, setavatar] = useState<any | undefined>("");
 
   const uploadImage = async (e: any) => {
     const file = e.target.files[0];
+    setavatar(file);
+
     const base64 = await convertBase64(file);
-    setBaseImage(base64);
+    setdisplayImg(base64);
   };
 
   const convertBase64 = (file: any) => {
@@ -102,7 +106,7 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
         Gender: gender,
         DOB: dob,
         Address: address,
-        Avatar: baseImage,
+        Avatar: avatar,
       });
       setStep(2);
     }
@@ -195,7 +199,7 @@ function ProfileForm({ user, setUser, setStep }: ProfileFormProps) {
             className={classes.card}
           >
             <Grid item xs={4}>
-              <CardMedia image={baseImage} className={classes.img} />
+              <CardMedia image={displayImg} className={classes.img} />
             </Grid>
             <Grid item xs={6}>
               <Typography align="center">
