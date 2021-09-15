@@ -49,11 +49,11 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: "15vh",
     },
     main: {
-      minHeight: "70vh",
+      minHeight: "85vh",
       paddingRight: "5%",
       paddingLeft: "5%",
-      minWidth: "80vw",
-      maxWidth: "100vw",
+      // minWidth: "100vw",
+      width: "90vw",
     },
     form: {
       paddingTop: "5%",
@@ -90,7 +90,6 @@ function RegisterPage() {
 
   const logout = () => {
     setAlert(true);
-    history.push("/");
   };
 
   const { signOut } = useGoogleLogout({

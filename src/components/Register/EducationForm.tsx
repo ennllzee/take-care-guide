@@ -161,12 +161,9 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
         <Grid
           container
           direction="row"
-          alignItems="center"
+          alignItems="flex-start"
           justify="space-between"
         >
-          <Grid item xs={1}>
-            <Typography align="center">1</Typography>
-          </Grid>
           <Grid item xs={8}>
             <Grid
               container
@@ -190,21 +187,6 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
                 </Typography>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              3
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              4
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography align="center" color="textSecondary">
-              5
-            </Typography>
           </Grid>
         </Grid>
 

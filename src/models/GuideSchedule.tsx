@@ -3,11 +3,10 @@ import Guide from "./Guide";
 
 interface GuideSchedule {
     _id: string
-    Date: any
-    Period: string //"morning" "afternoon" "all-day"
-    Guide: Guide
-    IsAvailable: boolean
-    WorkOnAppointmentId: Appointment
+    ScheduleDate: any
+    Period: string //"Morning" "Afternoon" "All-day"
+    Available: boolean
+    WorkOnAppointment?: Appointment
     Status: {
         Tag: string
         Details: string[]

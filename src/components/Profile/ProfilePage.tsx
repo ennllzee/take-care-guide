@@ -29,6 +29,8 @@ import ProfileCard from "./ProfileCard";
 import { useQuery } from "@apollo/client";
 import Guide from "../../models/Guide";
 import useGuideApi from "../../hooks/guidehooks";
+import DateFnsUtils from "@date-io/date-fns";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,7 +72,7 @@ function ProfilePage() {
   );
 
   useEffect(() => {
-    console.log(data)
+    console.log(data);
     if (!loading && data !== undefined) {
       setUser(data.getGuide);
       setFirstName(data.getGuide?.FirstName);
@@ -131,197 +133,207 @@ function ProfilePage() {
         <Grid item className={classes.sub}></Grid>
         <Grid item className={classes.main}>
           {!loading ? (
-          <Grid container direction="row" alignItems="center" justify="center">
-            <Grid item xs={12} md={10} lg={8}>
-              <ProfileCard
-                name={user?.FirstName + " " + user?.LastName}
-                gmail={user?.Gmail}
-                img={user?.Avatar}
-              />
-            </Grid>
-            <Grid item xs={12} md={10} lg={8}>
-              <form className={classes.form}>
-                <div className={classes.margin}>
-                  <Grid
-                    container
-                    spacing={2}
-                    justify="center"
-                    alignItems="flex-end"
-                  >
-                    <Grid item>
-                      <Person />
-                    </Grid>
-                    <Grid item xs={5}>
-                      <TextField
-                        id="input-with-icon-grid"
-                        label="ชื่อ"
-                        fullWidth={true}
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        required
-                        disabled={!edit}
-                        type="text"
-                      />
-                    </Grid>
-                    <Grid item xs={5}>
-                      <TextField
-                        id="input-with-icon-grid"
-                        label="นามสกุล"
-                        fullWidth={true}
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        required
-                        disabled={!edit}
-                        type="text"
-                      />
-                    </Grid>
-                  </Grid>
-                </div>
-                <div className={classes.margin}>
-                  <Grid
-                    container
-                    spacing={2}
-                    justify="center"
-                    alignItems="flex-end"
-                  >
-                    <Grid item>
-                      <Wc />
-                    </Grid>
-                    <Grid item xs={10}>
-                      <FormControl required fullWidth={true}>
-                        <InputLabel id="gender-label" shrink={true}>
-                          เพศ
-                        </InputLabel>
-                        <Select
-                          labelId="gender-label"
-                          value={user !== undefined ? gender : "gender"}
-                          onChange={(e) => {
-                            setGender(e.target.value as string);
-                          }}
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="center"
+            >
+              <Grid item xs={12} md={10} lg={8}>
+                <ProfileCard
+                  name={user?.FirstName + " " + user?.LastName}
+                  gmail={user?.Gmail}
+                  img={user?.Avatar}
+                />
+              </Grid>
+              <Grid item xs={12} md={10} lg={8}>
+                <form className={classes.form}>
+                  <div className={classes.margin}>
+                    <Grid
+                      container
+                      spacing={2}
+                      justify="center"
+                      alignItems="flex-end"
+                    >
+                      <Grid item>
+                        <Person />
+                      </Grid>
+                      <Grid item xs={5}>
+                        <TextField
+                          id="input-with-icon-grid"
+                          label="ชื่อ"
                           fullWidth={true}
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          required
                           disabled={!edit}
-                        >
-                          <MenuItem value={undefined} disabled>
+                          type="text"
+                        />
+                      </Grid>
+                      <Grid item xs={5}>
+                        <TextField
+                          id="input-with-icon-grid"
+                          label="นามสกุล"
+                          fullWidth={true}
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          required
+                          disabled={!edit}
+                          type="text"
+                        />
+                      </Grid>
+                    </Grid>
+                  </div>
+                  <div className={classes.margin}>
+                    <Grid
+                      container
+                      spacing={2}
+                      justify="center"
+                      alignItems="flex-end"
+                    >
+                      <Grid item>
+                        <Wc />
+                      </Grid>
+                      <Grid item xs={10}>
+                        <FormControl required fullWidth={true}>
+                          <InputLabel id="gender-label" shrink={true}>
                             เพศ
-                          </MenuItem>
-                          <MenuItem value="male">ชาย</MenuItem>
-                          <MenuItem value="female">หญิง</MenuItem>
-                          <MenuItem value="transgender">ทรานสเจนเดอร์</MenuItem>
-                        </Select>
-                      </FormControl>
+                          </InputLabel>
+                          <Select
+                            labelId="gender-label"
+                            value={user !== undefined ? gender : "gender"}
+                            onChange={(e) => {
+                              setGender(e.target.value as string);
+                            }}
+                            fullWidth={true}
+                            disabled={!edit}
+                          >
+                            <MenuItem value={undefined} disabled>
+                              เพศ
+                            </MenuItem>
+                            <MenuItem value="male">ชาย</MenuItem>
+                            <MenuItem value="female">หญิง</MenuItem>
+                            <MenuItem value="transgender">
+                              ทรานสเจนเดอร์
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </div>
-                <div className={classes.margin}>
+                  </div>
+                  <div className={classes.margin}>
+                    <Grid
+                      container
+                      spacing={2}
+                      justify="center"
+                      alignItems="flex-end"
+                    >
+                      <Grid item>
+                        <Cake />
+                      </Grid>
+                      <Grid item xs={10}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                          <DatePicker
+                            label="วันเกิด"
+                            clearable
+                            value={
+                              dob !== undefined ? new Date(dob) : undefined
+                            }
+                            onChange={(e) => setDOB(e?.toISOString())}
+                            openTo="year"
+                            views={["year", "month", "date"]}
+                            required
+                            disableFuture
+                            fullWidth={true}
+                            disabled={!edit}
+                          />
+                        </MuiPickersUtilsProvider>
+                      </Grid>
+                    </Grid>
+                  </div>
+                  <div className={classes.margin}>
+                    <Grid
+                      container
+                      spacing={2}
+                      justify="center"
+                      alignItems="flex-end"
+                    >
+                      <Grid item>
+                        <PhoneAndroid />
+                      </Grid>
+                      <Grid item xs={10}>
+                        <TextField
+                          id="input-with-icon-grid"
+                          label="เบอร์โทรศัพท์"
+                          fullWidth={true}
+                          value={phoneNum}
+                          onChange={(e) => setPhoneNum(e.target.value)}
+                          disabled={!edit}
+                          required
+                          type="text"
+                        />
+                      </Grid>
+                    </Grid>
+                  </div>
+                  <div className={classes.margin}>
+                    <Grid
+                      container
+                      spacing={2}
+                      justify="center"
+                      alignItems="flex-end"
+                    >
+                      <Grid item>
+                        <Email />
+                      </Grid>
+                      <Grid item xs={10}>
+                        <TextField
+                          id="input-with-icon-grid"
+                          label="อีเมล์"
+                          fullWidth={true}
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          disabled={!edit}
+                          type="text"
+                        />
+                      </Grid>
+                    </Grid>
+                  </div>
+                  <br />
                   <Grid
                     container
-                    spacing={2}
-                    justify="center"
-                    alignItems="flex-end"
+                    direction="row"
+                    justify="flex-end"
+                    alignItems="center"
                   >
-                    <Grid item>
-                      <Cake />
-                    </Grid>
-                    <Grid item xs={10}>
-                      <TextField
-                        id="date"
-                        label="วันเกิด"
-                        type="date"
-                        value={moment(dob).format("YYYY-MM-DD")}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        disabled={!edit}
-                        fullWidth={true}
-                        onChange={(e) => setDOB(new Date(e.target.value).toISOString())}
-                        required
-                      />
-                    </Grid>
-                  </Grid>
-                </div>
-                <div className={classes.margin}>
-                  <Grid
-                    container
-                    spacing={2}
-                    justify="center"
-                    alignItems="flex-end"
-                  >
-                    <Grid item>
-                      <PhoneAndroid />
-                    </Grid>
-                    <Grid item xs={10}>
-                      <TextField
-                        id="input-with-icon-grid"
-                        label="เบอร์โทรศัพท์"
-                        fullWidth={true}
-                        value={phoneNum}
-                        onChange={(e) => setPhoneNum(e.target.value)}
-                        disabled={!edit}
-                        required
-                        type="text"
-                      />
+                    <Grid item xs={4} md={3} lg={2}>
+                      {edit && (
+                        <Button
+                          fullWidth={true}
+                          type="submit"
+                          onClick={editProfile}
+                          color="primary"
+                          variant="contained"
+                        >
+                          ยืนยัน
+                        </Button>
+                      )}
+                      {!edit && (
+                        <Button
+                          fullWidth={true}
+                          type="button"
+                          onClick={() => setEdit(true)}
+                          color="primary"
+                          variant="contained"
+                        >
+                          แก้ไข
+                        </Button>
+                      )}
                     </Grid>
                   </Grid>
-                </div>
-                <div className={classes.margin}>
-                  <Grid
-                    container
-                    spacing={2}
-                    justify="center"
-                    alignItems="flex-end"
-                  >
-                    <Grid item>
-                      <Email />
-                    </Grid>
-                    <Grid item xs={10}>
-                      <TextField
-                        id="input-with-icon-grid"
-                        label="อีเมล์"
-                        fullWidth={true}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        disabled={!edit}
-                        type="text"
-                      />
-                    </Grid>
-                  </Grid>
-                </div>
-                <br />
-                <Grid
-                  container
-                  direction="row"
-                  justify="flex-end"
-                  alignItems="center"
-                >
-                  <Grid item xs={4} md={3} lg={2}>
-                    {edit && (
-                      <Button
-                        fullWidth={true}
-                        type="submit"
-                        onClick={editProfile}
-                        color="primary"
-                        variant="contained"
-                      >
-                        ยืนยัน
-                      </Button>
-                    )}
-                    {!edit && (
-                      <Button
-                        fullWidth={true}
-                        type="button"
-                        onClick={() => setEdit(true)}
-                        color="primary"
-                        variant="contained"
-                      >
-                        แก้ไข
-                      </Button>
-                    )}
-                  </Grid>
-                </Grid>
-              </form>
+                </form>
+              </Grid>
             </Grid>
-          </Grid>
-           ) : (
+          ) : (
             <Grid
               container
               direction="row"
@@ -330,7 +342,7 @@ function ProfilePage() {
             >
               <CircularProgress disableShrink />
             </Grid>
-          )} 
+          )}
         </Grid>
 
         <Grid item className={classes.sub}></Grid>
