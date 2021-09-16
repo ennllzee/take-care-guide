@@ -258,7 +258,8 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                                 (g) =>
                                   g.ScheduleDate === m.toISOString() &&
                                   g.Period === "Morning" &&
-                                  g.WorkOnAppointment !== undefined
+                                  g.WorkOnAppointment !== null &&
+                                  g.WorkOnAppointment?.Status.Tag === "Guide Confirm"
                               )
                                 ? true
                                 : false
@@ -278,7 +279,8 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                                 (g) =>
                                   g.ScheduleDate === m.toISOString() &&
                                   g.Period === "Afternoon" &&
-                                  g.WorkOnAppointment !== undefined
+                                  g.WorkOnAppointment !== null &&
+                                  g.WorkOnAppointment?.Status.Tag === "Guide Confirm"
                               )
                                 ? true
                                 : false
