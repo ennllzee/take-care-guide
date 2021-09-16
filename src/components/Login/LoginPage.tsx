@@ -55,20 +55,12 @@ import GoogleLogin from "react-google-login";
     const [token, setToken] = useState<string>();
   
     const { LOGIN_GUIDE } = useGuideApi();
-
-    const responseGoogle = async (response: any) => {
-      console.log(response.tokenId);
-      setRes(response);
-      setToken(response.tokenId);
-    };
   
     const { loading, error, data } = useQuery(LOGIN_GUIDE, {
       variables: { loginGuideToken: token },
       fetchPolicy: "network-only"
     });
-    
-    console.log(data);
-  
+
     useEffect(() => {
       if (!loading && res !== undefined && token !== undefined) {
         if (data) {
@@ -81,7 +73,14 @@ import GoogleLogin from "react-google-login";
           history.push("/register");
         }
       }
-    }, [loading]);
+    }, [loading,data]);
+
+    
+    const responseGoogle = async (response: any) => {
+      console.log(response.tokenId);
+      setRes(response);
+      setToken(response.tokenId);
+    };
   
     return (
       <Grid
