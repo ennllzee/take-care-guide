@@ -143,9 +143,60 @@ const useGuideApi = () => {
   `;
 
   const LOGIN_GUIDE = gql`
-    query LOGIN_GUIDE($loginGuideToken: String!) {
+    query LOGIN_GUIDE($loginGuideToken: String) {
       loginGuide(Token: $loginGuideToken) {
         _id
+      }
+    }
+  `;
+
+  const GET_ALL_APPOINTMENT_BY_GUIDE = gql`
+    query GET_ALL_APPOINTMENT_BY_GUIDE($getAllAppointmentByGuideGuideId: ID!) {
+      getAllAppointmentByGuide(GuideId: $getAllAppointmentByGuideGuideId) {
+        _id
+        AppointTime
+        BeginTime
+        EndTime
+        Customer {
+          _id
+          FirstName
+          LastName
+          Gender
+          DOB
+          PhoneNumber
+          Email
+          Gmail
+          EmergencyTel
+          Avatar {
+            filename
+            mimetype
+            data
+          }
+          CongenitalDisorders
+        }
+        Department {
+          Name
+        }
+        Hospital {
+          Name
+          Address
+        }
+        Review {
+          Star
+          Comment
+        }
+        Record {
+          At
+          Title
+          Description
+        }
+        OpenLink
+        Note
+        Status {
+          Tag
+          Details
+        }
+        Period
       }
     }
   `;
@@ -444,6 +495,7 @@ const useGuideApi = () => {
     UPDATE_GUIDE,
     DELETE_GUIDE,
     LOGIN_GUIDE,
+    GET_ALL_APPOINTMENT_BY_GUIDE,
     GET_ALL_GUIDESCHEDULE_BYGUIDE,
     GET_SINGLE_GUIDESCHEDULE,
     GET_EXTENDTION_DATA,
