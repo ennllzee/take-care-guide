@@ -477,14 +477,26 @@ const useGuideApi = () => {
     }
   `;
 
-  const UPLOAD_MOREFILES = gql`
-    mutation UPLOAD_MOREFILES(
-      $uploadfilesGuideGuideId: ID!
-      $uploadfilesGuideFile: [Upload]
+  const UPLOAD_CERTIFICATE = gql`
+    mutation UploadCertificateGuideMutation(
+      $uploadCertificateGuideGuideId: ID!
+      $uploadCertificateGuideFile: Upload
     ) {
-      uploadfilesGuide(
-        guideId: $uploadfilesGuideGuideId
-        file: $uploadfilesGuideFile
+      uploadCertificateGuide(
+        guideId: $uploadCertificateGuideGuideId
+        file: $uploadCertificateGuideFile
+      )
+    }
+  `;
+
+  const UPLOAD_FACEWITHIDCARD = gql`
+    mutation UploadCertificateGuideMutation(
+      $uploadFaceWithIdcardGuideGuideId: ID!
+      $uploadFaceWithIdcardGuideFile: Upload
+    ) {
+      uploadFaceWithIdcardGuide(
+        guideId: $uploadFaceWithIdcardGuideGuideId
+        file: $uploadFaceWithIdcardGuideFile
       )
     }
   `;
@@ -508,7 +520,8 @@ const useGuideApi = () => {
     DELETE_GUIDESCHEDULE,
     CREATE_REPORT,
     UPLOAD_PROFILE,
-    UPLOAD_MOREFILES,
+    UPLOAD_CERTIFICATE,
+    UPLOAD_FACEWITHIDCARD
   };
 };
 

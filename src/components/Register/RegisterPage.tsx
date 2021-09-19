@@ -109,22 +109,60 @@ function RegisterPage() {
 
   const [submit, setSubmit] = useState<boolean>(false);
 
-  const { SIGNUP_GUIDE, UPLOAD_PROFILE, UPLOAD_MOREFILES } = useGuideApi();
+  const {
+    SIGNUP_GUIDE,
+    UPLOAD_PROFILE,
+    UPLOAD_CERTIFICATE,
+    UPLOAD_FACEWITHIDCARD,
+  } = useGuideApi();
 
   const [createGuide] = useMutation(SIGNUP_GUIDE, {
     onCompleted: (data) => {
       console.log(data);
-      addProfile({
-        variables: {
-          addGuideProfileFile: user.Avatar,
-          addGuideProfileGuideId: data.createdGuide._id,
-        },
-      });
+      if (user.Avatar) {
+        addProfile({
+          variables: {
+            addGuideProfileFile: user.Avatar,
+            addGuideProfileGuideId: data.createdGuide._id,
+          },
+        });
+      }
+      if (user.Education?.Certificate) {
+        addCertificate({
+          variables: {
+            uploadCertificateGuideFile: user.Education?.Certificate,
+            uploadCertificateGuideGuideId: data.createdGuide._id,
+          },
+        });
+      }
+
+      if (user.FaceWithIdCard) {
+        addFaceWithIdCard({
+          variables: {
+            uploadFaceWithIdcardGuideFile: user.FaceWithIdCard,
+            uploadFaceWithIdcardGuideGuideId: data.createdGuide._id,
+          },
+        });
+      }
     },
   });
 
   const [addProfile] = useMutation(UPLOAD_PROFILE, {
-    onCompleted: (data) => console.log(data),
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [addCertificate] = useMutation(UPLOAD_CERTIFICATE, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [addFaceWithIdCard] = useMutation(UPLOAD_FACEWITHIDCARD, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
   });
 
   const [displayImg, setdisplayImg] = useState<any | undefined>("");
@@ -132,12 +170,6 @@ function RegisterPage() {
   //NEEDED BACKEND
   const onSubmit = async () => {
     console.log(user);
-    console.log({
-      ...user,
-      Avatar: null,
-      Education: { ...user.Education, Certificate: null },
-    });
-    
     createGuide({
       variables: {
         createdGuideInput: {
