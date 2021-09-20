@@ -176,6 +176,7 @@ function RegisterPage() {
           ...user,
           Avatar: null,
           Education: { ...user.Education, Certificate: null },
+          FaceWithIdCard: null
         },
       },
     });
