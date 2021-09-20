@@ -1,11 +1,10 @@
 import {
   Button,
   CardMedia,
-  Checkbox,
   createStyles,
   Fab,
   FormControl,
-  FormControlLabel,
+  FormLabel,
   Grid,
   InputLabel,
   makeStyles,
@@ -20,32 +19,23 @@ import {
   Wc,
   Cake,
   Healing,
-  Email,
-  Phone,
-  PhoneAndroid,
   Home,
+  Book,
+  School,
+  Language,
+  AttachFile,
+  CheckCircle,
 } from "@material-ui/icons";
 import moment from "moment";
 import { useState } from "react";
 import GuideForm from "../../models/GuideForm";
+import LanguageSkill from "../../models/LanguageSkill";
+import Alert from "../Alert/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      minHeight: "100vh",
-    },
-    sub: {
-      minHeight: "15vh",
-    },
-    main: {
-      minHeight: "70vh",
-      paddingRight: "5%",
-      paddingLeft: "5%",
-      minWidth: "80vw",
-      maxWidth: "100vw",
-    },
     form: {
-      paddingTop: "5%",
+      paddingTop: "2%",
     },
     margin: {
       margin: theme.spacing(1),
@@ -68,54 +58,50 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       padding: "5%",
     },
+    title: {
+      color: "#6DB8A5",
+    },
   })
 );
 
-interface ContactFormProps {
+interface IdentifyFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
 }
 
-function ContactForm({ user, setUser, setStep }: ContactFormProps) {
+function IdentifyForm({ user, setUser, setStep }: IdentifyFormProps) {
   const classes = useStyles();
-  const [phoneNum, setPhoneNum] = useState<string | undefined>(
-    user.PhoneNumber
+  const [idCard, setIdCard] = useState<string | undefined>(user.IdCard);
+  const [idCardPic, setIdCardPic] = useState<any | undefined>(
+    user.FaceWithIdCard
   );
-  const [email, setEmail] = useState<string | undefined>(user.Email);
-  const [address, setAddress] = useState<string | undefined>(
-    user.ContactAddress
-  );
+
+  const uploadFile = async (e: any) => {
+    const file = e.target.files[0];
+    // const base64 = await convertBase64(file);
+    setIdCardPic(file);
+  };
+
+  const next = () => {
+    if (idCard !== undefined) {
+      setUser({
+        ...user,
+        IdCard: idCard,
+        FaceWithIdCard: idCardPic,
+      });
+      setStep(3);
+    }
+  };
 
   const back = () => {
     setUser({
       ...user,
-      PhoneNumber: phoneNum,
-      Email: email,
-      ContactAddress: address,
+      IdCard: idCard,
+      FaceWithIdCard: idCardPic,
     });
-    setStep(4);
+    setStep(1);
   };
-
-  const next = () => {
-    if (
-      phoneNum !== undefined &&
-      email !== undefined &&
-      address !== undefined
-    ) {
-      setUser({
-        ...user,
-        PhoneNumber: phoneNum,
-        Email: email,
-        ContactAddress: address,
-      });
-      setStep(6);
-    }
-  };
-
-  const [same, setSame] = useState<boolean>(
-    user.ContactAddress === user.Address ? true : false
-  );
 
   return (
     <Grid>
@@ -139,94 +125,83 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
                   style={{ background: "#6DB8A5", color: "white" }}
                   disabled={true}
                 >
-                  5
+                  2
                 </Fab>
               </Grid>
               <Grid item xs={8}>
-                <Typography variant="h4">Contact</Typography>
+                <Typography variant="h4">Identify</Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  ช่องทางการติดต่อ
+                  บัตรประจำตัวประชาชน
                 </Typography>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        {/* <Typography variant="h4">ช่องทางการติดต่อ</Typography> */}
+
         <div className={classes.margin}>
           <Grid container spacing={2} justify="center" alignItems="flex-end">
             <Grid item>
-              <Home />
+              <School />
             </Grid>
             <Grid item xs={10}>
               <TextField
                 id="input-with-icon-grid"
-                label="ที่อยู่ที่ติดต่อได้"
+                label="เลขประจำตัวประชาชน"
                 fullWidth={true}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                InputLabelProps={{
-                  shrink: address !== undefined,
-                }}
+                value={idCard}
+                onChange={(e) => setIdCard(e.target.value)}
                 type="text"
-                disabled={same}
                 required
-              />
-            </Grid>
-            <Grid item xs={10} style={{ padding: 0 }}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={same}
-                    onChange={() => {
-                      if (!same) {
-                        setAddress(user.Address);
-                      }
-                      setSame((s) => !s);
-                    }}
-                    color="primary"
-                  />
-                }
-                label="same as the address"
               />
             </Grid>
           </Grid>
         </div>
         <div className={classes.margin}>
-          <Grid container spacing={2} justify="center" alignItems="flex-end">
+          <Grid container spacing={2} justify="center" alignItems="center">
             <Grid item>
-              <PhoneAndroid />
+              <AttachFile />
             </Grid>
             <Grid item xs={10}>
-              <TextField
-                id="input-with-icon-grid"
-                label="เบอร์โทรศัพท์มือถือ"
-                fullWidth={true}
-                value={phoneNum}
-                onChange={(e) => setPhoneNum(e.target.value)}
-                required
-                type="text"
-              />
+              <FormLabel component="legend">
+                แนบรูปคู่บัตรประจำตัวประชาชน
+              </FormLabel>
+            </Grid>
+            {idCardPic !== undefined && (
+              <Grid item xs={10}>
+                <Grid
+                  container
+                  spacing={1}
+                  alignItems="flex-end"
+                  justify="flex-start"
+                >
+                  <CheckCircle />
+                  <Typography align="left">อัปโหลดสำเร็จ</Typography>
+                </Grid>
+              </Grid>
+            )}
+            <Grid item xs={10}>
+              <Typography align="center">
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="contained-button-file"
+                  //   key={imgName}
+                  onChange={(e: any) => {
+                    // setImgName(e.currentTarget.files[0].name);
+                    uploadFile(e);
+                  }}
+                  hidden
+                />
+                <label htmlFor="contained-button-file">
+                  <Button variant="contained" color="primary" component="span">
+                    อัปโหลด
+                  </Button>
+                </label>
+              </Typography>
             </Grid>
           </Grid>
         </div>
-        <div className={classes.margin}>
-          <Grid container spacing={2} justify="center" alignItems="flex-end">
-            <Grid item>
-              <Email />
-            </Grid>
-            <Grid item xs={10}>
-              <TextField
-                id="input-with-icon-grid"
-                label="อีเมล์"
-                fullWidth={true}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                required
-              />
-            </Grid>
-          </Grid>
-        </div>
+
         <Grid
           container
           direction="row"
@@ -262,4 +237,4 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
   );
 }
 
-export default ContactForm;
+export default IdentifyForm;

@@ -39,6 +39,7 @@ import { gql, useMutation } from "@apollo/client";
 import EducationForm from "./EducationForm";
 import WorkForm from "./WorkForm";
 import useGuideApi from "../../hooks/guidehooks";
+import IdentifyForm from "./IdentifyForm";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -209,7 +210,7 @@ function RegisterPage() {
           >
             <Grid item xs={12} md={12} lg={12}>
               {/* <Paper className={classes.box}>         */}
-              <div className={classes.margin}>
+              {/* <div className={classes.margin}>
                 <Grid
                   container
                   spacing={2}
@@ -232,7 +233,7 @@ function RegisterPage() {
                     />
                   </Grid>
                 </Grid>
-              </div>
+              </div> */}
               {/* </Paper> */}
               {/* </form> */}
             </Grid>
@@ -247,22 +248,28 @@ function RegisterPage() {
                 />
               )}
               {step === 2 && (
-                <EducationForm
+                <IdentifyForm
                   user={user}
                   setUser={setUser}
                   setStep={setStep}
                 />
               )}
               {step === 3 && (
-                <WorkForm user={user} setUser={setUser} setStep={setStep} />
-              )}
-              {step === 4 && (
-                <ContactForm user={user} setUser={setUser} setStep={setStep} />
-              )}
-              {step === 5 && (
-                <RegisterSubmit
+                <EducationForm
                   user={user}
                   setUser={setUser}
+                  setStep={setStep}
+                />
+              )}
+              {step === 4 && (
+                <WorkForm user={user} setUser={setUser} setStep={setStep} />
+              )}
+              {step === 5 && (
+                <ContactForm user={user} setUser={setUser} setStep={setStep} />
+              )}
+              {step === 6 && (
+                <RegisterSubmit
+                  user={user}
                   setStep={setStep}
                   setSubmit={setSubmit}
                   displayImg={displayImg}
