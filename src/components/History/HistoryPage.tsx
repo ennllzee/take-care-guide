@@ -1,11 +1,22 @@
-import { makeStyles, Theme, createStyles, Grid, Typography, Divider } from "@material-ui/core";
+import { useQuery } from "@apollo/client";
+import {
+  makeStyles,
+  Theme,
+  createStyles,
+  Grid,
+  Typography,
+  Divider,
+  CircularProgress,
+} from "@material-ui/core";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
+import useGuideApi from "../../hooks/guidehooks";
 import Appointment from "../../models/Appointment";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
+import AppointmentCard from "./AppointmentCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,8 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "1%",
     },
     card: {
-      padding: "2%"
-    }
+      padding: "2%",
+    },
   })
 );
 
@@ -40,145 +51,22 @@ function HistoryPage() {
     }
   }, [accessToken]);
 
-  // const { getAllAppointment } = useAppointmentApi();
-//   const QUERY_ALL_APPOINTMENT = gql`
-//   query Query($getAllAppointmentByPatientPatientId: ID!, $getAllAppointmentByGuideGuideId: ID!) {
-//     getAllAppointmentByPatient(
-//       PatientId: $getAllAppointmentByPatientPatientId
-//     ) {
-//       _id
-//       AppointTime
-//       BeginTime
-//       EndTime
-//       PatientId {
-//         _id
-//         FirstName
-//         LastName
-//         Gender
-//         DOB
-//         PhoneNumber
-//         Email
-//         Avatar
-//         Role
-//       }
-//       GuideId {
-//         _id
-//         FirstName
-//         LastName
-//         Gender
-//         PhoneNumber
-//         Email
-//         IsValidated
-//         Avatar
-//         Role
-//       }
-//       DepId {
-//         _id
-//         Name
-//         BuildingId {
-//           _id
-//           Name
-//         }
-//         HospitalId {
-//           _id
-//           Name
-//         }
-//       }
-//       Review {
-//         Star
-//         Comment
-//       }
-//       Record {
-//         At
-//         Title
-//         Description
-//       }
-//       OpenLink
-//       Note
-//       CreatedAt
-//       UpdatedAt
-//     },
-//     getAllAppointmentByGuide(GuideId: $getAllAppointmentByGuideGuideId) {
-//       _id
-//       AppointTime
-//       BeginTime
-//       EndTime
-//       PatientId {
-//         _id
-//         FirstName
-//         LastName
-//         Gender
-//         DOB
-//         PhoneNumber
-//         Email
-//         Avatar
-//         Role
-//       }
-//       GuideId {
-//         _id
-//         FirstName
-//         LastName
-//         Gender
-//         PhoneNumber
-//         Email
-//         IsValidated
-//         Avatar
-//         Role
-//       }
-//       DepId {
-//         _id
-//         Name
-//         BuildingId {
-//           _id
-//           Name
-//         }
-//         HospitalId {
-//           _id
-//           Name
-//         }
-//       }
-//       Review {
-//         Star
-//         Comment
-//       }
-//       Record {
-//         At
-//         Title
-//         Description
-//       }
-//       OpenLink
-//       Note
-//       CreatedAt
-//       UpdatedAt
-//     }
-//   }
-//   `
-//   const id = localStorage.getItem("_id");
+  const id = localStorage.getItem("_id");
+  const { GET_ALL_APPOINTMENT_BY_GUIDE } = useGuideApi();
 
-//   const { loading, error, data } = useQuery(QUERY_ALL_APPOINTMENT, {
-//     variables: { getAllAppointmentByPatientPatientId: id, getAllAppointmentByGuideGuideId: id },
-//   });
+  const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
+    variables: { getAllAppointmentByGuideGuideId: id },
+  });
 
-//   const [appointment, setAppointment] = useState<Appointment[]>(
-//     data !== undefined && role === "customer" ? data.getAllAppointmentByPatient : 
-//     data !== undefined && role === "guide" ? data.getAllAppointmentByGuide
-//     : []
-//   );
+  const [appointment, setAppointment] = useState<Appointment[]>(
+    data !== undefined ? data.getAllAppointmentByGuide : []
+  );
 
-//   useEffect(() => {
-//     if (!loading) {
-//       if(role === "customer"){
-//         console.log(data);
-//         setAppointment(data.getAllAppointmentByPatient);
-//       }else{ //guide
-//         setAppointment(data.getAllAppointmentByGuide);
-//       }
-      
-//     }
-//     console.log(error);
-//   }, [loading]);
-
-  const [appointment, setAppointment] = useState<Appointment[]>([]);
+  useEffect(() => {
+    if (!loading && data) {
+      setAppointment(data.getAllAppointmentByGuide);
+    }
+  }, [loading, data]);
 
   return (
     <Grid>
@@ -192,62 +80,64 @@ function HistoryPage() {
       >
         <Grid item className={classes.sub}></Grid>
         <Grid item className={classes.main}>
-          {/* {!loading ? ( */}
-            <>
-              {appointment !== undefined && appointment.find(a => a.EndTime !== null) ? (
-                appointment
-                  ?.filter(a => a.EndTime !== null).slice().sort((a, b) => {
-                    return (
-                      new Date(a.AppointTime).getTime() -
-                      new Date(b.AppointTime).getTime()
-                    );
-                  })
-                  .reverse()
-                  .map((a) => {
-                    return (
-                      <>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justify="flex-start"
-                          className={classes.line}
-                        >
-                          <Grid item xs={10} md={11} lg={11}>
-                            <Typography variant="h5">
-                              {convertToThaiDate(new Date(a.AppointTime))}
-                            </Typography>
-                          </Grid>
+          {!loading ? (
+          <>
+            {appointment !== undefined &&
+            appointment.find((a) => a.EndTime !== null) ? (
+              appointment
+                ?.filter((a) => a.EndTime !== null)
+                .slice()
+                .sort((a, b) => {
+                  return (
+                    new Date(a.AppointTime).getTime() -
+                    new Date(b.AppointTime).getTime()
+                  );
+                })
+                .reverse()
+                .map((a) => {
+                  return (
+                    <>
+                      <Grid
+                        container
+                        direction="row"
+                        alignItems="center"
+                        justify="flex-start"
+                        className={classes.line}
+                      >
+                        <Grid item xs={10} md={11} lg={11}>
+                          <Typography variant="h5">
+                            {convertToThaiDate(new Date(a.AppointTime))}
+                          </Typography>
                         </Grid>
-                        <Divider variant="middle" />
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justify="center"
-                          className={classes.card}
-                        >
-                          <Grid item xs={12} md={10} lg={8}>
-                            {/* <AppointmentCard
+                      </Grid>
+                      <Divider variant="middle" />
+                      <Grid
+                        container
+                        direction="row"
+                        alignItems="center"
+                        justify="center"
+                        className={classes.card}
+                      >
+                        <Grid item xs={12} md={10} lg={8}>
+                          <AppointmentCard
                               appointment={a}
-                              match={role === "customer" ? a.Guide : a.Customer}
-                            /> */}
-                          </Grid>
+                            />
                         </Grid>
-                      </>
-                    );
-                  })
-              ) : (
-                <Typography
-                  align="center"
-                  variant="subtitle1"
-                  color="textSecondary"
-                >
-                  ไม่มีประวัติการนัดหมาย
-                </Typography>
-              )}
-            </>
-           {/* ) : (
+                      </Grid>
+                    </>
+                  );
+                })
+            ) : (
+              <Typography
+                align="center"
+                variant="subtitle1"
+                color="textSecondary"
+              >
+                ไม่มีประวัติการนัดหมาย
+              </Typography>
+            )}
+          </>
+          ) : (
              <Grid
               container
               direction="row"
@@ -256,7 +146,7 @@ function HistoryPage() {
             >
               <CircularProgress disableShrink />
             </Grid>
-          )} */}
+          )}
         </Grid>
 
         <Grid item className={classes.sub}></Grid>

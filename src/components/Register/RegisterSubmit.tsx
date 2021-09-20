@@ -27,6 +27,7 @@ import {
   School,
   Language,
   Work,
+  CreditCard,
 } from "@material-ui/icons";
 import moment from "moment";
 import { useState } from "react";
@@ -77,7 +78,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface RegisterSubmitProps {
   user: GuideForm;
-  setUser: any;
   setStep: any;
   setSubmit: any;
   displayImg: any;
@@ -85,7 +85,6 @@ interface RegisterSubmitProps {
 
 function RegisterSubmit({
   user,
-  setUser,
   setStep,
   setSubmit,
   displayImg,
@@ -118,7 +117,7 @@ function RegisterSubmit({
                   style={{ background: "#6DB8A5", color: "white" }}
                   disabled={true}
                 >
-                  5
+                  6
                 </Fab>
               </Grid>
               <Grid item xs={8}>
@@ -238,6 +237,23 @@ function RegisterSubmit({
         <div className={classes.margin}>
           <Grid container spacing={2} justify="center" alignItems="flex-end">
             <Grid item>
+              <CreditCard />
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="input-with-icon-grid"
+                label="เลขประจำตัวประชาชน"
+                fullWidth={true}
+                value={user.IdCard}
+                type="text"
+                disabled={true}
+              />
+            </Grid>
+          </Grid>
+        </div>
+        <div className={classes.margin}>
+          <Grid container spacing={2} justify="center" alignItems="flex-end">
+            <Grid item>
               <Book />
             </Grid>
             <Grid item xs={10}>
@@ -279,32 +295,38 @@ function RegisterSubmit({
             </Grid>
           </Grid>
           <Grid container spacing={1} justify="center" alignItems="center">
-            {user.LangSkill?.map((m) => {
-              return (
-                <>
-                  <Grid item xs={5}>
-                    <TextField
-                      id="input-with-icon-grid"
-                      label="ชื่อภาษา"
-                      fullWidth={true}
-                      value={m.Language}
-                      disabled={true}
-                      type="text"
-                    />
-                  </Grid>
-                  <Grid item xs={5}>
-                    <TextField
-                      id="input-with-icon-grid"
-                      label="ระดับความชำนาญ"
-                      fullWidth={true}
-                      value={"ระดับ " + m.Level}
-                      disabled={true}
-                      type="text"
-                    />
-                  </Grid>
-                </>
-              );
-            })}
+            {user.LangSkill?.length !== 0 ? (
+              <>
+                {user.LangSkill?.map((m) => {
+                  return (
+                    <>
+                      <Grid item xs={5}>
+                        <TextField
+                          id="input-with-icon-grid"
+                          label="ชื่อภาษา"
+                          fullWidth={true}
+                          value={m.Language}
+                          disabled={true}
+                          type="text"
+                        />
+                      </Grid>
+                      <Grid item xs={5}>
+                        <TextField
+                          id="input-with-icon-grid"
+                          label="ระดับความชำนาญ"
+                          fullWidth={true}
+                          value={"ระดับ " + m.Level}
+                          disabled={true}
+                          type="text"
+                        />
+                      </Grid>
+                    </>
+                  );
+                })}
+              </>
+            ) : (
+              "-"
+            )}
           </Grid>
         </div>
         <div className={classes.margin}>

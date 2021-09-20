@@ -6,11 +6,13 @@ import {
   Fab,
   FormControl,
   Grid,
+  Input,
   InputLabel,
   makeStyles,
   MenuItem,
   Select,
   TextField,
+  TextFieldProps,
   Theme,
   Typography,
 } from "@material-ui/core";
@@ -59,7 +61,13 @@ interface ProfileFormProps {
   setdisplayImg: any;
 }
 
-function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: ProfileFormProps) {
+function ProfileForm({
+  user,
+  setUser,
+  setStep,
+  displayImg,
+  setdisplayImg,
+}: ProfileFormProps) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState<string | undefined>(
     user.FirstName
@@ -81,7 +89,7 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
     setdisplayImg(base64);
   };
 
-  const [alert,setAlert] = useState<boolean>(false)
+  const [alert, setAlert] = useState<boolean>(false);
 
   const convertBase64 = (file: any) => {
     return new Promise((resolve, reject) => {
@@ -116,10 +124,25 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
         Avatar: avatar,
       });
       setStep(2);
-    }else{
-      setAlert(true)
+    } else {
+      setAlert(true);
     }
   };
+
+  const renderInput = (props: TextFieldProps): any => (
+    <TextField
+      onClick={props.onClick}
+      label="วันเกิด"
+      fullWidth={true}
+      value={dob !== undefined ? convertToThaiDate(new Date(dob)) : null}
+      onChange={props.onChange}
+      required
+      type="text"
+      InputProps={{
+        readOnly: true,
+      }}
+    />
+  );
 
   return (
     <Grid>
@@ -130,7 +153,7 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
           alignItems="flex-start"
           justify="space-between"
         >
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <Grid
               container
               spacing={2}
@@ -259,9 +282,9 @@ function ProfileForm({ user, setUser, setStep , displayImg, setdisplayImg}: Prof
                   onChange={(e) => setDOB(e?.toISOString())}
                   openTo="year"
                   views={["year", "month", "date"]}
-                  required
                   disableFuture
                   fullWidth={true}
+                  TextFieldComponent={renderInput}
                 />
               </MuiPickersUtilsProvider>
             </Grid>

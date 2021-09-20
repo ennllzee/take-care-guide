@@ -80,7 +80,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
       ...user,
       WorkExp: hasExp ? workExp : [],
     });
-    setStep(4);
+    setStep(5);
   };
 
   const back = () => {
@@ -88,7 +88,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
       ...user,
       WorkExp: hasExp ? workExp : [],
     });
-    setStep(2);
+    setStep(3);
   };
 
   const [duplicate, setDuplicate] = useState<boolean>(false);
@@ -128,7 +128,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
           alignItems="flex-start"
           justify="space-between"
         >
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <Grid
               container
               spacing={2}
@@ -141,7 +141,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                   style={{ background: "#6DB8A5", color: "white" }}
                   disabled={true}
                 >
-                  3
+                  4
                 </Fab>
               </Grid>
               <Grid item xs={8}>
@@ -263,7 +263,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                     id="input-with-icon-grid"
                     label="ตำแหน่งงาน"
                     fullWidth={true}
-                    value={newTitle === undefined ? undefined : newTitle}
+                    value={newTitle !== undefined ? newTitle : null}
                     onChange={(e) => setNewTitle(e.target.value)}
                     type="text"
                   />
@@ -273,7 +273,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                       id="input-with-icon-grid"
                       label="สถานที่ทำงาน"
                       fullWidth={true}
-                      value={newWorkPlace === undefined ? undefined : newWorkPlace}
+                      value={newWorkPlace !== undefined ? newWorkPlace : null}
                       onChange={(e) => setNewWorkPlace(e.target.value)}
                       type="text"
                     />

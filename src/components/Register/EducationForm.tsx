@@ -24,6 +24,7 @@ import {
   School,
   Language,
   AttachFile,
+  CheckCircle,
 } from "@material-ui/icons";
 import moment from "moment";
 import { useState } from "react";
@@ -63,13 +64,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface ProfileFormProps {
+interface EducationFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
 }
 
-function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
+function EducationForm({ user, setUser, setStep }: EducationFormProps) {
   const classes = useStyles();
   const [degree, setDegree] = useState<string | undefined>(
     user.Education?.Degree
@@ -112,21 +113,6 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
     setCertificate(file);
   };
 
-  const convertBase64 = (file: any) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
-
   const next = () => {
     if (degree !== undefined && acadamy !== undefined) {
       setUser({
@@ -138,7 +124,7 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
         },
         LangSkill: languageSkill,
       });
-      setStep(3);
+      setStep(4);
     }
   };
 
@@ -152,7 +138,7 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
       },
       LangSkill: languageSkill,
     });
-    setStep(1);
+    setStep(2);
   };
 
   return (
@@ -164,7 +150,7 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
           alignItems="flex-start"
           justify="space-between"
         >
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <Grid
               container
               spacing={2}
@@ -177,7 +163,7 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
                   style={{ background: "#6DB8A5", color: "white" }}
                   disabled={true}
                 >
-                  2
+                  3
                 </Fab>
               </Grid>
               <Grid item xs={8}>
@@ -250,7 +236,22 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
             </Grid>
             <Grid item xs={10}>
               <FormLabel component="legend">แนบหลักฐานทางการศึกษา</FormLabel>
-              <Typography align="left">
+            </Grid>
+            {certificate !== undefined && (
+              <Grid item xs={10}>
+                <Grid
+                  container
+                  spacing={1}
+                  alignItems="flex-end"
+                  justify="flex-start"
+                >
+                  <CheckCircle />
+                  <Typography align="left">อัปโหลดสำเร็จ</Typography>
+                </Grid>
+              </Grid>
+            )}
+            <Grid item xs={10}>
+              <Typography align="center">
                 <input
                   type="file"
                   accept="image/*"
@@ -260,11 +261,18 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
                     // setImgName(e.currentTarget.files[0].name);
                     uploadFile(e);
                   }}
+                  hidden
                 />
+                <label htmlFor="contained-button-file">
+                  <Button variant="contained" color="primary" component="span">
+                    อัปโหลด
+                  </Button>
+                </label>
               </Typography>
             </Grid>
           </Grid>
         </div>
+        
         <div className={classes.margin}>
           <Grid container spacing={1} justify="center" alignItems="center">
             <Grid item>
@@ -294,7 +302,7 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
                   <Grid item xs={4}>
                     <TextField
                       id="input-with-icon-grid"
-                      label="ระดับความชำนาญ"
+                      label="ความชำนาญ"
                       fullWidth={true}
                       value={"ระดับ " + m.Level}
                       disabled={true}
@@ -316,22 +324,22 @@ function EducationForm({ user, setUser, setStep }: ProfileFormProps) {
                 id="input-with-icon-grid"
                 label="ชื่อภาษา"
                 fullWidth={true}
-                value={newLang === undefined ? undefined : newLang}
+                value={newLang !== undefined ? newLang : null}
                 onChange={(e) => setNewLang(e.target.value)}
                 type="text"
               />
             </Grid>
             <Grid item xs={5} md={4} lg={4}>
               <FormControl required fullWidth={true}>
-                <InputLabel id="level-label">ระดับความชำนาญ</InputLabel>
+                <InputLabel id="level-label" shrink={newLevel !== undefined}>ความชำนาญ</InputLabel>
                 <Select
                   labelId="level-label"
-                  value={newLevel === undefined ? undefined : newLevel}
+                  value={newLevel !== undefined ? newLevel : null}
                   onChange={(e) => setNewLevel(e.target.value as number)}
                   fullWidth={true}
                 >
                   <MenuItem value={undefined} disabled>
-                    ระดับความชำนาญ
+                    ความชำนาญ
                   </MenuItem>
                   <MenuItem value={1}>ระดับ 1 สนทนาได้เล็กน้อย</MenuItem>
                   <MenuItem value={2}>ระดับ 2 สนทนาได้</MenuItem>
