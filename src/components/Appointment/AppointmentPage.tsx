@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client";
 import {
   makeStyles,
   Theme,
@@ -7,13 +8,17 @@ import {
   Button,
   Divider,
   Checkbox,
+  CircularProgress,
 } from "@material-ui/core";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
+import convertToThaiDate from "../../hooks/convertToThaiDate";
+import useGuideApi from "../../hooks/guidehooks";
 import Appointment from "../../models/Appointment";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
+import AppointmentCard from "./AppointmentCard";
 import ManageSchedule from "./ManageSchedule";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: "100vw",
     },
     line: {
-      padding: "2%",
+      padding: "1%",
     },
     card: {
       padding: "2%",
@@ -49,30 +54,26 @@ function AppointmentPage() {
     }
   }, [accessToken]);
 
-  // const { getAllAppointment } = useAppointmentApi();
-  // const id = localStorage.getItem("_id");
+  const { GET_ALL_APPOINTMENT_BY_GUIDE } = useGuideApi();
+  const id = localStorage.getItem("_id");
 
-  // const { loading, error, data } = useQuery(getAllAppointment, {
-  //   variables: { getAllAppointmentGuideId: id },
-  // });
+  const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
+    variables: { getAllAppointmentByGuideGuideId: id },
+  });
 
-  // const [appointment, setAppointment] = useState<any[]>(
-  //   data !== undefined ? data.getAllAppointment : []
-  // );
+  const [appointment, setAppointment] = useState<any[]>(
+    data !== undefined ? data.getAllAppointmentByGuide : []
+  );
 
   const [manage, setManage] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   if (!loading) {
-  //     console.log(data);
-  //     setAppointment(data.getAllAppointment);
-  //   }
-  //   console.log(error);
-  // }, [loading]);
-
-
-
-  const [appointment, setAppointment] = useState<Appointment[]>([]);
+  useEffect(() => {
+    if (!loading && data) {
+      console.log(data);
+      setAppointment(data.getAllAppointmentByGuide);
+    }
+    console.log(error);
+  }, [loading]);
 
   return (
     <Grid>
@@ -92,65 +93,62 @@ function AppointmentPage() {
             </Button>
           </Typography>
 
-          {/* {!loading ? ( */}
-          <>
-            {appointment !== undefined &&
-            appointment.find((a) => a.EndTime === null) ? (
-              appointment
-                ?.filter((a) => a.EndTime === null)
-                .slice()
-                .sort((a, b) => {
-                  return (
-                    new Date(a.AppointTime).getTime() -
-                    new Date(b.AppointTime).getTime()
-                  );
-                })
-                .map((a) => {
-                  return (
-                    <>
-                      <Grid
-                        container
-                        direction="row"
-                        alignItems="center"
-                        justify="flex-start"
-                        className={classes.line}
-                      >
-                        <Grid item xs={10} md={11} lg={11}>
-                          <Typography variant="h5">
-                            {moment(a.AppointTime).format("DD MMMM YYYY")}
-                          </Typography>
+          {!loading ? (
+            <>
+              {appointment !== undefined &&
+              appointment.find((a) => a.Status.Tag ==="Guide Confirm" && a.Status.Tag ==="In process") ? (
+                appointment
+                  ?.filter((a) => a.EndTime === null)
+                  .slice()
+                  .sort((a, b) => {
+                    return (
+                      new Date(a.AppointTime).getTime() -
+                      new Date(b.AppointTime).getTime()
+                    );
+                  })
+                  .map((a) => {
+                    return (
+                      <>
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justify="flex-start"
+                          className={classes.line}
+                        >
+                          <Grid item xs={10} md={11} lg={11}>
+                            <Typography variant="h5">
+                              {convertToThaiDate(new Date(a.AppointTime))}
+                            </Typography>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                      <Divider variant="middle" />
-                      <Grid
-                        container
-                        direction="row"
-                        alignItems="center"
-                        justify="center"
-                        className={classes.card}
-                      >
-                        <Grid item xs={12} md={10} lg={8}>
-                          {/* <AppointmentCard
-                              appointment={a}
-                              match={a.PatientId}
-                            /> */}
+                        <Divider variant="middle" />
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justify="center"
+                          className={classes.card}
+                        >
+                          <Grid item xs={12} md={10} lg={8}>
+                            <AppointmentCard appointment={a} />
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </>
-                  );
-                })
-            ) : (
-              <Typography
-                align="center"
-                variant="subtitle1"
-                color="textSecondary"
-              >
-                ไม่มีการนัดหมาย
-              </Typography>
-            )}
-          </>
-          {/* ) : (
-             <Grid
+                      </>
+                    );
+                  })
+              ) : (
+                <Typography
+                  align="center"
+                  variant="subtitle1"
+                  color="textSecondary"
+                >
+                  ไม่มีการนัดหมาย
+                </Typography>
+              )}
+            </>
+          ) : (
+            <Grid
               container
               direction="row"
               alignItems="center"
@@ -158,12 +156,12 @@ function AppointmentPage() {
             >
               <CircularProgress disableShrink />
             </Grid>
-          )} */}
+          )}
         </Grid>
 
         <Grid item className={classes.sub}></Grid>
       </Grid>
-      <BottomBar page="Manage Appointment" />
+      <BottomBar page="Appointment" />
       <ManageSchedule open={manage} setOpen={setManage} />
     </Grid>
   );
