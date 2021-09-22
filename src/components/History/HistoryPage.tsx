@@ -83,7 +83,7 @@ function HistoryPage() {
           {!loading ? (
           <>
             {appointment !== undefined &&
-            appointment.find((a) => a.EndTime !== null) ? (
+            appointment.find((a) => a.Status.Tag === "Completed") ? (
               appointment
                 ?.filter((a) => a.EndTime !== null)
                 .slice()
