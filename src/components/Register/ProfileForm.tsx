@@ -6,7 +6,6 @@ import {
   Fab,
   FormControl,
   Grid,
-  Input,
   InputLabel,
   makeStyles,
   MenuItem,
@@ -16,13 +15,13 @@ import {
   Theme,
   Typography,
 } from "@material-ui/core";
-import { Person, Wc, Cake, Healing, Home } from "@material-ui/icons";
+import { Person, Wc, Cake, Home } from "@material-ui/icons";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import moment from "moment";
 import { useState } from "react";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
 import GuideForm from "../../models/GuideForm";
 import Alert from "../Alert/Alert";
+import Image from "material-ui-image";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -188,7 +187,8 @@ function ProfileForm({
             className={classes.card}
           >
             <Grid item xs={4}>
-              <CardMedia image={displayImg} className={classes.img} />
+              {/* <CardMedia image={displayImg} className={classes.img} /> */}
+              <Image src={displayImg} cover={true} />
             </Grid>
             <Grid item xs={6}>
               <Typography align="center">

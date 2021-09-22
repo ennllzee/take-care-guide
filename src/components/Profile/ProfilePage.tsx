@@ -10,6 +10,7 @@ import {
   MenuItem,
   Button,
   CircularProgress,
+  TextFieldProps,
 } from "@material-ui/core";
 import {
   Person,
@@ -31,6 +32,7 @@ import Guide from "../../models/Guide";
 import useGuideApi from "../../hooks/guidehooks";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+import convertToThaiDate from "../../hooks/convertToThaiDate";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -122,6 +124,22 @@ function ProfilePage() {
 
     setEdit(false);
   };
+
+  const renderInput = (props: TextFieldProps): any => (
+    <TextField
+      onClick={edit ? props.onClick : undefined}
+      label="วันเกิด"
+      fullWidth={true}
+      value={dob !== undefined ? convertToThaiDate(new Date(dob)) : null}
+      onChange={props.onChange}
+      required
+      type="text"
+      disabled={!edit}
+      InputProps={{
+        readOnly: true,
+      }}
+    />
+  );
 
   return (
     <Grid>
@@ -239,17 +257,13 @@ function ProfilePage() {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <DatePicker
                             label="วันเกิด"
-                            clearable
-                            value={
-                              dob !== undefined ? new Date(dob) : undefined
-                            }
+                            value={dob !== undefined ? new Date(dob) : null}
                             onChange={(e) => setDOB(e?.toISOString())}
                             openTo="year"
                             views={["year", "month", "date"]}
-                            required
                             disableFuture
                             fullWidth={true}
-                            disabled={!edit}
+                            TextFieldComponent={renderInput}
                           />
                         </MuiPickersUtilsProvider>
                       </Grid>

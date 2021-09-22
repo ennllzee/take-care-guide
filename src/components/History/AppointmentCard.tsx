@@ -22,7 +22,6 @@ import Appointment from "../../models/Appointment";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: "4%",
       paddingBottom: 0,
     },
     expand: {
@@ -147,6 +146,16 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
             <Grid item xs={7}>
               <Typography variant="body1" align="left">
                 {moment(appointment.EndTime).format("HH.mm น.")}
+              </Typography>
+            </Grid>
+            <Grid item xs={5}>
+              <Typography variant="body1" align="left">
+                ไกด์:
+              </Typography>
+            </Grid>
+            <Grid item xs={7}>
+              <Typography variant="body1" align="left">
+                {appointment.Guide?.FirstName} {appointment.Guide?.LastName}
               </Typography>
             </Grid>
             <Grid item xs={5}>
