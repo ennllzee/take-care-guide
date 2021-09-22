@@ -16,12 +16,9 @@ import {
   Person,
   Wc,
   Cake,
-  Healing,
   PhoneAndroid,
   Email,
-  Phone,
 } from "@material-ui/icons";
-import moment from "moment";
 import { useState, useEffect } from "react";
 import { history } from "../../helper/history";
 import BottomBar from "../BottomBar/BottomBar";
@@ -75,7 +72,7 @@ function ProfilePage() {
 
   useEffect(() => {
     console.log(data);
-    if (!loading && data !== undefined) {
+    if (!loading && data) {
       setUser(data.getGuide);
       setFirstName(data.getGuide?.FirstName);
       setLastName(data.getGuide?.LastName);
@@ -89,6 +86,7 @@ function ProfilePage() {
           : undefined
       );
     }
+    console.log(error)
   }, [loading]);
 
   const [firstName, setFirstName] = useState<string | undefined>(
