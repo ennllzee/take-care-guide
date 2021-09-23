@@ -12,6 +12,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Button, Grid } from "@material-ui/core";
 import moment from "moment";
 import Appointment from "../../models/Appointment";
+import Image from "material-ui-image";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,6 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
     avatar: {
       backgroundColor: red[500],
     },
+    below: {
+      paddingTop: 0,
+    },
   })
 );
 
@@ -47,6 +51,8 @@ function RequestCard({ appointment }: RequestCardProps) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  console.log(appointment.Customer.CongenitalDisorders !== undefined)
 
   return (
     <Card>
@@ -116,42 +122,105 @@ function RequestCard({ appointment }: RequestCardProps) {
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
+        <CardContent className={classes.below}>
           <Grid
             container
             direction="row"
             alignItems="flex-start"
             justify="center"
           >
-            <Grid item xs={12}></Grid>
             <Grid item xs={12}>
               <Grid
                 container
-                direction="row"
-                alignItems="flex-end"
+                spacing={1}
+                alignItems="center"
                 justify="space-between"
               >
                 <Grid item xs={4}>
-                  <Button
-                    fullWidth={true}
-                    type="submit"
-                    variant="contained"
-                  >
-                    ปฏิเสธ
-                  </Button>
+                  <Image
+                    src={"https://pbs.twimg.com/media/D42rqfjU0AA0CBZ.jpg"}
+                    // src={appointment.Customer.Avatar}
+                    cover={true}
+                    // style={{padding: 0}}
+                  />
                 </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    fullWidth={true}
-                    type="submit"
-                    variant="contained"
+                <Grid item xs={8}>
+                  <Grid
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justify="flex-start"
                   >
-                    ตอบรับ
-                  </Button>
+                    <Grid item xs={5}>
+                      <Typography variant="body1">ชื่อ:</Typography>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Typography variant="body1">
+                        {appointment.Customer.FirstName}{" "}
+                        {appointment.Customer.LastName}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography variant="body1">เพศ:</Typography>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Typography variant="body1">
+                        {appointment.Customer.Gender === "male" ? "ชาย" : appointment.Customer.Gender === "female" ? "หญิง" : "อื่น ๆ"}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography variant="body1">อายุ:</Typography>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Typography variant="body1">
+                        {moment().diff(
+                          appointment.Customer.DOB,
+                          "years",
+                          false
+                        )}{" "}
+                        ปี
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Typography variant="body1">
+                        โรคประจำตัว:
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Typography variant="body1">
+                        {appointment.Customer.CongenitalDisorders !== undefined && appointment.Customer.CongenitalDisorders !== "" && appointment.Customer.CongenitalDisorders !== "nope" ? 
+                          <>{appointment.Customer.CongenitalDisorders} wtf</>
+                        :
+                          "ไม่มี"
+                        }
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-            {/* <Grid item xs={5}>
+          </Grid>
+          <br/>
+          <Grid item xs={12}>
+            <Grid
+              container
+              direction="row"
+              alignItems="flex-end"
+              justify="space-between"
+            >
+              <Grid item xs={4}>
+                <Button fullWidth={true} type="submit" variant="contained">
+                  ปฏิเสธ
+                </Button>
+              </Grid>
+              <Grid item xs={4}>
+                <Button fullWidth={true} type="submit" variant="contained">
+                  ตอบรับ
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* <Grid item xs={5}>
               <Typography variant="body1" align="left">
                 เวลาเริ่ม:
               </Typography>
@@ -199,7 +268,6 @@ function RequestCard({ appointment }: RequestCardProps) {
                 )}
               </Typography>
             </Grid> */}
-          </Grid>
         </CardContent>
       </Collapse>
     </Card>

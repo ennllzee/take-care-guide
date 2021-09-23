@@ -10,17 +10,15 @@ import {
   MenuItem,
   Button,
   CircularProgress,
+  TextFieldProps,
 } from "@material-ui/core";
 import {
   Person,
   Wc,
   Cake,
-  Healing,
   PhoneAndroid,
   Email,
-  Phone,
 } from "@material-ui/icons";
-import moment from "moment";
 import { useState, useEffect } from "react";
 import { history } from "../../helper/history";
 import BottomBar from "../BottomBar/BottomBar";
@@ -31,6 +29,7 @@ import Guide from "../../models/Guide";
 import useGuideApi from "../../hooks/guidehooks";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+import convertToThaiDate from "../../hooks/convertToThaiDate";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,7 +72,7 @@ function ProfilePage() {
 
   useEffect(() => {
     console.log(data);
-    if (!loading && data !== undefined) {
+    if (!loading && data) {
       setUser(data.getGuide);
       setFirstName(data.getGuide?.FirstName);
       setLastName(data.getGuide?.LastName);
@@ -87,6 +86,7 @@ function ProfilePage() {
           : undefined
       );
     }
+    console.log(error)
   }, [loading]);
 
   const [firstName, setFirstName] = useState<string | undefined>(
@@ -122,6 +122,22 @@ function ProfilePage() {
 
     setEdit(false);
   };
+
+  const renderInput = (props: TextFieldProps): any => (
+    <TextField
+      onClick={edit ? props.onClick : undefined}
+      label="วันเกิด"
+      fullWidth={true}
+      value={dob !== undefined ? convertToThaiDate(new Date(dob)) : null}
+      onChange={props.onChange}
+      required
+      type="text"
+      disabled={!edit}
+      InputProps={{
+        readOnly: true,
+      }}
+    />
+  );
 
   return (
     <Grid>
@@ -239,17 +255,13 @@ function ProfilePage() {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <DatePicker
                             label="วันเกิด"
-                            clearable
-                            value={
-                              dob !== undefined ? new Date(dob) : undefined
-                            }
+                            value={dob !== undefined ? new Date(dob) : null}
                             onChange={(e) => setDOB(e?.toISOString())}
                             openTo="year"
                             views={["year", "month", "date"]}
-                            required
                             disableFuture
                             fullWidth={true}
-                            disabled={!edit}
+                            TextFieldComponent={renderInput}
                           />
                         </MuiPickersUtilsProvider>
                       </Grid>
