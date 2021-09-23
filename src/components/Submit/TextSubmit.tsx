@@ -7,10 +7,11 @@ import {
   DialogContentText,
   DialogTitle,
   makeStyles,
+  TextField,
   Theme,
 } from "@material-ui/core";
 
-interface SubmitProps {
+interface TextSubmitProps {
   submit: boolean;
   title: string;
   text: string;
@@ -18,17 +19,19 @@ interface SubmitProps {
   submitText: string;
   denyAction: any;
   submitAction: any;
+  denyDetail?: string
+  setDenyDetail: any
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: "100vw",
-    },
+      width: '100vw'
+    }
   })
 );
 
-function Submit({
+function TextSubmit({
   submit,
   title,
   text,
@@ -36,8 +39,11 @@ function Submit({
   submitText,
   denyAction,
   submitAction,
-}: SubmitProps) {
-  const classes = useStyles();
+  denyDetail,
+  setDenyDetail
+}: TextSubmitProps) {
+
+  const classes = useStyles()
   return (
     <Dialog
       //   onClose={closeSubmit}
@@ -52,6 +58,13 @@ function Submit({
         <DialogContentText id="alert-dialog-description">
           {text}
         </DialogContentText>
+        <TextField
+          type="text"
+          label="ข้อความปฏิเสธ"
+          fullWidth={true}
+          value={denyDetail}
+          onChange = {e => setDenyDetail(e.target.value)}
+        />
       </DialogContent>
       <DialogActions>
         <DialogActions>
@@ -67,4 +80,4 @@ function Submit({
   );
 }
 
-export default Submit;
+export default TextSubmit;

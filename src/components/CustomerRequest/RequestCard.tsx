@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -13,6 +13,9 @@ import { Button, Grid } from "@material-ui/core";
 import moment from "moment";
 import Appointment from "../../models/Appointment";
 import Image from "material-ui-image";
+import Submit from "../Submit/Submit";
+import Alert from "../Alert/Alert"
+import TextSubmit from "../Submit/TextSubmit";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,13 +49,28 @@ interface RequestCardProps {
 
 function RequestCard({ appointment }: RequestCardProps) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const [acceptSubmit, setAcceptSubmit] = useState<boolean>(false);
+  const [denySubmit, setDenySubmit] = useState<boolean>(false);
+  const [acceptAlert, setAcceptAlert] = useState<boolean>(false);
+  const [denyAlert, setDenyAlert] = useState<boolean>(false);
+  const [denyDetail, setDenyDetail] = useState<string | undefined>()
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  console.log(appointment.Customer.CongenitalDisorders !== undefined)
+  const deny = () => {
+    //waiting for update appoinment status
+    setDenySubmit(false)
+    setDenyAlert(true)
+  };
+
+  const accept = () => {
+    //waiting for update appoinment status
+    setAcceptSubmit(false)
+    setAcceptAlert(true)
+  };
 
   return (
     <Card>
@@ -165,7 +183,11 @@ function RequestCard({ appointment }: RequestCardProps) {
                     </Grid>
                     <Grid item xs={7}>
                       <Typography variant="body1">
-                        {appointment.Customer.Gender === "male" ? "ชาย" : appointment.Customer.Gender === "female" ? "หญิง" : "อื่น ๆ"}
+                        {appointment.Customer.Gender === "male"
+                          ? "ชาย"
+                          : appointment.Customer.Gender === "female"
+                          ? "หญิง"
+                          : "อื่น ๆ"}
                       </Typography>
                     </Grid>
                     <Grid item xs={5}>
@@ -182,17 +204,18 @@ function RequestCard({ appointment }: RequestCardProps) {
                       </Typography>
                     </Grid>
                     <Grid item xs={5}>
-                      <Typography variant="body1">
-                        โรคประจำตัว:
-                      </Typography>
+                      <Typography variant="body1">โรคประจำตัว:</Typography>
                     </Grid>
                     <Grid item xs={7}>
                       <Typography variant="body1">
-                        {appointment.Customer.CongenitalDisorders !== undefined && appointment.Customer.CongenitalDisorders !== "" && appointment.Customer.CongenitalDisorders !== "nope" ? 
-                          <>{appointment.Customer.CongenitalDisorders} wtf</>
-                        :
+                        {appointment.Customer.CongenitalDisorders !==
+                          undefined &&
+                        appointment.Customer.CongenitalDisorders !== "" &&
+                        appointment.Customer.CongenitalDisorders !== "nope" ? (
+                          <>{appointment.Customer.CongenitalDisorders}</>
+                        ) : (
                           "ไม่มี"
-                        }
+                        )}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -200,7 +223,7 @@ function RequestCard({ appointment }: RequestCardProps) {
               </Grid>
             </Grid>
           </Grid>
-          <br/>
+          <br />
           <Grid item xs={12}>
             <Grid
               container
@@ -209,67 +232,41 @@ function RequestCard({ appointment }: RequestCardProps) {
               justify="space-between"
             >
               <Grid item xs={4}>
-                <Button fullWidth={true} type="submit" variant="contained">
+                <Button fullWidth={true} type="button" onClick={() => setDenySubmit(true)} variant="contained">
                   ปฏิเสธ
                 </Button>
               </Grid>
               <Grid item xs={4}>
-                <Button fullWidth={true} type="submit" variant="contained">
+                <Button fullWidth={true} type="button" onClick={() => setAcceptSubmit(true)} variant="contained">
                   ตอบรับ
                 </Button>
               </Grid>
             </Grid>
           </Grid>
-          {/* <Grid item xs={5}>
-              <Typography variant="body1" align="left">
-                เวลาเริ่ม:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {moment(appointment.BeginTime).format("HH.mm น.")}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant="body1" align="left">
-                เวลาสิ้นสุด:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {moment(appointment.EndTime).format("HH.mm น.")}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant="body1" align="left">
-                ระดับความพึงพอใจ:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {appointment.Review?.Star !== null ? (
-                  <>{appointment.Review?.Star}</>
-                ) : (
-                  "ยังไม่ได้รับการประเมิน"
-                )}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant="body1" align="left">
-                ความคิดเห็น:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {appointment.Review?.Comment !== null ? (
-                  <>{appointment.Review?.Comment}</>
-                ) : (
-                  "-"
-                )}
-              </Typography>
-            </Grid> */}
         </CardContent>
       </Collapse>
+      <Submit
+        submit={acceptSubmit}
+        title="ตอบรับคำขอ"
+        text="ต้องการรับนัดหมายนี้หรือไม่?"
+        denyText="ยกเลิก"
+        submitText="ยืนยัน"
+        denyAction={() => setAcceptSubmit(false)}
+        submitAction={accept}
+      />
+      <TextSubmit
+        submit={denySubmit}
+        title="ปฏิเสธคำขอ"
+        text="ต้องการการปฏิเสธนัดหมายนี้หรือไม่?"
+        denyText="ยกเลิก"
+        submitText="ยืนยัน"
+        denyAction={() => setDenySubmit(false)}
+        submitAction={deny}
+        denyDetail={denyDetail}
+        setDenyDetail={setDenyDetail}
+      />
+      <Alert closeAlert={() => setAcceptAlert(false)} alert={acceptAlert} title="ตอบรับสำเร็จ" text="เพิ่มการนัดหมายสำเร็จ" buttonText="ตกลง" />
+      <Alert closeAlert={() => setDenyAlert(false)} alert={denyAlert} title="ปฏิเสธสำเร็จ" text="ปฏิเสธการนัดหมายสำเร็จ" buttonText="ตกลง" />
     </Card>
   );
 }
