@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   makeStyles,
   Theme,
@@ -86,7 +86,12 @@ const StyledTableRow = withStyles((theme: Theme) =>
 function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   const classes = useStyles();
   const id = localStorage.getItem("_id");
-  const { GET_ALL_GUIDESCHEDULE_BYGUIDE } = useGuideApi();
+
+  const {
+    GET_ALL_GUIDESCHEDULE_BYGUIDE,
+    CREATE_GUIDESCHEDULE,
+    DELETE_GUIDESCHEDULE,
+  } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_ALL_GUIDESCHEDULE_BYGUIDE, {
     variables: { getAllGuidescheduleByGuideGuideId: id },
@@ -126,14 +131,35 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
   const [success, setSuccess] = useState<boolean>(false);
 
+  const [createGuideSchedule] = useMutation(CREATE_GUIDESCHEDULE, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [deleteGuideSchedule] = useMutation(DELETE_GUIDESCHEDULE, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
   const onSubmit = () => {
     setSubmit(false);
     //waiting for add
+    const createRequest = scheduleForm.filter((data) => {
+      return data.Available === true;
+    });
+    const deleteRequest = scheduleForm.filter((data) =>{
+      return data.Available === false;
+    })
+    console.log(createRequest);
+    console.log(deleteRequest);
     setSuccess(true);
   };
 
   useEffect(() => {
     if (!loading && data) {
+      console.log(data.getAllGuidescheduleByGuide)
       setGuideSchedule(data.getAllGuidescheduleByGuide);
       for (let i = 1; i < 15; i++) {
         let newSchMor: GuideScheduleForm = {
@@ -259,7 +285,8 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                                   g.ScheduleDate === m.toISOString() &&
                                   g.Period === "Morning" &&
                                   g.WorkOnAppointment !== null &&
-                                  g.WorkOnAppointment?.Status.Tag === "Guide Confirm"
+                                  g.WorkOnAppointment?.Status.Tag ===
+                                    "Guide Confirm"
                               )
                                 ? true
                                 : false
@@ -280,7 +307,8 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                                   g.ScheduleDate === m.toISOString() &&
                                   g.Period === "Afternoon" &&
                                   g.WorkOnAppointment !== null &&
-                                  g.WorkOnAppointment?.Status.Tag === "Guide Confirm"
+                                  g.WorkOnAppointment?.Status.Tag ===
+                                    "Guide Confirm"
                               )
                                 ? true
                                 : false

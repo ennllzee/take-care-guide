@@ -208,9 +208,12 @@ const useGuideApi = () => {
       getAllGuidescheduleByGuide(GuideId: $getAllGuidescheduleByGuideGuideId) {
         _id
         ScheduleDate
-        Available
         Period
-        WorkOnAppointment {
+        CreatedAt
+        UpdatedAt
+        AvailableMorning
+        AvailableAfternoon
+        WorkOnMorningAppointment {
           _id
           AppointTime
           Customer {
@@ -244,12 +247,48 @@ const useGuideApi = () => {
           CreatedAt
           UpdatedAt
         }
-        Status {
+        WorkOnAfternoonAppointment {
+          _id
+          AppointTime
+          Customer {
+            FirstName
+            LastName
+            Email
+            Gmail
+            Avatar {
+              _id
+              filename
+              mimetype
+              data
+            }
+            CongenitalDisorders
+            PhoneNumber
+            Gender
+            DOB
+            EmergencyTel
+          }
+          Department {
+            Name
+          }
+          Hospital {
+            Name
+          }
+          Note
+          Status {
+            Tag
+            Details
+          }
+          CreatedAt
+          UpdatedAt
+        }
+        ScheduleMorningStatus {
           Tag
           Details
         }
-        CreatedAt
-        UpdatedAt
+        ScheduleAfternoonStatus {
+          Tag
+          Details
+        }
       }
     }
   `;
@@ -521,7 +560,7 @@ const useGuideApi = () => {
     CREATE_REPORT,
     UPLOAD_PROFILE,
     UPLOAD_CERTIFICATE,
-    UPLOAD_FACEWITHIDCARD
+    UPLOAD_FACEWITHIDCARD,
   };
 };
 
