@@ -43,14 +43,9 @@ import IdentifyForm from "./IdentifyForm";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      minHeight: "100vh",
-    },
-    sub: {
-      minHeight: "15vh",
-    },
     main: {
-      minHeight: "85vh",
+      marginTop: theme.spacing(10),
+      marginBottom: theme.spacing(10),
       paddingRight: "5%",
       paddingLeft: "5%",
       // minWidth: "100vw",
@@ -65,9 +60,6 @@ const useStyles = makeStyles((theme: Theme) =>
     box: {
       padding: "5%",
       marginBottom: "5%",
-    },
-    end: {
-      minHeight: "5vh",
     },
     img: {
       height: "20vh",
@@ -101,7 +93,7 @@ function RegisterPage() {
 
   useEffect(() => {
     if (accessToken !== null) {
-      history.push(`/profile&=${accessToken}`);
+      history.push(`/appointment&=${accessToken}`);
     }
     if (gmail === null) {
       history.push("/");
@@ -198,10 +190,8 @@ function RegisterPage() {
         container
         direction="column"
         alignItems="center"
-        justify="space-between"
-        className={classes.root}
+        justify="flex-start"
       >
-        <Grid item className={classes.sub}></Grid>
         <Grid item className={classes.main}>
           <Grid
             container

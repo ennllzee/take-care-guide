@@ -1,5 +1,13 @@
 import { useQuery } from "@apollo/client";
-import { makeStyles, Theme, createStyles, Grid, CircularProgress, Divider, Typography } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  createStyles,
+  Grid,
+  CircularProgress,
+  Divider,
+  Typography,
+} from "@material-ui/core";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
@@ -11,24 +19,19 @@ import RequestCard from "./RequestCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-        minHeight: "100vh",
-      },
-      sub: {
-        minHeight: "15vh",
-      },
-      main: {
-        minHeight: "70vh",
-        paddingRight: "5%",
-        paddingLeft: "5%",
-        minWidth: "100vw",
-      },
-      line: {
-        padding: "1%",
-      },
-      card: {
-        padding: "2%",
-      },
+    main: {
+      marginTop: theme.spacing(10),
+      marginBottom: theme.spacing(10),
+      paddingRight: "5%",
+      paddingLeft: "5%",
+      minWidth: "100vw",
+    },
+    line: {
+      padding: "1%",
+    },
+    card: {
+      padding: "2%",
+    },
   })
 );
 
@@ -69,16 +72,13 @@ function CustomerRequestPage() {
         direction="column"
         alignItems="center"
         justify="space-between"
-        className={classes.root}
       >
-        <Grid item className={classes.sub}></Grid>
         <Grid item className={classes.main}>
           {!loading ? (
             <>
               {appointment !== undefined &&
               appointment.find(
-                (a) =>
-                  a.Status.Tag === "Wait for Guide to Confirm"
+                (a) => a.Status.Tag === "Wait for Guide to Confirm"
               ) ? (
                 appointment
                   ?.filter((a) => a.EndTime === null)
@@ -141,8 +141,6 @@ function CustomerRequestPage() {
             </Grid>
           )}
         </Grid>
-
-        <Grid item className={classes.sub}></Grid>
       </Grid>
       <BottomBar page="Customer Request" />
     </Grid>

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     bar: {
-      height: "10vh",
+      height: "7vh",
     },
     icon: {
       // marginRight: theme.spacing(2),
