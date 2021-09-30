@@ -540,6 +540,38 @@ const useGuideApi = () => {
     }
   `;
 
+  const RESPONSE_CUSTOMER_REQUEST = gql`
+    mutation RESPONSE_CUSTOMER_REQUEST(
+      $updateGuideScheduleResponseAppointmentResponse: Boolean!
+      $updateGuideScheduleResponseAppointmentWorkOnAppointmentId: ID!
+      $updateGuideScheduleResponseAppointmentCancleDetails: String
+    ) {
+      updateGuideScheduleResponseAppointment(
+        response: $updateGuideScheduleResponseAppointmentResponse
+        WorkOnAppointmentId: $updateGuideScheduleResponseAppointmentWorkOnAppointmentId
+        cancleDetails: $updateGuideScheduleResponseAppointmentCancleDetails
+      ) {
+        _id
+        ScheduleDate
+        AvailableMorning
+        AvailableAfternoon
+        Period
+        WorkOnMorningAppointment {
+          _id
+        }
+        WorkOnAfternoonAppointment {
+          _id
+        }
+        ScheduleMorningStatus {
+          Tag
+        }
+        ScheduleAfternoonStatus {
+          Tag
+        }
+      }
+    }
+  `;
+
   return {
     GET_SINGLE_GUIDE,
     SIGNUP_GUIDE,
@@ -561,6 +593,7 @@ const useGuideApi = () => {
     UPLOAD_PROFILE,
     UPLOAD_CERTIFICATE,
     UPLOAD_FACEWITHIDCARD,
+    RESPONSE_CUSTOMER_REQUEST,
   };
 };
 

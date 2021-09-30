@@ -50,8 +50,9 @@ function CustomerRequestPage() {
 
   const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
     variables: { getAllAppointmentByGuideGuideId: id },
+    pollInterval: 60000,
   });
-
+  
   const [appointment, setAppointment] = useState<any[]>(
     data !== undefined ? data.getAllAppointmentByGuide : []
   );

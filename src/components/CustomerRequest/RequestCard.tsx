@@ -14,8 +14,10 @@ import moment from "moment";
 import Appointment from "../../models/Appointment";
 import Image from "material-ui-image";
 import Submit from "../Submit/Submit";
-import Alert from "../Alert/Alert"
+import Alert from "../Alert/Alert";
 import TextSubmit from "../Submit/TextSubmit";
+import useGuideApi from "../../hooks/guidehooks";
+import { useMutation } from "@apollo/client";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,22 +56,45 @@ function RequestCard({ appointment }: RequestCardProps) {
   const [denySubmit, setDenySubmit] = useState<boolean>(false);
   const [acceptAlert, setAcceptAlert] = useState<boolean>(false);
   const [denyAlert, setDenyAlert] = useState<boolean>(false);
-  const [denyDetail, setDenyDetail] = useState<string | undefined>()
+  const [denyDetail, setDenyDetail] = useState<string | undefined>();
+
+  const { RESPONSE_CUSTOMER_REQUEST } = useGuideApi();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  const [sendResponse] = useMutation(RESPONSE_CUSTOMER_REQUEST, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
   const deny = () => {
     //waiting for update appoinment status
-    setDenySubmit(false)
-    setDenyAlert(true)
+    sendResponse({
+      variables: {
+        updateGuideScheduleResponseAppointmentResponse: false,
+        updateGuideScheduleResponseAppointmentWorkOnAppointmentId: appointment._id,
+        updateGuideScheduleResponseAppointmentCancleDetails: denyDetail,
+      },
+    });
+    console.log("Deny")
+    setDenySubmit(false);
+    setDenyAlert(true);
   };
 
   const accept = () => {
     //waiting for update appoinment status
-    setAcceptSubmit(false)
-    setAcceptAlert(true)
+    sendResponse({
+      variables: {
+        updateGuideScheduleResponseAppointmentResponse: true,
+        updateGuideScheduleResponseAppointmentWorkOnAppointmentId: appointment._id
+      },
+    });
+    console.log("Accept")
+    setAcceptSubmit(false);
+    setAcceptAlert(true);
   };
 
   return (
@@ -232,12 +257,22 @@ function RequestCard({ appointment }: RequestCardProps) {
               justify="space-between"
             >
               <Grid item xs={4}>
-                <Button fullWidth={true} type="button" onClick={() => setDenySubmit(true)} variant="contained">
+                <Button
+                  fullWidth={true}
+                  type="button"
+                  onClick={() => setDenySubmit(true)}
+                  variant="contained"
+                >
                   ปฏิเสธ
                 </Button>
               </Grid>
               <Grid item xs={4}>
-                <Button fullWidth={true} type="button" onClick={() => setAcceptSubmit(true)} variant="contained">
+                <Button
+                  fullWidth={true}
+                  type="button"
+                  onClick={() => setAcceptSubmit(true)}
+                  variant="contained"
+                >
                   ตอบรับ
                 </Button>
               </Grid>
@@ -265,8 +300,20 @@ function RequestCard({ appointment }: RequestCardProps) {
         denyDetail={denyDetail}
         setDenyDetail={setDenyDetail}
       />
-      <Alert closeAlert={() => setAcceptAlert(false)} alert={acceptAlert} title="ตอบรับสำเร็จ" text="เพิ่มการนัดหมายสำเร็จ" buttonText="ตกลง" />
-      <Alert closeAlert={() => setDenyAlert(false)} alert={denyAlert} title="ปฏิเสธสำเร็จ" text="ปฏิเสธการนัดหมายสำเร็จ" buttonText="ตกลง" />
+      <Alert
+        closeAlert={() => setAcceptAlert(false)}
+        alert={acceptAlert}
+        title="ตอบรับสำเร็จ"
+        text="เพิ่มการนัดหมายสำเร็จ"
+        buttonText="ตกลง"
+      />
+      <Alert
+        closeAlert={() => setDenyAlert(false)}
+        alert={denyAlert}
+        title="ปฏิเสธสำเร็จ"
+        text="ปฏิเสธการนัดหมายสำเร็จ"
+        buttonText="ตกลง"
+      />
     </Card>
   );
 }
