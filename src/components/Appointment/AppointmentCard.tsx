@@ -1,5 +1,10 @@
-import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import React, { useState } from "react";
+import {
+  makeStyles,
+  Theme,
+  createStyles,
+  withStyles,
+} from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,10 +14,23 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { Grid } from "@material-ui/core";
+import {
+  Fab,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
 import moment from "moment";
 import Appointment from "../../models/Appointment";
 import Image from "material-ui-image";
+import RecordRow from "./RecordRow";
+import { AddCircle } from "@material-ui/icons";
+import AddRecord from "./AddRecord";
+import Alert from "../Alert/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,8 +52,35 @@ const useStyles = makeStyles((theme: Theme) =>
     avatar: {
       backgroundColor: red[500],
     },
+    add: {
+      padding: "1%",
+    },
   })
 );
+
+const StyledTableRow = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      "&:nth-of-type(odd)": {
+        backgroundColor: theme.palette.action.hover,
+      },
+    },
+  })
+)(TableRow);
+
+const StyledTableCell = withStyles((theme: Theme) =>
+  createStyles({
+    head: {
+      fontSize: 10,
+      padding: 0,
+      paddingTop: "1%",
+    },
+    body: {
+      fontSize: 10,
+      padding: "1%",
+    },
+  })
+)(TableCell);
 
 interface AppointmentCardProps {
   appointment: Appointment;
@@ -43,11 +88,14 @@ interface AppointmentCardProps {
 
 function AppointmentCard({ appointment }: AppointmentCardProps) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const [addRecord, setAddRecord] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
 
   return (
     <Card>
@@ -109,6 +157,57 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
             </Typography>
           </Grid>
         </Grid>
+        {appointment.Status.Tag === "In process" && (
+          <>
+            <Grid item xs={12} md={12} lg={12}>
+              <TableContainer>
+                <Table>
+                  <colgroup>
+                    <col style={{ width: "20%" }} />
+                    <col style={{ width: "30%" }} />
+                    <col style={{ width: "50%" }} />
+                  </colgroup>
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">เวลา</StyledTableCell>
+                      <StyledTableCell align="center">กิจกรรม</StyledTableCell>
+                      <StyledTableCell align="center">บันทึก</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {appointment?.Record?.map((r, key) => {
+                      return <RecordRow key={key} record={r} />;
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
+              <Grid container justify="center" alignItems="center">
+                <IconButton
+                  className={classes.add}
+                  onClick={() => setAddRecord(true)}
+                >
+                  <AddCircle fontSize="small" />
+                  <Typography variant="body2">เพิ่มบันทึก</Typography>
+                </IconButton>
+              </Grid>
+            </Grid>
+          </>
+        )}
+        <AddRecord
+          appointment={appointment}
+          add={addRecord}
+          setAdd={setAddRecord}
+          setAlert={setAlert}
+        />
+        <Alert
+          closeAlert={() => setAlert(false)}
+          alert={alert}
+          title="สำเร็จ"
+          text="เพิ่มบันทึกสำเร็จ"
+          buttonText="ตกลง"
+        />
       </CardContent>
       <CardActions disableSpacing>
         <IconButton
@@ -220,54 +319,6 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
                 </Grid>
               </Grid>
             </Grid>
-            {/* <Grid item xs={5}>
-              <Typography variant="body1" align="left">
-                เวลาเริ่ม:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {moment(appointment.BeginTime).format("HH.mm น.")}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant="body1" align="left">
-                เวลาสิ้นสุด:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {moment(appointment.EndTime).format("HH.mm น.")}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant="body1" align="left">
-                ระดับความพึงพอใจ:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {appointment.Review?.Star !== null ? (
-                  <>{appointment.Review?.Star}</>
-                ) : (
-                  "ยังไม่ได้รับการประเมิน"
-                )}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant="body1" align="left">
-                ความคิดเห็น:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {appointment.Review?.Comment !== null ? (
-                  <>{appointment.Review?.Comment}</>
-                ) : (
-                  "-"
-                )}
-              </Typography>
-            </Grid> */}
           </Grid>
         </CardContent>
       </Collapse>

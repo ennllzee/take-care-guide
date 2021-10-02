@@ -90,7 +90,7 @@ function AppointmentPage() {
           {!loading ? (
             <>
               {appointment !== undefined &&
-              appointment.find((a) => a.Status.Tag ==="Guide Confirm" && a.Status.Tag ==="In process") ? (
+              appointment.find((a) => a.Status.Tag === "Guide Confirm" || a.Status.Tag === "In process") ? (
                 appointment
                   ?.filter((a) => a.EndTime === null)
                   .slice()

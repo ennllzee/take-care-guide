@@ -150,16 +150,6 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
             </Grid>
             <Grid item xs={5}>
               <Typography variant="body1" align="left">
-                ไกด์:
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" align="left">
-                {appointment.Guide?.FirstName} {appointment.Guide?.LastName}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant="body1" align="left">
                 ระดับความพึงพอใจ:
               </Typography>
             </Grid>
