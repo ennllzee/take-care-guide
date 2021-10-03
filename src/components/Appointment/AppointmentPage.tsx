@@ -9,7 +9,9 @@ import {
   Divider,
   Checkbox,
   CircularProgress,
+  Fab,
 } from "@material-ui/core";
+import { DateRange } from "@material-ui/icons";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
@@ -35,6 +37,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     card: {
       padding: "2%",
+    },
+    fab: {
+      position: "fixed",
+      bottom: theme.spacing(10),
+      right: theme.spacing(2),
     },
   })
 );
@@ -81,18 +88,38 @@ function AppointmentPage() {
         justify="flex-start"
       >
         <Grid item className={classes.main}>
-          <Typography align="right">
-            <Button type="button" onClick={() => setManage(true)}>
-              การจัดการตารางงาน
-            </Button>
-          </Typography>
+          <Fab className={classes.fab} onClick={() => setManage(true)} variant="extended">
+            <DateRange /> ตารางงาน
+          </Fab>
 
           {!loading ? (
             <>
               {appointment !== undefined &&
-              appointment.find((a) => a.Status.Tag === "Guide Confirm" || a.Status.Tag === "In process") ? (
+              appointment.find(
+                (a) =>
+                  (a.Status.Tag === "Guide Confirm" ||
+                    a.Status.Tag === "In process") &&
+                  new Date(moment(a.AppointTime).format("DD MMMM yyyy")) >=
+                    new Date(moment(new Date()).format("DD MMMM yyyy")) &&
+                  new Date(moment(a.AppointTime).format("DD MMMM yyyy")) <=
+                    new Date(
+                      moment(new Date()).add(7, "days").format("DD MMMM yyyy")
+                    )
+              ) ? (
                 appointment
-                  ?.filter((a) => a.EndTime === null)
+                  ?.filter(
+                    (a) =>
+                      (a.Status.Tag === "Guide Confirm" ||
+                        a.Status.Tag === "In process") &&
+                      new Date(moment(a.AppointTime).format("DD MMMM yyyy")) >=
+                        new Date(moment(new Date()).format("DD MMMM yyyy")) &&
+                      new Date(moment(a.AppointTime).format("DD MMMM yyyy")) <=
+                        new Date(
+                          moment(new Date())
+                            .add(7, "days")
+                            .format("DD MMMM yyyy")
+                        )
+                  )
                   .slice()
                   .sort((a, b) => {
                     return (

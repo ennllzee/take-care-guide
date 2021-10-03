@@ -16,7 +16,7 @@ import { red } from "@material-ui/core/colors";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
   CardHeader,
-  Fab,
+  Chip,
   Grid,
   Table,
   TableBody,
@@ -29,7 +29,14 @@ import moment from "moment";
 import Appointment from "../../models/Appointment";
 import Image from "material-ui-image";
 import RecordRow from "./RecordRow";
-import { AddCircle } from "@material-ui/icons";
+import {
+  AddCircle,
+  Cancel,
+  CheckCircle,
+  FaceRounded,
+  Timer,
+  Error,
+} from "@material-ui/icons";
 import AddRecord from "./AddRecord";
 import Alert from "../Alert/Alert";
 
@@ -83,6 +90,21 @@ const useStyles = makeStyles((theme: Theme) =>
     sunday: {
       backgroundColor: "#EA7C7C",
       padding: "1%",
+    },
+    status: {
+      padding: "2%",
+    },
+    confirm: {
+      backgroundColor: "#34C156",
+      color: "white",
+    },
+    process: {
+      backgroundColor: "#4884E6",
+      color: "white",
+    },
+    cancel: {
+      backgroundColor: "#5D5D5D",
+      color: "white",
     },
   })
 );
@@ -192,14 +214,42 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
               {appointment.Note !== null ? appointment.Note : "-"}
             </Typography>
           </Grid>
-          <Grid item xs={5}>
-            <Typography variant="body1" align="left">
-              สถานะ:
-            </Typography>
-          </Grid>
-          <Grid item xs={7}>
-            <Typography variant="body1" align="left">
-              {appointment.Status.Tag}
+          <Grid item xs={12} className={classes.status}>
+            <Typography variant="body1" align="center">
+              {appointment.Status.Tag === "Guide Confirm" &&
+                new Date(
+                  moment(appointment.AppointTime).format("DD MMMM yyyy")
+                ) >= new Date(moment(new Date()).format("DD MMMM yyyy")) ? (
+                <>
+                  <Chip
+                    size="small"
+                    icon={<CheckCircle style={{ color: "white" }} />}
+                    label="เพิ่มนัดหมายสำเร็จ"
+                    className={classes.confirm}
+                  />
+                </>
+              ) : appointment.Status.Tag === "In process" ? (
+                <>
+                  <Chip
+                    size="small"
+                    icon={<FaceRounded style={{ color: "white" }} />}
+                    label="อยู่ระหว่างการบริการ"
+                    className={classes.process}
+                  />
+                </>
+              ) : (
+                <>
+                  <Chip
+                    size="small"
+                    icon={<Cancel style={{ color: "white" }} />}
+                    label="การเพิ่มนัดหมายไม่สำเร็จ"
+                    className={classes.cancel}
+                  />
+                  <Typography color="textSecondary">
+                    ข้อมูลการนัดหมายจะถูกลบจากระบบในวันถัดไป
+                  </Typography>
+                </>
+              )}
             </Typography>
           </Grid>
         </Grid>
@@ -255,22 +305,25 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
           buttonText="ตกลง"
         />
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="แสดงข้อมูลเพิ่มเติม"
-        >
-          {!expanded && (
-            <Typography variant="button">แสดงข้อมูลลูกค้า</Typography>
-          )}
+      {new Date(moment(appointment.AppointTime).format("DD MMMM yyyy")) >=
+        new Date(moment(new Date()).format("DD MMMM yyyy")) && (
+        <CardActions disableSpacing>
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="แสดงข้อมูลเพิ่มเติม"
+          >
+            {!expanded && (
+              <Typography variant="button">แสดงข้อมูลลูกค้า</Typography>
+            )}
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+      )}
 
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Grid
@@ -289,8 +342,8 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
                 >
                   <Grid item xs={4}>
                     <Image
-                      src={"https://pbs.twimg.com/media/D42rqfjU0AA0CBZ.jpg"}
-                      // src={appointment.Customer.Avatar}
+                      // src={"https://pbs.twimg.com/media/D42rqfjU0AA0CBZ.jpg"}
+                      src={appointment.Customer.Avatar}
                       cover={true}
                       // style={{padding: 0}}
                     />

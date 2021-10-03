@@ -52,7 +52,7 @@ function CustomerRequestPage() {
     variables: { getAllAppointmentByGuideGuideId: id },
     pollInterval: 1000,
   });
-  
+
   const [appointment, setAppointment] = useState<any[]>(
     data !== undefined ? data.getAllAppointmentByGuide : []
   );
@@ -78,10 +78,27 @@ function CustomerRequestPage() {
             <>
               {appointment !== undefined &&
               appointment.find(
-                (a) => a.Status.Tag === "Wait for Guide to Confirm"
+                (a) =>
+                  a.Status.Tag === "Wait for Guide to Confirm" &&
+                  new Date(moment(a.AppointTime).format("DD MMMM yyyy")) >=
+                    new Date(moment(new Date()).format("DD MMMM yyyy")) &&
+                  new Date(moment(a.AppointTime).format("DD MMMM yyyy")) <=
+                    new Date(
+                      moment(new Date()).add(7, "days").format("DD MMMM yyyy")
+                    )
               ) ? (
                 appointment
-                  ?.filter((a) => a.EndTime === null)
+                  ?.filter(
+                    (a) =>
+                      new Date(moment(a.AppointTime).format("DD MMMM yyyy")) >=
+                        new Date(moment(new Date()).format("DD MMMM yyyy")) &&
+                      new Date(moment(a.AppointTime).format("DD MMMM yyyy")) <=
+                        new Date(
+                          moment(new Date())
+                            .add(7, "days")
+                            .format("DD MMMM yyyy")
+                        )
+                  )
                   .slice()
                   .sort((a, b) => {
                     return (
@@ -121,11 +138,7 @@ function CustomerRequestPage() {
                     );
                   })
               ) : (
-                <Typography
-                  align="center"
-                  variant="subtitle1"
-                  color="textSecondary"
-                >
+                <Typography align="center" variant="h6" color="textSecondary">
                   ไม่มีคำขอรับบริการ
                 </Typography>
               )}

@@ -78,7 +78,7 @@ function HistoryPage() {
             {appointment !== undefined &&
             appointment.find((a) => a.Status.Tag === "Completed") ? (
               appointment
-                ?.filter((a) => a.EndTime !== null)
+                ?.filter((a) => a.Status.Tag === "Completed")
                 .slice()
                 .sort((a, b) => {
                   return (
