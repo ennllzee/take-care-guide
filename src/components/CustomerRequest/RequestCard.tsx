@@ -9,7 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { Button, Grid } from "@material-ui/core";
+import { Button, CardHeader, Grid } from "@material-ui/core";
 import moment from "moment";
 import Appointment from "../../models/Appointment";
 import Image from "material-ui-image";
@@ -41,6 +41,34 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     below: {
       paddingTop: 0,
+    },
+    monday: {
+      backgroundColor: "#FFD68F",
+      padding: "1%",
+    },
+    tuesday: {
+      backgroundColor: "#FF8FD4",
+      padding: "1%",
+    },
+    wednesday: {
+      backgroundColor: "#94E18A",
+      padding: "1%",
+    },
+    thursday: {
+      backgroundColor: "#F3BE95",
+      padding: "1%",
+    },
+    friday: {
+      backgroundColor: "#9FBFF2",
+      padding: "1%",
+    },
+    saturday: {
+      backgroundColor: "#C78FDC",
+      padding: "1%",
+    },
+    sunday: {
+      backgroundColor: "#EA7C7C",
+      padding: "1%",
     },
   })
 );
@@ -75,11 +103,11 @@ function RequestCard({ appointment }: RequestCardProps) {
     sendResponse({
       variables: {
         updateGuideScheduleResponseAppointmentResponse: false,
-        updateGuideScheduleResponseAppointmentWorkOnAppointmentId: appointment._id,
+        updateGuideScheduleResponseAppointmentWorkOnAppointmentId:
+          appointment._id,
         updateGuideScheduleResponseAppointmentCancleDetails: denyDetail,
       },
     });
-    console.log("Deny")
     setDenySubmit(false);
     setDenyAlert(true);
   };
@@ -89,16 +117,34 @@ function RequestCard({ appointment }: RequestCardProps) {
     sendResponse({
       variables: {
         updateGuideScheduleResponseAppointmentResponse: true,
-        updateGuideScheduleResponseAppointmentWorkOnAppointmentId: appointment._id
+        updateGuideScheduleResponseAppointmentWorkOnAppointmentId:
+          appointment._id,
       },
     });
-    console.log("Accept")
+    console.log("Accept");
     setAcceptSubmit(false);
     setAcceptAlert(true);
   };
 
   return (
     <Card>
+      <CardHeader
+        className={
+          new Date(appointment.AppointTime).getDay() === 0
+            ? classes.sunday
+            : new Date(appointment.AppointTime).getDay() === 1
+            ? classes.monday
+            : new Date(appointment.AppointTime).getDay() === 2
+            ? classes.tuesday
+            : new Date(appointment.AppointTime).getDay() === 3
+            ? classes.wednesday
+            : new Date(appointment.AppointTime).getDay() === 4
+            ? classes.thursday
+            : new Date(appointment.AppointTime).getDay() === 5
+            ? classes.friday
+            : classes.saturday
+        }
+      />
       <CardContent className={classes.root}>
         <Grid
           container
@@ -181,8 +227,8 @@ function RequestCard({ appointment }: RequestCardProps) {
               >
                 <Grid item xs={4}>
                   <Image
-                    src={"https://pbs.twimg.com/media/D42rqfjU0AA0CBZ.jpg"}
-                    // src={appointment.Customer.Avatar}
+                    // src={"https://pbs.twimg.com/media/D42rqfjU0AA0CBZ.jpg"}
+                    src={appointment.Customer.Avatar}
                     cover={true}
                     // style={{padding: 0}}
                   />
@@ -235,6 +281,7 @@ function RequestCard({ appointment }: RequestCardProps) {
                       <Typography variant="body1">
                         {appointment.Customer.CongenitalDisorders !==
                           undefined &&
+                        appointment.Customer.CongenitalDisorders !== null &&
                         appointment.Customer.CongenitalDisorders !== "" &&
                         appointment.Customer.CongenitalDisorders !== "nope" ? (
                           <>{appointment.Customer.CongenitalDisorders}</>

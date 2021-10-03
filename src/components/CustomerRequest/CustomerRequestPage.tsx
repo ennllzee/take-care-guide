@@ -50,7 +50,7 @@ function CustomerRequestPage() {
 
   const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
     variables: { getAllAppointmentByGuideGuideId: id },
-    pollInterval: 60000,
+    pollInterval: 1000,
   });
   
   const [appointment, setAppointment] = useState<any[]>(
@@ -59,7 +59,6 @@ function CustomerRequestPage() {
 
   useEffect(() => {
     if (!loading && data) {
-      console.log(data);
       setAppointment(data.getAllAppointmentByGuide);
     }
     console.log(error);
