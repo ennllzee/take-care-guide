@@ -41,6 +41,8 @@ import {
 import AddRecord from "./AddRecord";
 import Alert from "../Alert/Alert";
 import Submit from "../Submit/Submit";
+import { useMutation, useQuery } from "@apollo/client";
+import useGuideApi from "../../hooks/guidehooks";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -148,13 +150,26 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
   };
 
   const [addRecord, setAddRecord] = useState<boolean>(false);
-  const [end,setEnd] = useState<boolean>(false)
-  const [alert,setAlert] = useState<boolean>(false)
+  const [end, setEnd] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
+
+  const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
+  const [endAppointment] = useMutation(UPDATE_APPOINTMENT_ENDTIME, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
 
   const accept = () => {
-    //waiting for end tracking
-    setAlert(true)
-  }
+    endAppointment({
+      variables: {
+        updateAppointmentEndTimeId: appointment._id,
+        updateAppointmentEndTimeEndTime: new Date().toISOString(),
+      },
+    });
+    
+    setAlert(true);
+  };
 
   return (
     <Card>
@@ -225,9 +240,9 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
           <Grid item xs={12} className={classes.status}>
             <Typography variant="body1" align="center">
               {appointment.Status.Tag === "Guide Confirm" &&
-                new Date(
-                  moment(appointment.AppointTime).format("DD MMMM yyyy")
-                ) >= new Date(moment(new Date()).format("DD MMMM yyyy")) ? (
+              new Date(
+                moment(appointment.AppointTime).format("DD MMMM yyyy")
+              ) >= new Date(moment(new Date()).format("DD MMMM yyyy")) ? (
                 <>
                   <Chip
                     size="small"
@@ -288,7 +303,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
               <Grid container justify="space-between" alignItems="center">
-              <IconButton
+                <IconButton
                   className={classes.add}
                   onClick={() => setEnd(true)}
                 >
@@ -312,21 +327,21 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
           setAdd={setAddRecord}
         />
         <Submit
-        submit={end}
-        title="สิ้นสุดนัดหมาย"
-        text="ยืนยันการสิ้นสุดการบริการหรือไม่?"
-        denyText="ยกเลิก"
-        submitText="ยืนยัน"
-        denyAction={() => setEnd(false)}
-        submitAction={accept}
-      />
-      <Alert
-        closeAlert={() => setAlert(false)}
-        alert={alert}
-        title="สำเร็จ"
-        text="สิ้นสุดการบริการเรียบร้อยแล้ว"
-        buttonText="ตกลง"
-      />
+          submit={end}
+          title="สิ้นสุดนัดหมาย"
+          text="ยืนยันการสิ้นสุดการบริการหรือไม่?"
+          denyText="ยกเลิก"
+          submitText="ยืนยัน"
+          denyAction={() => setEnd(false)}
+          submitAction={accept}
+        />
+        <Alert
+          closeAlert={() => setAlert(false)}
+          alert={alert}
+          title="สำเร็จ"
+          text="สิ้นสุดการบริการเรียบร้อยแล้ว"
+          buttonText="ตกลง"
+        />
       </CardContent>
       {new Date(moment(appointment.AppointTime).format("DD MMMM yyyy")) >=
         new Date(moment(new Date()).format("DD MMMM yyyy")) && (
@@ -348,7 +363,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
       )}
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent style={{paddingTop: 0}}>
+        <CardContent style={{ paddingTop: 0 }}>
           <Grid
             container
             direction="row"
@@ -417,8 +432,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
                       </Grid>
                       <Grid item xs={7}>
                         <Typography variant="body1">
-                          {appointment.Customer.CongenitalDisorders !==
-                            null &&
+                          {appointment.Customer.CongenitalDisorders !== null &&
                           appointment.Customer.CongenitalDisorders !== "" &&
                           appointment.Customer.CongenitalDisorders !==
                             "nope" ? (
