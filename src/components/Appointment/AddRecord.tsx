@@ -21,7 +21,6 @@ interface AddRecordProps {
   appointment: Appointment;
   add: boolean;
   setAdd: any;
-  setAlert: any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
+function AddRecord({ appointment, add, setAdd }: AddRecordProps) {
   const classes = useStyles();
 
   const [title, setTitle] = useState<string | undefined>();
@@ -40,14 +39,15 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
   const [time, setTime] = useState<Date>(new Date());
   const [confirm, setConfirm] = useState<boolean>(false);
   const [alertData, setAlertData] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
   const submit = () => {
-    //waiting for add record
     if (title !== undefined) {
       let newRecord: Record = {
         At: time.toISOString(),
         Title: title,
-        Description: des
+        Description: des,
       };
+      //waiting for add record
       setAdd(false);
       setAlert(true);
     } else {
@@ -81,7 +81,6 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
             </Typography>
           </Grid>
         </Grid>
-
         <TextField
           type="text"
           label="กิจกรรม"
@@ -107,7 +106,20 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
           </Button>
         </DialogActions>
       </DialogActions>
-      <Alert closeAlert={() => setAlertData(false)} alert={alertData} title="ข้อมูลไม่ครบ" text="โปรดใส่กิจกรรม" buttonText="ตกลง"/>
+      <Alert
+        closeAlert={() => setAlert(false)}
+        alert={alert}
+        title="สำเร็จ"
+        text="เพิ่มบันทึกสำเร็จ"
+        buttonText="ตกลง"
+      />
+      <Alert
+        closeAlert={() => setAlertData(false)}
+        alert={alertData}
+        title="ข้อมูลไม่ครบ"
+        text="โปรดใส่กิจกรรม"
+        buttonText="ตกลง"
+      />
     </Dialog>
   );
 }

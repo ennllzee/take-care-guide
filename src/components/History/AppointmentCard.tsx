@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "1%",
     },
     tuesday: {
-      backgroundColor: "#FF8FD4",
+      backgroundColor: "#EE9EC7",
       padding: "1%",
     },
     wednesday: {

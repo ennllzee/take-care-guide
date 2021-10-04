@@ -36,9 +36,11 @@ import {
   FaceRounded,
   Timer,
   Error,
+  Done,
 } from "@material-ui/icons";
 import AddRecord from "./AddRecord";
 import Alert from "../Alert/Alert";
+import Submit from "../Submit/Submit";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,7 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "1%",
     },
     tuesday: {
-      backgroundColor: "#FF8FD4",
+      backgroundColor: "#EE9EC7",
       padding: "1%",
     },
     wednesday: {
@@ -146,7 +148,13 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
   };
 
   const [addRecord, setAddRecord] = useState<boolean>(false);
-  const [alert, setAlert] = useState<boolean>(false);
+  const [end,setEnd] = useState<boolean>(false)
+  const [alert,setAlert] = useState<boolean>(false)
+
+  const accept = () => {
+    //waiting for end tracking
+    setAlert(true)
+  }
 
   return (
     <Card>
@@ -279,7 +287,14 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
               </TableContainer>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
-              <Grid container justify="center" alignItems="center">
+              <Grid container justify="space-between" alignItems="center">
+              <IconButton
+                  className={classes.add}
+                  onClick={() => setEnd(true)}
+                >
+                  <Done fontSize="small" />
+                  <Typography variant="body2">สิ้นสุดการบริการ</Typography>
+                </IconButton>
                 <IconButton
                   className={classes.add}
                   onClick={() => setAddRecord(true)}
@@ -295,15 +310,23 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
           appointment={appointment}
           add={addRecord}
           setAdd={setAddRecord}
-          setAlert={setAlert}
         />
-        <Alert
-          closeAlert={() => setAlert(false)}
-          alert={alert}
-          title="สำเร็จ"
-          text="เพิ่มบันทึกสำเร็จ"
-          buttonText="ตกลง"
-        />
+        <Submit
+        submit={end}
+        title="สิ้นสุดนัดหมาย"
+        text="ยืนยันการสิ้นสุดการบริการหรือไม่?"
+        denyText="ยกเลิก"
+        submitText="ยืนยัน"
+        denyAction={() => setEnd(false)}
+        submitAction={accept}
+      />
+      <Alert
+        closeAlert={() => setAlert(false)}
+        alert={alert}
+        title="สำเร็จ"
+        text="สิ้นสุดการบริการเรียบร้อยแล้ว"
+        buttonText="ตกลง"
+      />
       </CardContent>
       {new Date(moment(appointment.AppointTime).format("DD MMMM yyyy")) >=
         new Date(moment(new Date()).format("DD MMMM yyyy")) && (
