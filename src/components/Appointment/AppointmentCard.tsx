@@ -325,7 +325,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
       )}
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
+        <CardContent style={{paddingTop: 0}}>
           <Grid
             container
             direction="row"
@@ -395,11 +395,11 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
                       <Grid item xs={7}>
                         <Typography variant="body1">
                           {appointment.Customer.CongenitalDisorders !==
-                            undefined &&
+                            null &&
                           appointment.Customer.CongenitalDisorders !== "" &&
                           appointment.Customer.CongenitalDisorders !==
                             "nope" ? (
-                            <>{appointment.Customer.CongenitalDisorders} wtf</>
+                            <>{appointment.Customer.CongenitalDisorders}</>
                           ) : (
                             "ไม่มี"
                           )}

@@ -97,7 +97,8 @@ function CustomerRequestPage() {
                           moment(new Date())
                             .add(7, "days")
                             .format("DD MMMM yyyy")
-                        )
+                        ) &&
+                      a.Status.Tag === "Wait for Guide to Confirm"
                   )
                   .slice()
                   .sort((a, b) => {
