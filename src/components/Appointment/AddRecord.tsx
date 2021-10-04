@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import Appointment from "../../models/Appointment";
 import Record from "../../models/Record";
 import Alert from "../Alert/Alert";
+import { useMutation, useQuery } from "@apollo/client";
+import useGuideApi from "../../hooks/guidehooks";
 
 interface AddRecordProps {
   appointment: Appointment;
@@ -40,20 +42,36 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
   const [time, setTime] = useState<Date>(new Date());
   const [confirm, setConfirm] = useState<boolean>(false);
   const [alertData, setAlertData] = useState<boolean>(false);
+
+  const { UPDATE_APPOINTMENT_RECORD } = useGuideApi();
+  const [addRecord] = useMutation(UPDATE_APPOINTMENT_RECORD, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
   const submit = () => {
-    //waiting for add record
+
     if (title !== undefined) {
       let newRecord: Record = {
         At: time.toISOString(),
         Title: title,
         Description: des
       };
+
+      addRecord({
+        variables: {
+          updateAppointmentRecordId: appointment._id,
+          updateAppointmentRecordRecordinput: {...newRecord},
+      }});
+
       setAdd(false);
       setAlert(true);
     } else {
       setAlertData(true);
     }
   };
+
   useEffect(() => {
     setTime(new Date());
     setTitle(undefined);

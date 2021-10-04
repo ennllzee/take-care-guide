@@ -99,7 +99,6 @@ function RequestCard({ appointment }: RequestCardProps) {
   });
 
   const deny = () => {
-    //waiting for update appoinment status
     sendResponse({
       variables: {
         updateGuideScheduleResponseAppointmentResponse: false,
@@ -113,7 +112,6 @@ function RequestCard({ appointment }: RequestCardProps) {
   };
 
   const accept = () => {
-    //waiting for update appoinment status
     sendResponse({
       variables: {
         updateGuideScheduleResponseAppointmentResponse: true,
