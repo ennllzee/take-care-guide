@@ -61,8 +61,8 @@ function CustomerRequestPage() {
     if (!loading && data) {
       setAppointment(data.getAllAppointmentByGuide);
     }
-    console.log(error);
-  }, [loading, data]);
+    if (error) console.log(error?.graphQLErrors);
+  }, [loading, data, error]);
 
   return (
     <Grid>
