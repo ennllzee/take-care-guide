@@ -61,7 +61,8 @@ function HistoryPage() {
     if (!loading && data) {
       setAppointment(data.getAllAppointmentByGuide);
     }
-  }, [loading, data]);
+    if (error) console.log(error?.graphQLErrors);
+  }, [loading, data, error]);
 
   return (
     <Grid>
