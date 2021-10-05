@@ -226,8 +226,7 @@ function RequestCard({ appointment }: RequestCardProps) {
               >
                 <Grid item xs={4}>
                   <Image
-                    // src={"https://pbs.twimg.com/media/D42rqfjU0AA0CBZ.jpg"}
-                    src={appointment.Customer.Avatar}
+                    src={`data:${appointment.Customer.Avatar.mimetype};base64,${appointment.Customer.Avatar?.data}`}
                     cover={true}
                     // style={{padding: 0}}
                   />
