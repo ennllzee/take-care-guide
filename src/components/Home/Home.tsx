@@ -2,9 +2,9 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import { Route, Switch } from "react-router-dom";
 import AppointmentPage from "../Appointment/AppointmentPage";
 import CustomerRequestPage from "../CustomerRequest/CustomerRequestPage";
-import CustomerServicePage from "../CustomerService/CustomerServicePage";
+// import CustomerServicePage from "../CustomerService/CustomerServicePage";
 import HistoryPage from "../History/HistoryPage";
-import HospitalInformationPage from "../HospitalInformation/HospitalInformationPage";
+// import HospitalInformationPage from "../HospitalInformation/HospitalInformationPage";
 import ProfilePage from "../Profile/ProfilePage";
 
 const useStyles = makeStyles((theme: Theme) => 

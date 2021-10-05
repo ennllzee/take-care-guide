@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   makeStyles,
   Theme,
@@ -16,15 +16,12 @@ import {
   TableCell,
   withStyles,
   TableBody,
-  Checkbox,
-  FormControlLabel,
   Button,
   CircularProgress,
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { history } from "../../helper/history";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
 import useGuideApi from "../../hooks/guidehooks";
 import GuideSchedule from "../../models/GuideSchedule";
@@ -66,32 +63,16 @@ const StyledTableCell = withStyles((theme: Theme) =>
       backgroundColor: theme.palette.common.black,
       color: theme.palette.common.white,
       fontSize: 12,
-    },
-    body: {
-      fontSize: 10,
+      padding: "3%",
     },
   })
 )(TableCell);
-
-const StyledTableRow = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "&:nth-of-type(odd)": {
-        backgroundColor: theme.palette.action.hover,
-      },
-    },
-  })
-)(TableRow);
 
 function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   const classes = useStyles();
   const id = localStorage.getItem("_id");
 
-  const {
-    GET_ALL_GUIDESCHEDULE_BYGUIDE,
-    CREATE_GUIDESCHEDULE,
-    DELETE_GUIDESCHEDULE,
-  } = useGuideApi();
+  const { GET_ALL_GUIDESCHEDULE_BYGUIDE } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_ALL_GUIDESCHEDULE_BYGUIDE, {
     variables: { getAllGuidescheduleByGuideGuideId: id },
@@ -102,114 +83,77 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   );
 
   const [submit, setSubmit] = useState<boolean>(false);
-  const token = localStorage.getItem("accessToken");
 
   const [scheduleDate, setScheduleDate] = useState<Date[]>([]);
   const [scheduleForm, setScheduleForm] = useState<GuideScheduleForm[]>([]);
+
   const updateAvailable = (a: GuideScheduleForm | undefined, i: number) => {
     if (a !== undefined) {
       let arr = scheduleForm;
       arr[i] = {
+        AvailableAfternoon: a.AvailableAfternoon,
+        AvailableMorning: a.AvailableMorning,
+        Createdby: a.Createdby,
         ScheduleDate: a.ScheduleDate,
-        Period: a.Period,
-        Guide: a.Guide,
-        Available: !a.Available,
       };
       setScheduleForm(arr);
     }
   };
 
-  useEffect(() => {
-    setScheduleDate([]);
-    for (let i = 1; i < 15; i++) {
-      setScheduleDate((d) => [
-        ...d,
-        new Date(moment(new Date()).add(i, "days").format("DD MMMM yyyy")),
-      ]);
-    }
-  }, [moment(new Date()).format("DD MMMM yyyy")]);
-
   const [success, setSuccess] = useState<boolean>(false);
-
-  const [createGuideSchedule] = useMutation(CREATE_GUIDESCHEDULE, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
-
-  const [deleteGuideSchedule] = useMutation(DELETE_GUIDESCHEDULE, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
 
   const onSubmit = () => {
     setSubmit(false);
-    //waiting for add
-    const createRequest = scheduleForm.filter((data) => {
-      return data.Available === true;
+    scheduleForm.map((m, key) => {
+      //waiting for add or update
     });
-    const deleteRequest = scheduleForm.filter((data) =>{
-      return data.Available === false;
-    })
-    console.log(createRequest);
-    console.log(deleteRequest);
     setSuccess(true);
   };
 
   useEffect(() => {
     if (!loading && data) {
-      console.log(data.getAllGuidescheduleByGuide)
+      setScheduleDate([]);
+      for (let i = 1; i < 15; i++) {
+        setScheduleDate((d) => [
+          ...d,
+          new Date(moment(new Date()).add(i, "days").format("DD MMMM yyyy")),
+        ]);
+      }
       setGuideSchedule(data.getAllGuidescheduleByGuide);
       for (let i = 1; i < 15; i++) {
-        let newSchMor: GuideScheduleForm = {
+        let newSch: GuideScheduleForm = {
           ScheduleDate: new Date(
             moment(new Date()).add(i, "days").format("DD MMMM yyyy")
           ).toISOString(),
-          Period: "Morning",
-          Guide: id,
-          Available: data.getAllGuidescheduleByGuide.find(
+          Createdby: id,
+          AvailableMorning: data.getAllGuidescheduleByGuide.find(
             (g: GuideSchedule) =>
-              g.ScheduleDate ===
-                new Date(
-                  moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-                ).toISOString() && g.Period === "Morning"
+              moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+              moment(new Date()).add(i, "days").format("DD MMMM yyyy")
           )
             ? data.getAllGuidescheduleByGuide.find(
                 (g: GuideSchedule) =>
-                  g.ScheduleDate ===
-                    new Date(
-                      moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-                    ).toISOString() && g.Period === "Morning"
-              ).Available
-            : false,
-        };
-        let newSchAft: GuideScheduleForm = {
-          ScheduleDate: new Date(
-            moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-          ).toISOString(),
-          Period: "Afternoon",
-          Guide: id,
-          Available: data.getAllGuidescheduleByGuide.find(
-            (g: GuideSchedule) =>
-              g.ScheduleDate ===
-                new Date(
+                  moment(g.ScheduleDate).format("DD MMMM yyyy") ===
                   moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-                ).toISOString() && g.Period === "Afternoon"
+              ).AvailableMorning
+            : true,
+          AvailableAfternoon: data.getAllGuidescheduleByGuide.find(
+            (g: GuideSchedule) =>
+              moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+              moment(new Date()).add(i, "days").format("DD MMMM yyyy")
           )
             ? data.getAllGuidescheduleByGuide.find(
                 (g: GuideSchedule) =>
-                  g.ScheduleDate ===
-                    new Date(
-                      moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-                    ).toISOString() && g.Period === "Afternoon"
-              ).Available
-            : false,
+                  moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                  moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+              ).AvailableAfternoon
+            : true,
         };
-        setScheduleForm((s) => [...s, newSchMor, newSchAft]);
+        if (error) console.log(error?.graphQLErrors);
+        setScheduleForm((s) => [...s, newSch]);
       }
     }
-  }, [loading, data, moment(new Date()).format("DD MMMM yyyy")]);
+  }, [loading, data, error, id]);
 
   return (
     <Modal open={open} className={classes.modal}>
@@ -271,21 +215,24 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                             key={key}
                             morning={scheduleForm.find(
                               (s) =>
-                                s.ScheduleDate === m.toISOString() &&
-                                s.Period === "Morning"
+                                moment(s.ScheduleDate).format(
+                                  "DD MMMM yyyy"
+                                ) === moment(m).format("DD MMMM yyyy")
                             )}
                             morIndex={scheduleForm.findIndex(
                               (s) =>
-                                s.ScheduleDate === m.toISOString() &&
-                                s.Period === "Morning"
+                                moment(s.ScheduleDate).format(
+                                  "DD MMMM yyyy"
+                                ) === moment(m).format("DD MMMM yyyy")
                             )}
                             morWork={
                               guideSchedule.find(
                                 (g) =>
-                                  g.ScheduleDate === m.toISOString() &&
-                                  g.Period === "Morning" &&
-                                  g.WorkOnAppointment !== null &&
-                                  g.WorkOnAppointment?.Status.Tag ===
+                                  moment(g.ScheduleDate).format(
+                                    "DD MMMM yyyy"
+                                  ) === moment(m).format("DD MMMM yyyy") &&
+                                  g.WorkOnMorningAppointment !== null &&
+                                  g.WorkOnMorningAppointment?.Status.Tag ===
                                     "Guide Confirm"
                               )
                                 ? true
@@ -293,21 +240,24 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                             }
                             afternoon={scheduleForm.find(
                               (s) =>
-                                s.ScheduleDate === m.toISOString() &&
-                                s.Period === "Afternoon"
+                                moment(s.ScheduleDate).format(
+                                  "DD MMMM yyyy"
+                                ) === moment(m).format("DD MMMM yyyy")
                             )}
                             aftIndex={scheduleForm.findIndex(
                               (s) =>
-                                s.ScheduleDate === m.toISOString() &&
-                                s.Period === "Afternoon"
+                                moment(s.ScheduleDate).format(
+                                  "DD MMMM yyyy"
+                                ) === moment(m).format("DD MMMM yyyy")
                             )}
                             aftWork={
                               guideSchedule.find(
                                 (g) =>
-                                  g.ScheduleDate === m.toISOString() &&
-                                  g.Period === "Afternoon" &&
-                                  g.WorkOnAppointment !== null &&
-                                  g.WorkOnAppointment?.Status.Tag ===
+                                  moment(g.ScheduleDate).format(
+                                    "DD MMMM yyyy"
+                                  ) === moment(m).format("DD MMMM yyyy") &&
+                                  g.WorkOnAfternoonAppointment !== null &&
+                                  g.WorkOnAfternoonAppointment?.Status.Tag ===
                                     "Guide Confirm"
                               )
                                 ? true
@@ -356,15 +306,13 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             submitAction={onSubmit}
           />
         )}
-        {success && (
-          <Alert
-            closeAlert={() => setSuccess(false)}
-            alert={success}
-            title="สำเร็จ"
-            text="จัดการตารางงานสำเร็จ"
-            buttonText="ตกลง"
-          />
-        )}
+        <Alert
+          closeAlert={() => setSuccess(false)}
+          alert={success}
+          title="สำเร็จ"
+          text="จัดการตารางงานสำเร็จ"
+          buttonText="ตกลง"
+        />
       </Paper>
     </Modal>
   );

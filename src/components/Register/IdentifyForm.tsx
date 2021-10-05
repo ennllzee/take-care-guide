@@ -1,36 +1,21 @@
 import {
   Button,
-  CardMedia,
   createStyles,
   Fab,
-  FormControl,
   FormLabel,
   Grid,
-  InputLabel,
   makeStyles,
-  MenuItem,
-  Select,
   TextField,
   Theme,
   Typography,
 } from "@material-ui/core";
 import {
-  Person,
-  Wc,
-  Cake,
-  Healing,
-  Home,
-  Book,
   School,
-  Language,
   AttachFile,
   CheckCircle,
 } from "@material-ui/icons";
-import moment from "moment";
 import { useState } from "react";
 import GuideForm from "../../models/GuideForm";
-import LanguageSkill from "../../models/LanguageSkill";
-import Alert from "../Alert/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

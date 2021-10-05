@@ -13,13 +13,16 @@ import {
   Divider,
   IconButton,
   Button,
-  Grid,
   CircularProgress,
+  Grid,
 } from "@material-ui/core";
 import { ViewList } from "@material-ui/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleLogout } from "react-google-login";
 import moment from "moment";
+import { useQuery } from "@apollo/client";
+import useGuideApi from "../../hooks/guidehooks";
+import convertToThaiDate from "../../hooks/convertToThaiDate";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,7 +58,6 @@ function TopBar({ page }: TopBarProps) {
     null
   );
   const [open, setOpen] = React.useState(false);
-  const id = localStorage.getItem("_id");
 
   const handleClick = () => (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -64,141 +66,24 @@ function TopBar({ page }: TopBarProps) {
 
   const accessToken = localStorage.getItem("accessToken");
 
-  //   const QUERY_ALL_APPOINTMENT = gql`
-  //     query Query(
-  //       $getAllAppointmentByPatientPatientId: ID!
-  //     ) {
-  //       getAllAppointmentByPatient(
-  //         PatientId: $getAllAppointmentByPatientPatientId
-  //       ) {
-  //         _id
-  //         AppointTime
-  //         BeginTime
-  //         EndTime
-  //         PatientId {
-  //           _id
-  //           FirstName
-  //           LastName
-  //           Gender
-  //           DOB
-  //           PhoneNumber
-  //           Email
-  //           Avatar
-  //           Role
-  //         }
-  //         GuideId {
-  //           _id
-  //           FirstName
-  //           LastName
-  //           Gender
-  //           PhoneNumber
-  //           Email
-  //           IsValidated
-  //           Avatar
-  //           Role
-  //         }
-  //         DepId {
-  //           _id
-  //           Name
-  //           BuildingId {
-  //             _id
-  //             Name
-  //           }
-  //           HospitalId {
-  //             _id
-  //             Name
-  //           }
-  //         }
-  //         Review {
-  //           Star
-  //           Comment
-  //         }
-  //         Record {
-  //           At
-  //           Title
-  //           Description
-  //         }
-  //         OpenLink
-  //         Note
-  //         CreatedAt
-  //         UpdatedAt
-  //       }
-  //       getAllAppointmentByGuide(GuideId: $getAllAppointmentByGuideGuideId) {
-  //         _id
-  //         AppointTime
-  //         BeginTime
-  //         EndTime
-  //         PatientId {
-  //           _id
-  //           FirstName
-  //           LastName
-  //           Gender
-  //           DOB
-  //           PhoneNumber
-  //           Email
-  //           Avatar
-  //           Role
-  //         }
-  //         GuideId {
-  //           _id
-  //           FirstName
-  //           LastName
-  //           Gender
-  //           PhoneNumber
-  //           Email
-  //           IsValidated
-  //           Avatar
-  //           Role
-  //         }
-  //         DepId {
-  //           _id
-  //           Name
-  //           BuildingId {
-  //             _id
-  //             Name
-  //           }
-  //           HospitalId {
-  //             _id
-  //             Name
-  //           }
-  //         }
-  //         Review {
-  //           Star
-  //           Comment
-  //         }
-  //         Record {
-  //           At
-  //           Title
-  //           Description
-  //         }
-  //         OpenLink
-  //         Note
-  //         CreatedAt
-  //         UpdatedAt
-  //       }
-  //     }
-  //   `;
+  const { GET_ALL_APPOINTMENT_BY_GUIDE } = useGuideApi();
+  const id = localStorage.getItem("_id");
 
-  //   const { loading, error, data } = useQuery(QUERY_ALL_APPOINTMENT, {
-  //     variables: {
-  //       getAllAppointmentByPatientPatientId: id,
-  //       getAllAppointmentByGuideGuideId: id,
-  //     },
-  //   });
+  const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
+    variables: { getAllAppointmentByGuideGuideId: id },
+    pollInterval: 1000,
+  });
 
-  //   const [appointment, setAppointment] = useState<any[]>(
-  //     data !== undefined ? data.getAllAppointmentByPatient : []
-  //   );
+  const [appointment, setAppointment] = useState<Appointment[]>(
+    data !== undefined ? data.getAllAppointmentByGuide : []
+  );
 
-  //   useEffect(() => {
-  //     if (!loading) {
-  //         console.log(data);
-  //         setAppointment(data.getAllAppointmentByPatient);
-  //     }
-  //     console.log(error);
-  //   }, [loading]);
-
-  const [appointment, setAppointment] = useState<Appointment[]>([]);
+  useEffect(() => {
+    if (!loading && data) {
+      setAppointment(data.getAllAppointmentByGuide);
+    }
+    if (error) console.log(error?.graphQLErrors);
+  }, [loading, data, error]);
 
   const logout = () => {
     localStorage.clear();
@@ -223,12 +108,12 @@ function TopBar({ page }: TopBarProps) {
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={350}>
                     <Paper className={classes.typography}>
-                      {/* {!loading ? ( */}
+                      {!loading ? (
                         <>
                           {appointment !== undefined &&
-                          appointment.find((a) => a.EndTime === null) ? (
+                          appointment.find((a) => a.Status.Tag === "Guide Confirm" || a.Status.Tag === "Waiting for Guide to Confirm") ? (
                             appointment
-                              ?.filter((a) => a.EndTime === null)
+                              ?.filter((a) => a.Status.Tag === "Guide Confirm" || a.Status.Tag === "Waiting for Guide to Confirm")
                               .slice()
                               .sort((a, b) => {
                                 return (
@@ -240,9 +125,7 @@ function TopBar({ page }: TopBarProps) {
                                 return (
                                   <>
                                     <Typography>
-                                      {moment(new Date(a.AppointTime)).format(
-                                        "DD MMMM YYYY"
-                                      )}
+                                      {convertToThaiDate(new Date(a.AppointTime))}
                                     </Typography>
                                     <Divider />
                                     <Typography>
@@ -254,7 +137,7 @@ function TopBar({ page }: TopBarProps) {
                                     <Typography>
                                       เวลานัดหมาย:{" "}
                                       {moment(new Date(a.AppointTime)).format(
-                                        "HH:mm"
+                                        "HH.mm น."
                                       )}
                                     </Typography>
                                   </>
@@ -270,7 +153,7 @@ function TopBar({ page }: TopBarProps) {
                             </Typography>
                           )}
                         </>
-                      {/* ) : (
+                      ) : (
                         <Grid
                           container
                           direction="row"
@@ -279,7 +162,7 @@ function TopBar({ page }: TopBarProps) {
                         >
                           <CircularProgress disableShrink />
                         </Grid>
-                      )} */}
+                      )}
                     </Paper>
                   </Fade>
                 )}

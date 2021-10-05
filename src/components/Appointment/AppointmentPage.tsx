@@ -5,9 +5,7 @@ import {
   createStyles,
   Grid,
   Typography,
-  Button,
   Divider,
-  Checkbox,
   CircularProgress,
   Fab,
 } from "@material-ui/core";
@@ -17,7 +15,6 @@ import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
 import useGuideApi from "../../hooks/guidehooks";
-import Appointment from "../../models/Appointment";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
 import AppointmentCard from "./AppointmentCard";
@@ -72,7 +69,6 @@ function AppointmentPage() {
 
   useEffect(() => {
     if (!loading && data) {
-      console.log(data);
       setAppointment(data.getAllAppointmentByGuide);
     }
     if (error) console.log(error?.graphQLErrors);

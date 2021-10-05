@@ -18,9 +18,7 @@ import {
   Person,
   Wc,
   Cake,
-  Healing,
   Email,
-  Phone,
   PhoneAndroid,
   Home,
   Book,
@@ -30,9 +28,7 @@ import {
   CreditCard,
 } from "@material-ui/icons";
 import moment from "moment";
-import { useState } from "react";
 import GuideForm from "../../models/GuideForm";
-import Submit from "../Submit/Submit";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

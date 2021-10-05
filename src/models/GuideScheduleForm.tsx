@@ -1,8 +1,8 @@
 interface GuideScheduleForm {
+    AvailableAfternoon: boolean
+    AvailableMorning: boolean
+    Createdby: string | null
     ScheduleDate: any
-    Period: string
-    Guide: string | null
-    Available: boolean
 }
 
 export default GuideScheduleForm

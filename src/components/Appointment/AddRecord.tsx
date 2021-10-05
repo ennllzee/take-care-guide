@@ -20,6 +20,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import useGuideApi from "../../hooks/guidehooks";
 import { Autocomplete } from "@material-ui/lab";
 import Title from "../../models/Title";
+import Submit from "../Submit/Submit";
 
 interface AddRecordProps {
   appointment: Appointment;
@@ -55,7 +56,8 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
     if (!loading && data) {
       setKeyword(data.getAllRecordTitles);
     }
-  }, [loading]);
+    if (error) console.log(error?.graphQLErrors);
+  }, [loading, data, error]);
 
   const { UPDATE_APPOINTMENT_RECORD } = useGuideApi();
   const [addRecord] = useMutation(UPDATE_APPOINTMENT_RECORD, {
@@ -146,7 +148,15 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
           </Button>
         </DialogActions>
       </DialogActions>
-      
+      <Submit
+          submit={confirm}
+          title="บันทึกข้อมูล"
+          text="ยืนยันการบันทึกข้อมูลหรือไม่?"
+          denyText="ยกเลิก"
+          submitText="ยืนยัน"
+          denyAction={() => setConfirm(false)}
+          submitAction={addRecord}
+        />
       <Alert
         closeAlert={() => setAlertData(false)}
         alert={alertData}

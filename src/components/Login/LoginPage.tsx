@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { history } from "../../helper/history";
 import GoogleLogin from "react-google-login";
 import Image from "material-ui-image";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import useGuideApi from "../../hooks/guidehooks";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,7 +75,8 @@ function LoginPage() {
         history.push("/register");
       }
     }
-  }, [loading, data]);
+    if (error) console.log(error?.graphQLErrors);
+  }, [loading, data, error, res, token]);
 
   const responseGoogle = async (response: any) => {
     console.log(response.tokenId);

@@ -8,7 +8,6 @@ import {
   Divider,
   CircularProgress,
 } from "@material-ui/core";
-import moment from "moment";
 import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
 import convertToThaiDate from "../../hooks/convertToThaiDate";

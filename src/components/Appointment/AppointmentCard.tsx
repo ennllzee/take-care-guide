@@ -34,14 +34,12 @@ import {
   Cancel,
   CheckCircle,
   FaceRounded,
-  Timer,
-  Error,
   Done,
 } from "@material-ui/icons";
 import AddRecord from "./AddRecord";
 import Alert from "../Alert/Alert";
 import Submit from "../Submit/Submit";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import useGuideApi from "../../hooks/guidehooks";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -112,16 +110,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const StyledTableRow = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "&:nth-of-type(odd)": {
-        backgroundColor: theme.palette.action.hover,
-      },
-    },
-  })
-)(TableRow);
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({

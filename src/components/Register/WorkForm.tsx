@@ -1,32 +1,22 @@
 import {
   Button,
-  CardMedia,
   createStyles,
   Fab,
   FormControl,
   FormControlLabel,
   FormLabel,
   Grid,
-  InputLabel,
   makeStyles,
-  MenuItem,
   Radio,
   RadioGroup,
-  Select,
   TextField,
   Theme,
   Typography,
 } from "@material-ui/core";
 import {
-  Person,
-  Wc,
-  Cake,
-  Healing,
-  Home,
   Work,
   AssignmentInd,
 } from "@material-ui/icons";
-import moment from "moment";
 import { useState } from "react";
 import GuideForm from "../../models/GuideForm";
 import WorkExp from "../../models/WorkExp";

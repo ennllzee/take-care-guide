@@ -25,6 +25,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
     body: {
       fontSize: 10,
+      padding: '3%'
     },
   })
 )(TableCell);
@@ -50,11 +51,13 @@ function ScheduleRow({
   check,
 }: ScheduleRowProps) {
   const [checkMor, setCheckMor] = useState<boolean>(
-    morning !== undefined ? morning?.Available : false
+    morning !== undefined ? morning?.AvailableMorning : true
   );
   const [checkAft, setCheckAft] = useState<boolean>(
-    afternoon !== undefined ? afternoon?.Available : false
+    afternoon !== undefined ? afternoon?.AvailableAfternoon : true
   );
+
+  console.log(morWork)
 
   return (
     <StyledTableRow key={key}>

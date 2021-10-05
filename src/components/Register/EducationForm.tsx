@@ -1,6 +1,5 @@
 import {
   Button,
-  CardMedia,
   createStyles,
   Fab,
   FormControl,
@@ -15,18 +14,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import {
-  Person,
-  Wc,
-  Cake,
-  Healing,
-  Home,
   Book,
   School,
   Language,
   AttachFile,
   CheckCircle,
 } from "@material-ui/icons";
-import moment from "moment";
 import { useState } from "react";
 import GuideForm from "../../models/GuideForm";
 import LanguageSkill from "../../models/LanguageSkill";

@@ -1,30 +1,9 @@
 import {
-  Button,
-  CardMedia,
   createStyles,
-  FormControl,
   Grid,
-  InputLabel,
   makeStyles,
-  MenuItem,
-  Paper,
-  Select,
-  TextField,
   Theme,
-  Typography,
 } from "@material-ui/core";
-
-import {
-  Person,
-  Wc,
-  Cake,
-  Healing,
-  PhoneAndroid,
-  Email,
-  Phone,
-  AccountCircle,
-} from "@material-ui/icons";
-import moment from "moment";
 import { useEffect, useState } from "react";
 import { useGoogleLogout } from "react-google-login";
 import { history } from "../../helper/history";
@@ -35,7 +14,7 @@ import TopBar from "../TopBar/TopBar";
 import ContactForm from "./ContactForm";
 import ProfileForm from "./ProfileForm";
 import RegisterSubmit from "./RegisterSubmit";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import EducationForm from "./EducationForm";
 import WorkForm from "./WorkForm";
 import useGuideApi from "../../hooks/guidehooks";

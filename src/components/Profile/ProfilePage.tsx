@@ -66,7 +66,6 @@ function ProfilePage() {
   );
 
   useEffect(() => {
-    console.log(data);
     if (!loading && data) {
       setUser(data.getGuide);
       setFirstName(data.getGuide?.FirstName);
@@ -81,8 +80,8 @@ function ProfilePage() {
           : undefined
       );
     }
-    console.log(error)
-  }, [loading]);
+    if (error) console.log(error?.graphQLErrors);
+  }, [loading, data, error]);
 
   const [firstName, setFirstName] = useState<string | undefined>(
     user?.FirstName

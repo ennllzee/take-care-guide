@@ -3,9 +3,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Grid, IconButton, Typography } from "@material-ui/core";
 import {
-  Business,
+  // Business,
   Event,
-  Help,
+  // Help,
   History,
   Person,
   Queue,
