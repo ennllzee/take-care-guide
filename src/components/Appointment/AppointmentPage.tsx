@@ -61,7 +61,7 @@ function AppointmentPage() {
 
   const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
     variables: { getAllAppointmentByGuideGuideId: id },
-    pollInterval: 3000,
+    pollInterval: 1000,
   });
 
   const [appointment, setAppointment] = useState<any[]>(

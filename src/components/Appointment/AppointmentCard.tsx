@@ -152,6 +152,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
   const [addRecord, setAddRecord] = useState<boolean>(false);
   const [end, setEnd] = useState<boolean>(false);
   const [alert, setAlert] = useState<boolean>(false);
+  const [alertAdd, setAlertAdd] = useState<boolean>(false);
 
   const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
   const [endAppointment] = useMutation(UPDATE_APPOINTMENT_ENDTIME, {
@@ -167,8 +168,8 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
         updateAppointmentEndTimeEndTime: new Date().toISOString(),
       },
     });
-    
     setAlert(true);
+    setEnd(false)
   };
 
   return (
@@ -325,6 +326,14 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
           appointment={appointment}
           add={addRecord}
           setAdd={setAddRecord}
+          setAlert={setAlertAdd}
+        />
+        <Alert
+          closeAlert={() => setAlertAdd(false)}
+          alert={alertAdd}
+          title="สำเร็จ"
+          text="เพิ่มบันทึกสำเร็จ"
+          buttonText="ตกลง"
         />
         <Submit
           submit={end}

@@ -18,11 +18,14 @@ import Record from "../../models/Record";
 import Alert from "../Alert/Alert";
 import { useMutation, useQuery } from "@apollo/client";
 import useGuideApi from "../../hooks/guidehooks";
+import { Autocomplete } from "@material-ui/lab";
+import Title from "../../models/Title";
 
 interface AddRecordProps {
   appointment: Appointment;
   add: boolean;
   setAdd: any;
+  setAlert: any
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,15 +36,26 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function AddRecord({ appointment, add, setAdd }: AddRecordProps) {
+function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
   const classes = useStyles();
+
+  const { GET_ALL_RECORDTITLE } = useGuideApi();
+  const { loading, error, data } = useQuery(GET_ALL_RECORDTITLE, {});
 
   const [title, setTitle] = useState<string | undefined>();
   const [des, setDes] = useState<string | undefined>();
   const [time, setTime] = useState<Date>(new Date());
   const [confirm, setConfirm] = useState<boolean>(false);
   const [alertData, setAlertData] = useState<boolean>(false);
-  const [alert, setAlert] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<Title[]>(
+    data !== undefined ? data.getAllRecordTitles : []
+  );
+
+  useEffect(() => {
+    if (!loading && data) {
+      setKeyword(data.getAllRecordTitles);
+    }
+  }, [loading]);
 
   const { UPDATE_APPOINTMENT_RECORD } = useGuideApi();
   const [addRecord] = useMutation(UPDATE_APPOINTMENT_RECORD, {
@@ -64,9 +78,8 @@ function AddRecord({ appointment, add, setAdd }: AddRecordProps) {
           updateAppointmentRecordRecordinput: { ...newRecord },
         },
       });
-
-      setAdd(false);
       setAlert(true);
+      setAdd(false);
     } else {
       setAlertData(true);
     }
@@ -99,12 +112,21 @@ function AddRecord({ appointment, add, setAdd }: AddRecordProps) {
             </Typography>
           </Grid>
         </Grid>
-        <TextField
-          type="text"
-          label="กิจกรรม"
-          fullWidth={true}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+        <Autocomplete
+          freeSolo
+          options={keyword.map((option) => option.Title)}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="กิจกรรม"
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          )}
+          onChange={(e, val) => {
+            if(val !== null){
+              setTitle(val);
+            }
+          }}
         />
         <TextField
           type="text"
@@ -124,13 +146,7 @@ function AddRecord({ appointment, add, setAdd }: AddRecordProps) {
           </Button>
         </DialogActions>
       </DialogActions>
-      <Alert
-        closeAlert={() => setAlert(false)}
-        alert={alert}
-        title="สำเร็จ"
-        text="เพิ่มบันทึกสำเร็จ"
-        buttonText="ตกลง"
-      />
+      
       <Alert
         closeAlert={() => setAlertData(false)}
         alert={alertData}

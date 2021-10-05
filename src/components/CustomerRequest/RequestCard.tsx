@@ -18,6 +18,7 @@ import Alert from "../Alert/Alert";
 import TextSubmit from "../Submit/TextSubmit";
 import useGuideApi from "../../hooks/guidehooks";
 import { useMutation } from "@apollo/client";
+import { Cancel, CheckCircle } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -298,6 +299,55 @@ function RequestCard({ appointment }: RequestCardProps) {
             <Grid
               container
               direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Grid item xs={4}>
+                <Button
+                  type="button"
+                  fullWidth={true}
+                  // variant="contained"
+                  style={{ padding: "5%" }}
+                  onClick={() => setDenySubmit(true)}
+                >
+                  <Grid
+                    container
+                    direction="row"
+                    spacing={1}
+                    justify="center"
+                    alignItems="center"
+                  >
+                    <Cancel />
+                    <Typography variant="body1">ปฏิเสธ</Typography>
+                  </Grid>
+                </Button>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  type="button"
+                  fullWidth={true}
+                  // variant="contained"
+                  style={{ padding: "5%" }}
+                  onClick={() => setAcceptSubmit(true)}
+                >
+                  <Grid
+                    container
+                    direction="row"
+                    spacing={1}
+                    justify="center"
+                    alignItems="center"
+                  >
+                    <CheckCircle />
+                    <Typography variant="body1"> ตอบรับ</Typography>
+                  </Grid>
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* <Grid item xs={12}>
+            <Grid
+              container
+              direction="row"
               alignItems="flex-end"
               justify="space-between"
             >
@@ -306,8 +356,9 @@ function RequestCard({ appointment }: RequestCardProps) {
                   fullWidth={true}
                   type="button"
                   onClick={() => setDenySubmit(true)}
-                  variant="contained"
+                  // variant="contained"
                 >
+                  <Cancel/>
                   ปฏิเสธ
                 </Button>
               </Grid>
@@ -316,13 +367,13 @@ function RequestCard({ appointment }: RequestCardProps) {
                   fullWidth={true}
                   type="button"
                   onClick={() => setAcceptSubmit(true)}
-                  variant="contained"
+                  // variant="contained"
                 >
                   ตอบรับ
                 </Button>
               </Grid>
             </Grid>
-          </Grid>
+          </Grid> */}
         </CardContent>
       </Collapse>
       <Submit
