@@ -76,7 +76,7 @@ function AppointmentPage() {
       setAppointment(data.getAllAppointmentByGuide);
     }
     console.log(error);
-  }, [loading]);
+  }, [loading, data]);
 
   return (
     <Grid>
