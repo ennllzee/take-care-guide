@@ -111,9 +111,9 @@ function TopBar({ page }: TopBarProps) {
                       {!loading ? (
                         <>
                           {appointment !== undefined &&
-                          appointment.find((a) => a.Status.Tag === "Guide Confirm" || a.Status.Tag === "Waiting for Guide to Confirm") ? (
+                          appointment.find((a) => a.Status.Tag === "Waiting for Guide to Confirm") ? (
                             appointment
-                              ?.filter((a) => a.Status.Tag === "Guide Confirm" || a.Status.Tag === "Waiting for Guide to Confirm")
+                              ?.filter((a) => a.Status.Tag === "Waiting for Guide to Confirm")
                               .slice()
                               .sort((a, b) => {
                                 return (
