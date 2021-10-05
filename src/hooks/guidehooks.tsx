@@ -572,6 +572,22 @@ const useGuideApi = () => {
     }
   `;
 
+  const GET_ALL_RECORDTITLE = gql`
+    query Query {
+      getAllRecordTitles {
+        Title
+      }
+    }
+  `;
+
+  const UPDATE_RECORDTITLE = gql`
+    mutation PostnewRecordTitlesMutation($postnewRecordTitlesNewTitle: String) {
+      postnewRecordTitles(newTitle: $postnewRecordTitlesNewTitle) {
+        Title
+      }
+    }
+  `;
+
   return {
     GET_SINGLE_GUIDE,
     SIGNUP_GUIDE,
@@ -594,6 +610,8 @@ const useGuideApi = () => {
     UPLOAD_CERTIFICATE,
     UPLOAD_FACEWITHIDCARD,
     RESPONSE_CUSTOMER_REQUEST,
+    GET_ALL_RECORDTITLE,
+    UPDATE_RECORDTITLE
   };
 };
 
