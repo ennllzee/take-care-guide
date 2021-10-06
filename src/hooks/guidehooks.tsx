@@ -425,29 +425,40 @@ const useGuideApi = () => {
   `;
 
   const UPDATE_GUIDESCHEDULE = gql`
-    mutation UPDATE_GUIDESCHEDULE(
+    mutation UpdateGuideScheduleMutation(
       $updateGuideScheduleId: ID!
-      $updateGuideScheduleScheduleDate: String!
       $updateGuideSchedulePeriod: String!
+      $updateGuideScheduleAvailable: Boolean!
     ) {
       updateGuideSchedule(
         _id: $updateGuideScheduleId
-        ScheduleDate: $updateGuideScheduleScheduleDate
         Period: $updateGuideSchedulePeriod
+        Available: $updateGuideScheduleAvailable
       ) {
         _id
         ScheduleDate
-        Available
+        AvailableMorning
+        AvailableAfternoon
         Period
-        WorkOnAppointment {
+        WorkOnMorningAppointment {
           _id
         }
-        Status {
+        WorkOnAfternoonAppointment {
+          _id
+        }
+        Createdby {
+          _id
+          FirstName
+          LastName
+        }
+        ScheduleMorningStatus {
           Tag
           Details
         }
-        CreatedAt
-        UpdatedAt
+        ScheduleAfternoonStatus {
+          Tag
+          Details
+        }
       }
     }
   `;
@@ -588,6 +599,63 @@ const useGuideApi = () => {
     }
   `;
 
+  const GET_DATA_APPOINTMENTPAGE = gql`
+    query GET_ALL_APPOINTMENT_BY_GUIDE(
+      $getAllAppointmentByGuideGuideId: ID!
+      $getGuideId: ID!
+    ) {
+      getAllAppointmentByGuide(GuideId: $getAllAppointmentByGuideGuideId) {
+        _id
+        AppointTime
+        BeginTime
+        EndTime
+        Customer {
+          _id
+          FirstName
+          LastName
+          Gender
+          DOB
+          PhoneNumber
+          Email
+          Gmail
+          EmergencyTel
+          Avatar {
+            filename
+            mimetype
+            data
+          }
+          CongenitalDisorders
+        }
+        Department {
+          Name
+        }
+        Hospital {
+          Name
+          Address
+        }
+        Review {
+          Star
+          Comment
+        }
+        Record {
+          At
+          Title
+          Description
+        }
+        OpenLink
+        Note
+        Status {
+          Tag
+          Details
+        }
+        Period
+      }
+      getGuide(_id: $getGuideId) {
+        IsVerified
+      }
+    }
+  `;
+
   return {
     GET_SINGLE_GUIDE,
     SIGNUP_GUIDE,
@@ -611,7 +679,8 @@ const useGuideApi = () => {
     UPLOAD_FACEWITHIDCARD,
     RESPONSE_CUSTOMER_REQUEST,
     GET_ALL_RECORDTITLE,
-    UPDATE_RECORDTITLE
+    UPDATE_RECORDTITLE,
+    GET_DATA_APPOINTMENTPAGE,
   };
 };
 

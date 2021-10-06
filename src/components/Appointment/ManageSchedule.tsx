@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   makeStyles,
   Theme,
@@ -72,7 +72,11 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   const classes = useStyles();
   const id = localStorage.getItem("_id");
 
-  const { GET_ALL_GUIDESCHEDULE_BYGUIDE } = useGuideApi();
+  const {
+    GET_ALL_GUIDESCHEDULE_BYGUIDE,
+    CREATE_GUIDESCHEDULE,
+    UPDATE_GUIDESCHEDULE,
+  } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_ALL_GUIDESCHEDULE_BYGUIDE, {
     variables: { getAllGuidescheduleByGuideGuideId: id },
@@ -102,10 +106,29 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
   const [success, setSuccess] = useState<boolean>(false);
 
+  const [createGuideSchedule] = useMutation(CREATE_GUIDESCHEDULE, {
+    onCompleted: (data: any) => {
+      console.log(data);
+    },
+  });
+
+  const [updateGuideSchedule] = useMutation(UPDATE_GUIDESCHEDULE, {
+    onCompleted: (data: any) => {
+      console.log(data);
+    },
+  });
+
   const onSubmit = () => {
     setSubmit(false);
     scheduleForm.map((m, key) => {
       //waiting for add or update
+
+      const exist = guideSchedule.find((s: any) => {
+        return moment(s.ScheduleDate).startOf('day').format() === moment(m.ScheduleDate).startOf('day').format()
+      })
+
+      console.log(exist)
+
     });
     setSuccess(true);
   };
@@ -120,6 +143,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         ]);
       }
       setGuideSchedule(data.getAllGuidescheduleByGuide);
+
       for (let i = 1; i < 15; i++) {
         let newSch: GuideScheduleForm = {
           ScheduleDate: new Date(

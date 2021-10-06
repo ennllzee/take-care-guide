@@ -53,11 +53,11 @@ function AppointmentPage() {
     }
   }, [accessToken]);
 
-  const { GET_ALL_APPOINTMENT_BY_GUIDE } = useGuideApi();
+  const { GET_DATA_APPOINTMENTPAGE } = useGuideApi();
   const id = localStorage.getItem("_id");
 
-  const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
-    variables: { getAllAppointmentByGuideGuideId: id },
+  const { loading, error, data } = useQuery(GET_DATA_APPOINTMENTPAGE, {
+    variables: { getAllAppointmentByGuideGuideId: id, getGuideId: id },
     pollInterval: 1000,
   });
 
