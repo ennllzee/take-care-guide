@@ -67,7 +67,16 @@ function AppointmentPage() {
 
   const [manage, setManage] = useState<boolean>(false);
 
+  const [rangeDate, setRangeDate] = useState<string[]>([]);
+
   useEffect(() => {
+    setRangeDate([]);
+    for (let i = 0; i < 8; i++) {
+      setRangeDate((d) => [
+        ...d,
+        moment(new Date()).add(i, "days").format("DD MMMM yyyy"),
+      ]);
+    }
     if (!loading && data) {
       setAppointment(data.getAllAppointmentByGuide);
     }
@@ -84,7 +93,11 @@ function AppointmentPage() {
         justify="flex-start"
       >
         <Grid item className={classes.main}>
-          <Fab className={classes.fab} onClick={() => setManage(true)} variant="extended">
+          <Fab
+            className={classes.fab}
+            onClick={() => setManage(true)}
+            variant="extended"
+          >
             <DateRange /> ตารางงาน
           </Fab>
 
@@ -95,36 +108,20 @@ function AppointmentPage() {
                 (a) =>
                   (a.Status.Tag === "Guide Confirm" ||
                     a.Status.Tag === "In process") &&
-                  new Date(moment(a.AppointTime).format("DD MMMM yyyy")) >=
-                    new Date(moment(new Date()).format("DD MMMM yyyy")) &&
-                  new Date(moment(a.AppointTime).format("DD MMMM yyyy")) <=
-                    new Date(
-                      moment(new Date()).add(7, "days").format("DD MMMM yyyy")
-                    )
-              ) ? (
-                appointment
-                  ?.filter(
-                    (a) =>
-                      (a.Status.Tag === "Guide Confirm" ||
-                        a.Status.Tag === "In process") &&
-                      new Date(moment(a.AppointTime).format("DD MMMM yyyy")) >=
-                        new Date(moment(new Date()).format("DD MMMM yyyy")) &&
-                      new Date(moment(a.AppointTime).format("DD MMMM yyyy")) <=
-                        new Date(
-                          moment(new Date())
-                            .add(7, "days")
-                            .format("DD MMMM yyyy")
-                        )
+                  rangeDate.find(
+                    (d) => d === moment(a.AppointTime).format("DD MMMM yyyy")
                   )
-                  .slice()
-                  .sort((a, b) => {
-                    return (
-                      new Date(a.AppointTime).getTime() -
-                      new Date(b.AppointTime).getTime()
-                    );
-                  })
-                  .map((a) => {
-                    return (
+              ) ? (
+                rangeDate.map((d, k) => {
+                  return (
+                    appointment !== undefined &&
+                    appointment.find(
+                      (a) =>
+                        (a.Status.Tag === "Guide Confirm" ||
+                          a.Status.Tag === "In process") &&
+                        moment(a.AppointTime).format("DD MMMM yyyy") ===
+                          moment(d).format("DD MMMM yyyy")
+                    ) && (
                       <>
                         <Grid
                           container
@@ -135,7 +132,7 @@ function AppointmentPage() {
                         >
                           <Grid item xs={10} md={11} lg={11}>
                             <Typography variant="h5">
-                              {convertToThaiDate(new Date(a.AppointTime))}
+                              {convertToThaiDate(new Date(d))}
                             </Typography>
                           </Grid>
                         </Grid>
@@ -147,13 +144,35 @@ function AppointmentPage() {
                           justify="center"
                           className={classes.card}
                         >
-                          <Grid item xs={12} md={10} lg={8}>
-                            <AppointmentCard appointment={a} />
-                          </Grid>
+                          {appointment
+                            ?.filter(
+                              (a) =>
+                                (a.Status.Tag === "Guide Confirm" ||
+                                  a.Status.Tag === "In process") &&
+                                moment(a.AppointTime).format("DD MMMM yyyy") ===
+                                  d
+                            )
+                            .slice()
+                            .sort((a, b) => {
+                              return (
+                                new Date(a.AppointTime).getTime() -
+                                new Date(b.AppointTime).getTime()
+                              );
+                            })
+                            .map((a) => {
+                              return (
+                                <>
+                                  <Grid item xs={12} md={10} lg={8} className={classes.card}>
+                                    <AppointmentCard appointment={a} />
+                                  </Grid>
+                                </>
+                              );
+                            })}
                         </Grid>
                       </>
-                    );
-                  })
+                    )
+                  );
+                })
               ) : (
                 <Typography
                   align="center"
