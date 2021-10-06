@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
 import useGuideApi from "../../hooks/guidehooks";
+import Alert from "../Alert/Alert";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
 import RequestCard from "./RequestCard";
@@ -50,12 +51,15 @@ function CustomerRequestPage() {
 
   const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
     variables: { getAllAppointmentByGuideGuideId: id },
-    pollInterval: 3000,
+    pollInterval: 1000,
   });
 
   const [appointment, setAppointment] = useState<any[]>(
     data !== undefined ? data.getAllAppointmentByGuide : []
   );
+
+  const [denyAlert, setDenyAlert] = useState<boolean>(false);
+  const [acceptAlert, setAcceptAlert] = useState<boolean>(false);
 
   useEffect(() => {
     if (!loading && data) {
@@ -132,7 +136,7 @@ function CustomerRequestPage() {
                           className={classes.card}
                         >
                           <Grid item xs={12} md={10} lg={8}>
-                            <RequestCard appointment={a} />
+                            <RequestCard appointment={a} setAcceptAlert={setAcceptAlert} setDenyAlert={setDenyAlert}/>
                           </Grid>
                         </Grid>
                       </>
@@ -156,6 +160,20 @@ function CustomerRequestPage() {
           )}
         </Grid>
       </Grid>
+      <Alert
+        closeAlert={() => setAcceptAlert(false)}
+        alert={acceptAlert}
+        title="ตอบรับสำเร็จ"
+        text="เพิ่มการนัดหมายสำเร็จ"
+        buttonText="ตกลง"
+      />
+      <Alert
+        closeAlert={() => setDenyAlert(false)}
+        alert={denyAlert}
+        title="ปฏิเสธสำเร็จ"
+        text="ปฏิเสธการนัดหมายสำเร็จ"
+        buttonText="ตกลง"
+      />
       <BottomBar page="Customer Request" />
     </Grid>
   );

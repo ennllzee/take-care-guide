@@ -4,6 +4,7 @@ import {
   TableCell,
   TableRow,
   Theme,
+  Typography,
   withStyles,
 } from "@material-ui/core";
 import { useState } from "react";
@@ -25,7 +26,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
     body: {
       fontSize: 10,
-      padding: '3%'
+      padding: "2%",
     },
   })
 )(TableCell);
@@ -57,39 +58,45 @@ function ScheduleRow({
     afternoon !== undefined ? afternoon?.AvailableAfternoon : true
   );
 
-  console.log(morWork)
-
   return (
     <StyledTableRow key={key}>
-      <StyledTableCell>
+      <StyledTableCell align="center">
         {convertToThaiDate(new Date(morning?.ScheduleDate))}
       </StyledTableCell>
       <StyledTableCell align="center">
         {morWork ? (
           <>มีนัดหมาย</>
         ) : (
-          <Checkbox
-            checked={checkMor}
-            onChange={() => {
-              setCheckMor((s) => !s);
-              check(morning, morIndex);
-            }}
-            color="primary"
-          />
+          <>
+            <Checkbox
+              checked={checkMor}
+              onChange={() => {
+                setCheckMor((s) => !s);
+                check(morning, morIndex);
+              }}
+              color="primary"
+              style={{ padding: 0 }}
+            />
+            <Typography variant="caption">{checkMor ? "ว่าง" : "ไม่ว่าง"}</Typography>
+          </>
         )}
       </StyledTableCell>
       <StyledTableCell align="center">
         {aftWork ? (
-          <>นัดหมาย</>
+          <>มีนัดหมาย</>
         ) : (
-          <Checkbox
-            checked={checkAft}
-            onChange={() => {
-              setCheckAft((s) => !s);
-              check(afternoon, aftIndex);
-            }}
-            color="primary"
-          />
+          <>
+            <Checkbox
+              checked={checkAft}
+              onChange={() => {
+                setCheckAft((s) => !s);
+                check(afternoon, aftIndex);
+              }}
+              color="primary"
+              style={{ padding: 0 }}
+            />
+            <Typography variant="caption">{checkAft ? "ว่าง" : "ไม่ว่าง"}</Typography>
+          </>
         )}
       </StyledTableCell>
     </StyledTableRow>

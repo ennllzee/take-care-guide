@@ -14,7 +14,6 @@ import moment from "moment";
 import Appointment from "../../models/Appointment";
 import Image from "material-ui-image";
 import Submit from "../Submit/Submit";
-import Alert from "../Alert/Alert";
 import TextSubmit from "../Submit/TextSubmit";
 import useGuideApi from "../../hooks/guidehooks";
 import { useMutation } from "@apollo/client";
@@ -76,15 +75,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface RequestCardProps {
   appointment: Appointment;
+  setAcceptAlert: any
+  setDenyAlert: any
 }
 
-function RequestCard({ appointment }: RequestCardProps) {
+function RequestCard({ appointment, setAcceptAlert, setDenyAlert }: RequestCardProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState<boolean>(false);
   const [acceptSubmit, setAcceptSubmit] = useState<boolean>(false);
   const [denySubmit, setDenySubmit] = useState<boolean>(false);
-  const [acceptAlert, setAcceptAlert] = useState<boolean>(false);
-  const [denyAlert, setDenyAlert] = useState<boolean>(false);
   const [denyDetail, setDenyDetail] = useState<string | undefined>();
 
   const { RESPONSE_CUSTOMER_REQUEST } = useGuideApi();
@@ -120,7 +119,6 @@ function RequestCard({ appointment }: RequestCardProps) {
           appointment._id,
       },
     });
-    console.log("Accept");
     setAcceptSubmit(false);
     setAcceptAlert(true);
   };
@@ -325,7 +323,6 @@ function RequestCard({ appointment }: RequestCardProps) {
                 <Button
                   type="button"
                   fullWidth={true}
-                  // variant="contained"
                   style={{ padding: "5%" }}
                   onClick={() => setAcceptSubmit(true)}
                 >
@@ -343,36 +340,6 @@ function RequestCard({ appointment }: RequestCardProps) {
               </Grid>
             </Grid>
           </Grid>
-          {/* <Grid item xs={12}>
-            <Grid
-              container
-              direction="row"
-              alignItems="flex-end"
-              justify="space-between"
-            >
-              <Grid item xs={4}>
-                <Button
-                  fullWidth={true}
-                  type="button"
-                  onClick={() => setDenySubmit(true)}
-                  // variant="contained"
-                >
-                  <Cancel/>
-                  ปฏิเสธ
-                </Button>
-              </Grid>
-              <Grid item xs={4}>
-                <Button
-                  fullWidth={true}
-                  type="button"
-                  onClick={() => setAcceptSubmit(true)}
-                  // variant="contained"
-                >
-                  ตอบรับ
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid> */}
         </CardContent>
       </Collapse>
       <Submit
@@ -394,20 +361,6 @@ function RequestCard({ appointment }: RequestCardProps) {
         submitAction={deny}
         denyDetail={denyDetail}
         setDenyDetail={setDenyDetail}
-      />
-      <Alert
-        closeAlert={() => setAcceptAlert(false)}
-        alert={acceptAlert}
-        title="ตอบรับสำเร็จ"
-        text="เพิ่มการนัดหมายสำเร็จ"
-        buttonText="ตกลง"
-      />
-      <Alert
-        closeAlert={() => setDenyAlert(false)}
-        alert={denyAlert}
-        title="ปฏิเสธสำเร็จ"
-        text="ปฏิเสธการนัดหมายสำเร็จ"
-        buttonText="ตกลง"
       />
     </Card>
   );
