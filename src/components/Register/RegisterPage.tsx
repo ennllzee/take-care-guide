@@ -57,6 +57,7 @@ function RegisterPage() {
   const accessToken = localStorage.getItem("accessToken");
   const gmail = localStorage.getItem("gmail");
   const token = localStorage.getItem("token");
+  const id = localStorage.getItem("_id");
 
   const [alert, setAlert] = useState<boolean>(false);
 
@@ -71,7 +72,7 @@ function RegisterPage() {
   });
 
   useEffect(() => {
-    if (accessToken !== null) {
+    if (accessToken !== null && id !== null) {
       history.push(`/appointment&=${accessToken}`);
     }
     if (gmail === null) {

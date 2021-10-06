@@ -9,7 +9,7 @@ import {
   CircularProgress,
   Fab,
 } from "@material-ui/core";
-import { DateRange } from "@material-ui/icons";
+import { DateRange, Timer } from "@material-ui/icons";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
@@ -35,10 +35,19 @@ const useStyles = makeStyles((theme: Theme) =>
     card: {
       padding: "2%",
     },
+    waitfab: {
+      position: "fixed",
+      bottom: theme.spacing(10),
+      right: theme.spacing(2),
+      backgroundColor: "#E59B07",
+      color: "white",
+    },
     fab: {
       position: "fixed",
       bottom: theme.spacing(10),
       right: theme.spacing(2),
+      backgroundColor: "#4884E6",
+      color: "white",
     },
   })
 );
@@ -46,15 +55,15 @@ const useStyles = makeStyles((theme: Theme) =>
 function AppointmentPage() {
   const classes = useStyles();
   const accessToken = localStorage.getItem("accessToken");
-
+  const id = localStorage.getItem("_id");
   useEffect(() => {
-    if (accessToken === null) {
+    if (accessToken === null || id === null) {
       history.push("/");
     }
-  }, [accessToken]);
+  }, [accessToken, id]);
 
   const { GET_DATA_APPOINTMENTPAGE } = useGuideApi();
-  const id = localStorage.getItem("_id");
+  
 
   const { loading, error, data } = useQuery(GET_DATA_APPOINTMENTPAGE, {
     variables: { getAllAppointmentByGuideGuideId: id, getGuideId: id },
@@ -69,6 +78,10 @@ function AppointmentPage() {
 
   const [rangeDate, setRangeDate] = useState<string[]>([]);
 
+  const [isValidate, setIsValidate] = useState<boolean>(
+    data !== undefined ? data.getGuide.IsVerified : false
+  );
+
   useEffect(() => {
     setRangeDate([]);
     for (let i = 0; i < 8; i++) {
@@ -79,6 +92,7 @@ function AppointmentPage() {
     }
     if (!loading && data) {
       setAppointment(data.getAllAppointmentByGuide);
+      setIsValidate(data.getGuide.IsVerified);
     }
     if (error) console.log(error?.graphQLErrors);
   }, [loading, data, error]);
@@ -93,16 +107,22 @@ function AppointmentPage() {
         justify="flex-start"
       >
         <Grid item className={classes.main}>
-          <Fab
-            className={classes.fab}
-            onClick={() => setManage(true)}
-            variant="extended"
-          >
-            <DateRange /> ตารางงาน
-          </Fab>
-
           {!loading ? (
             <>
+              {isValidate ? (
+                <Fab
+                  className={classes.fab}
+                  onClick={() => setManage(true)}
+                  variant="extended"
+                >
+                  <DateRange /> ตารางงาน
+                </Fab>
+              ) : (
+                <Fab className={classes.waitfab} variant="extended">
+                  <Timer /> อยู่ระหว่างขั้นตอนรอการอนุมัติ
+                </Fab>
+              )}
+
               {appointment !== undefined &&
               appointment.find(
                 (a) =>
@@ -162,7 +182,13 @@ function AppointmentPage() {
                             .map((a) => {
                               return (
                                 <>
-                                  <Grid item xs={12} md={10} lg={8} className={classes.card}>
+                                  <Grid
+                                    item
+                                    xs={12}
+                                    md={10}
+                                    lg={8}
+                                    className={classes.card}
+                                  >
                                     <AppointmentCard appointment={a} />
                                   </Grid>
                                 </>

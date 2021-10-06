@@ -38,16 +38,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function CustomerRequestPage() {
   const classes = useStyles();
-  const accessToken = localStorage.getItem("accessToken");
-
-  useEffect(() => {
-    if (accessToken === null) {
-      history.push("/");
-    }
-  }, [accessToken]);
 
   const { GET_ALL_APPOINTMENT_BY_GUIDE } = useGuideApi();
+  const accessToken = localStorage.getItem("accessToken");
   const id = localStorage.getItem("_id");
+  useEffect(() => {
+    if (accessToken === null || id === null) {
+      history.push("/");
+    }
+  }, [accessToken, id]);
 
   const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
     variables: { getAllAppointmentByGuideGuideId: id },
