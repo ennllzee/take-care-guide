@@ -22,6 +22,7 @@ interface Guide {
     WorkExp: WorkExp[]
     LangSkill: LanguageSkill[]
     IdCard: string
+    FaceWithIdCard?: any
     VerifyDate?: any
     Avatar?: any
     CongenitalDisorders?: string
