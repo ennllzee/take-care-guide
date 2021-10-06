@@ -78,7 +78,7 @@ function RegisterPage() {
     if (gmail === null) {
       history.push("/");
     }
-  }, [accessToken, gmail]);
+  }, [accessToken, gmail, id]);
 
   const [submit, setSubmit] = useState<boolean>(false);
 

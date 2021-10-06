@@ -8,10 +8,11 @@ interface Guide {
     Gender: string
     DOB: any
     PhoneNumber: string
+    Address?: string
+    ContactAddress?: string
     Email: string
     GoogleId: string
     Gmail: string
-    EmergencyTel?: string 
     IsVerified: boolean
     Education: {
         Degree: string

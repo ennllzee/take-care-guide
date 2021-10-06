@@ -30,10 +30,11 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: "100vw",
     },
     line: {
-      padding: "1%",
+      padding: "2%",
     },
     card: {
       padding: "2%",
+      paddingTop: 0
     },
     waitfab: {
       position: "fixed",
@@ -162,7 +163,7 @@ function AppointmentPage() {
                           direction="row"
                           alignItems="center"
                           justify="center"
-                          className={classes.card}
+                          className={classes.line}
                         >
                           {appointment
                             ?.filter(
