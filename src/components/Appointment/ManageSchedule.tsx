@@ -19,7 +19,7 @@ import {
   Button,
   CircularProgress,
 } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
+import { Close, Save } from "@material-ui/icons";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
@@ -52,7 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: "auto",
     },
     line: {
-      padding: "5%",
+      padding: "2%",
+    },
+    table: {
+      padding: 0,
+      paddingTop: '2%',
+      paddingBottom: '2%'
     },
   })
 );
@@ -60,10 +65,10 @@ const useStyles = makeStyles((theme: Theme) =>
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
     head: {
-      backgroundColor: theme.palette.common.black,
+      backgroundColor: "#508F7F",
       color: theme.palette.common.white,
       fontSize: 12,
-      padding: "3%",
+      padding: "2%",
     },
   })
 )(TableCell);
@@ -191,7 +196,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
             <Divider variant="middle" />
           </Grid>
-          <Grid item xs={12} md={12} lg={12} className={classes.line}>
+          <Grid item xs={12} md={12} lg={12} className={classes.table}>
             <TableContainer>
               <Table>
                 <colgroup>
@@ -201,7 +206,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                 </colgroup>
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell>วันที่</StyledTableCell>
+                    <StyledTableCell align="center">วันที่</StyledTableCell>
                     <StyledTableCell align="center">เช้า</StyledTableCell>
                     <StyledTableCell align="center">บ่าย</StyledTableCell>
                   </TableRow>
@@ -290,6 +295,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                 onClick={() => setSubmit(true)}
                 variant="contained"
               >
+                <Save/>
                 บันทึก
               </Button>
             </Typography>
