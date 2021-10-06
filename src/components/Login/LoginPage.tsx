@@ -46,12 +46,13 @@ function LoginPage() {
   const classes = useStyles();
 
   const accessToken = localStorage.getItem("accessToken");
+  const id = localStorage.getItem("_id")
 
   useEffect(() => {
-    if (accessToken !== null) {
+    if (accessToken !== null && id !== null) {
       history.push(`/appointment&=${accessToken}`);
     }
-  }, [accessToken]);
+  }, [accessToken, id]);
 
   const [res, setRes] = useState<any>();
   const [token, setToken] = useState<string>();

@@ -97,10 +97,10 @@ function ProfilePage() {
   const [edit, setEdit] = useState<boolean>(false);
 
   useEffect(() => {
-    if (accessToken === null) {
+    if (accessToken === null || id === null) {
       history.push("/");
     }
-  }, [accessToken]);
+  }, [accessToken, id]);
 
   const editProfile = () => {
     if (

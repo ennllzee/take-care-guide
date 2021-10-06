@@ -38,14 +38,13 @@ const useStyles = makeStyles((theme: Theme) =>
 function HistoryPage() {
   const classes = useStyles();
   const accessToken = localStorage.getItem("accessToken");
-
+  const id = localStorage.getItem("_id");
   useEffect(() => {
-    if (accessToken === null) {
+    if (accessToken === null || id === null) {
       history.push("/");
     }
-  }, [accessToken]);
-
-  const id = localStorage.getItem("_id");
+  }, [accessToken, id]);
+  
   const { GET_ALL_APPOINTMENT_BY_GUIDE } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
