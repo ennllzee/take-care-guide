@@ -56,8 +56,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     table: {
       padding: 0,
-      paddingTop: '2%',
-      paddingBottom: '2%'
+      paddingTop: "2%",
+      paddingBottom: "2%",
     },
   })
 );
@@ -96,15 +96,28 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   const [scheduleDate, setScheduleDate] = useState<Date[]>([]);
   const [scheduleForm, setScheduleForm] = useState<GuideScheduleForm[]>([]);
 
-  const updateAvailable = (a: GuideScheduleForm | undefined, i: number) => {
+  const updateAvailable = (
+    a: GuideScheduleForm | undefined,
+    i: number,
+    period: string
+  ) => {
     if (a !== undefined) {
       let arr = scheduleForm;
-      arr[i] = {
-        AvailableAfternoon: a.AvailableAfternoon,
-        AvailableMorning: a.AvailableMorning,
-        Createdby: a.Createdby,
-        ScheduleDate: a.ScheduleDate,
-      };
+      if (period === "morning") {
+        arr[i] = {
+          AvailableAfternoon: a.AvailableAfternoon,
+          AvailableMorning: !a.AvailableMorning,
+          Createdby: a.Createdby,
+          ScheduleDate: a.ScheduleDate,
+        };
+      } else {
+        arr[i] = {
+          AvailableAfternoon: !a.AvailableAfternoon,
+          AvailableMorning: a.AvailableMorning,
+          Createdby: a.Createdby,
+          ScheduleDate: a.ScheduleDate,
+        };
+      }
       setScheduleForm(arr);
     }
   };
@@ -129,11 +142,13 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
       //waiting for add or update
 
       const exist = guideSchedule.find((s: any) => {
-        return moment(s.ScheduleDate).startOf('day').format() === moment(m.ScheduleDate).startOf('day').format()
-      })
+        return (
+          moment(s.ScheduleDate).startOf("day").format() ===
+          moment(m.ScheduleDate).startOf("day").format()
+        );
+      });
 
-      console.log(exist)
-
+      console.log(exist);
     });
     setSuccess(true);
   };
@@ -319,7 +334,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                 onClick={() => setSubmit(true)}
                 variant="contained"
               >
-                <Save/>
+                <Save />
                 บันทึก
               </Button>
             </Typography>
