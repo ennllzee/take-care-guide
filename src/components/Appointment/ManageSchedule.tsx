@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   makeStyles,
   Theme,
@@ -77,7 +77,11 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   const classes = useStyles();
   const id = localStorage.getItem("_id");
 
-  const { GET_ALL_GUIDESCHEDULE_BYGUIDE } = useGuideApi();
+  const {
+    GET_ALL_GUIDESCHEDULE_BYGUIDE,
+    CREATE_GUIDESCHEDULE,
+    UPDATE_GUIDESCHEDULE,
+  } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_ALL_GUIDESCHEDULE_BYGUIDE, {
     variables: { getAllGuidescheduleByGuideGuideId: id },
@@ -121,9 +125,21 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
   const [success, setSuccess] = useState<boolean>(false);
 
+  const [createGuideSchedule] = useMutation(CREATE_GUIDESCHEDULE, {
+    onCompleted: (data: any) => {
+      console.log(data);
+    },
+  });
+
+  const [updateGuideSchedule] = useMutation(UPDATE_GUIDESCHEDULE, {
+    onCompleted: (data: any) => {
+      console.log(data);
+    },
+  });
+
   const onSubmit = () => {
     setSubmit(false);
-    scheduleForm.map((m, key) => {
+    scheduleForm.forEach((m, key) => {
       //waiting for add or update
       const exist = guideSchedule.find((s: any) => {
         return (
@@ -132,95 +148,124 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         );
       });
 
-      // if (exist) {
-      //   if (m.AvailableMorning && m.AvailableAfternoon) {
-      //     updateGuideSchedule({
-      //       variables: {
-      //         updateGuideScheduleId: exist._id,
-      //         updateGuideSchedulePeriod: "All-day",
-      //         updateGuideScheduleAvailable: true
-      //       },
-      //     });
-      //   } else if (m.AvailableAfternoon) {
-      //     updateGuideSchedule({
-      //       variables: {
-      //         updateGuideScheduleId: exist._id,
-      //         updateGuideSchedulePeriod: "Afternoon",
-      //         updateGuideScheduleAvailable: true
-      //       },
-      //     });
-      //     if (!m.AvailableMorning){
-      //       updateGuideSchedule({
-      //         variables: {
-      //           updateGuideScheduleId: exist._id,
-      //           updateGuideSchedulePeriod: "Morning",
-      //           updateGuideScheduleAvailable: false
-      //         },
-      //       });
-      //     }
-      //   } else if (m.AvailableMorning) {
-      //     updateGuideSchedule({
-      //       variables: {
-      //         updateGuideScheduleId: exist._id,
-      //         updateGuideSchedulePeriod: "Morning",
-      //         updateGuideScheduleAvailable: true
-      //       },
-      //     });
-      //     if (!m.AvailableAfternoon){
-      //       updateGuideSchedule({
-      //         variables: {
-      //           updateGuideScheduleId: exist._id,
-      //           updateGuideSchedulePeriod: "Afternoon",
-      //           updateGuideScheduleAvailable: false
-      //         },
-      //       });
-      //     }
-      //   } else {
-      //     updateGuideSchedule({
-      //       variables: {
-      //         updateGuideScheduleId: exist._id,
-      //         updateGuideSchedulePeriod: "All-day",
-      //         updateGuideScheduleAvailable: false
-      //       },
-      //     });
-      //   }
-      // } else {
-      //   if (m.AvailableMorning && m.AvailableAfternoon) {
-      //     createGuideSchedule({
-      //       variables: {
-      //         createGuideScheduleInput: {
-      //           ScheduleDate: m.ScheduleDate,
-      //           Period: "All-day",
-      //           Createdby: m.Createdby,
-      //         },
-      //       },
-      //     });
-      //   } else if (m.AvailableAfternoon) {
-      //     createGuideSchedule({
-      //       variables: {
-      //         createGuideScheduleInput: {
-      //           ScheduleDate: m.ScheduleDate,
-      //           Period: "Afternoon",
-      //           Createdby: m.Createdby,
-      //         },
-      //       },
-      //     });
-      //   } else if (m.AvailableMorning) {
-      //     createGuideSchedule({
-      //       variables: {
-      //         createGuideScheduleInput: {
-      //           ScheduleDate: m.ScheduleDate,
-      //           Period: "Morning",
-      //           Createdby: m.Createdby,
-      //         },
-      //       },
-      //     });
-      //   }
-      // }
+      if (exist) {
+        if (m.AvailableMorning && m.AvailableAfternoon) {
+          if (
+            !exist.WorkOnAfternoonAppointment &&
+            !exist.WorkOnMorningAppointment &&
+            (m.AvailableMorning !== exist.AvailableMorning ||
+              m.AvailableAfternoon !== exist.AvailableAfternoon)
+          ) {
+            console.log("TakeSpecialV");
+            updateGuideSchedule({
+              variables: {
+                updateGuideScheduleId: exist._id,
+                updateGuideSchedulePeriod: "All-day",
+                updateGuideScheduleAvailable: true,
+              },
+            });
+          }
+          console.log("Take1");
+        } else if (m.AvailableAfternoon) {
+          if (
+            !exist.WorkOnAfternoonAppointment &&
+            exist.AvailableAfternoon !== m.AvailableAfternoon
+          ) {
+            console.log("Take2.1");
+            updateGuideSchedule({
+              variables: {
+                updateGuideScheduleId: exist._id,
+                updateGuideSchedulePeriod: "Afternoon",
+                updateGuideScheduleAvailable: true,
+              },
+            });
+          }
+          if (!m.AvailableMorning !== !exist.AvailableMorning) {
+            console.log("Take2.2");
+            updateGuideSchedule({
+              variables: {
+                updateGuideScheduleId: exist._id,
+                updateGuideSchedulePeriod: "Morning",
+                updateGuideScheduleAvailable: false,
+              },
+            });
+          }
+          console.log("Take2");
+        } else if (m.AvailableMorning) {
+          if (
+            !exist.WorkOnMorningAppointment &&
+            exist.AvailableMorning !== m.AvailableMorning
+          ) {
+            console.log("Take3.1");
+            updateGuideSchedule({
+              variables: {
+                updateGuideScheduleId: exist._id,
+                updateGuideSchedulePeriod: "Morning",
+                updateGuideScheduleAvailable: true,
+              },
+            });
+          }
 
-      // console.log(m, key);
-      console.log(exist);
-      return 0;
+          if (!m.AvailableAfternoon !== !exist.AvailableAfternoon) {
+            console.log("Take3.2");
+            updateGuideSchedule({
+              variables: {
+                updateGuideScheduleId: exist._id,
+                updateGuideSchedulePeriod: "Afternoon",
+                updateGuideScheduleAvailable: false,
+              },
+            });
+          }
+          console.log("Take3");
+        } else {
+          if (exist.AvailableAfternoon !== m.AvailableAfternoon || m.AvailableMorning !== exist.AvailableMorning) {
+            console.log("Special4");
+            updateGuideSchedule({
+              variables: {
+                updateGuideScheduleId: exist._id,
+                updateGuideSchedulePeriod: "All-day",
+                updateGuideScheduleAvailable: false,
+              },
+            });
+          }
+
+          console.log("Take4");
+        }
+      } else {
+        if (m.AvailableMorning && m.AvailableAfternoon) {
+          createGuideSchedule({
+            variables: {
+              createGuideScheduleInput: {
+                ScheduleDate: m.ScheduleDate,
+                Period: "All-day",
+                Createdby: m.Createdby,
+              },
+            },
+          });
+        } else if (m.AvailableAfternoon) {
+          createGuideSchedule({
+            variables: {
+              createGuideScheduleInput: {
+                ScheduleDate: m.ScheduleDate,
+                Period: "Afternoon",
+                Createdby: m.Createdby,
+              },
+            },
+          });
+        } else if (m.AvailableMorning) {
+          createGuideSchedule({
+            variables: {
+              createGuideScheduleInput: {
+                ScheduleDate: m.ScheduleDate,
+                Period: "Morning",
+                Createdby: m.Createdby,
+              },
+            },
+          });
+        }
+      }
+
+      console.log(exist?.ScheduleDate + " === " + m.ScheduleDate);
     });
     setSuccess(true);
   };
@@ -243,38 +288,38 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
       //       moment(new Date()).format("DD MMMM yyyy")
       //   )
       // ) {
-        setScheduleForm([]);
-        for (let i = 1; i < 15; i++) {
-          let newSch: GuideScheduleForm = {
-            ScheduleDate: moment(new Date()).add(i, "days").format(),
-            Createdby: id,
-            AvailableMorning: data.getAllGuidescheduleByGuide.find(
-              (g: GuideSchedule) => {
-                return (
-                  moment(g.ScheduleDate).format("DD MMMM yyyy") ===
-                  moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-                );
-              }
-            )
-              ? data.getAllGuidescheduleByGuide.find(
-                  (g: GuideSchedule) =>
-                    moment(g.ScheduleDate).format("DD MMMM yyyy") ===
-                    moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-                ).AvailableMorning
-              : true,
-            AvailableAfternoon: data.getAllGuidescheduleByGuide.find(
-              (g: GuideSchedule) =>
+      setScheduleForm([]);
+      for (let i = 1; i < 15; i++) {
+        let newSch: GuideScheduleForm = {
+          ScheduleDate: moment(new Date()).add(i, "days").format(),
+          Createdby: id,
+          AvailableMorning: data.getAllGuidescheduleByGuide.find(
+            (g: GuideSchedule) => {
+              return (
                 moment(g.ScheduleDate).format("DD MMMM yyyy") ===
                 moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-            )
-              ? data.getAllGuidescheduleByGuide.find(
-                  (g: GuideSchedule) =>
-                    moment(g.ScheduleDate).format("DD MMMM yyyy") ===
-                    moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-                ).AvailableAfternoon
-              : true,
-          };
-          setScheduleForm((s) => [...s, newSch]);
+              );
+            }
+          )
+            ? data.getAllGuidescheduleByGuide.find(
+                (g: GuideSchedule) =>
+                  moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                  moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+              ).AvailableMorning
+            : true,
+          AvailableAfternoon: data.getAllGuidescheduleByGuide.find(
+            (g: GuideSchedule) =>
+              moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+              moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+          )
+            ? data.getAllGuidescheduleByGuide.find(
+                (g: GuideSchedule) =>
+                  moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                  moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+              ).AvailableAfternoon
+            : true,
+        };
+        setScheduleForm((s) => [...s, newSch]);
         // }
 
         if (error) console.log(error?.graphQLErrors);
