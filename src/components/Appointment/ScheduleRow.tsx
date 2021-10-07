@@ -72,7 +72,7 @@ function ScheduleRow({
               checked={checkMor}
               onChange={() => {
                 setCheckMor((s) => !s);
-                check(morning, morIndex);
+                check(morning, morIndex, "morning");
               }}
               color="primary"
               style={{ padding: 0 }}
@@ -90,7 +90,7 @@ function ScheduleRow({
               checked={checkAft}
               onChange={() => {
                 setCheckAft((s) => !s);
-                check(afternoon, aftIndex);
+                check(afternoon, aftIndex, "afternoon");
               }}
               color="primary"
               style={{ padding: 0 }}

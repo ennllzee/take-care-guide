@@ -96,15 +96,28 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   const [scheduleDate, setScheduleDate] = useState<Date[]>([]);
   const [scheduleForm, setScheduleForm] = useState<GuideScheduleForm[]>([]);
 
-  const updateAvailable = (a: GuideScheduleForm | undefined, i: number) => {
+  const updateAvailable = (
+    a: GuideScheduleForm | undefined,
+    i: number,
+    period: string
+  ) => {
     if (a !== undefined) {
       let arr = scheduleForm;
-      arr[i] = {
-        AvailableAfternoon: a.AvailableAfternoon,
-        AvailableMorning: a.AvailableMorning,
-        Createdby: a.Createdby,
-        ScheduleDate: a.ScheduleDate,
-      };
+      if (period === "morning") {
+        arr[i] = {
+          AvailableAfternoon: a.AvailableAfternoon,
+          AvailableMorning: !a.AvailableMorning,
+          Createdby: a.Createdby,
+          ScheduleDate: a.ScheduleDate,
+        };
+      } else {
+        arr[i] = {
+          AvailableAfternoon: !a.AvailableAfternoon,
+          AvailableMorning: a.AvailableMorning,
+          Createdby: a.Createdby,
+          ScheduleDate: a.ScheduleDate,
+        };
+      }
       setScheduleForm(arr);
     }
   };
