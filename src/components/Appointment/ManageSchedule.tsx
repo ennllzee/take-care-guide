@@ -134,93 +134,93 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         );
       });
 
-      if (exist) {
-        if (m.AvailableMorning && m.AvailableAfternoon) {
-          updateGuideSchedule({
-            variables: {
-              updateGuideScheduleId: exist._id,
-              updateGuideSchedulePeriod: "All-day",
-              updateGuideScheduleAvailable: true
-            },
-          });
-        } else if (m.AvailableAfternoon) {
-          updateGuideSchedule({
-            variables: {
-              updateGuideScheduleId: exist._id,
-              updateGuideSchedulePeriod: "Afternoon",
-              updateGuideScheduleAvailable: true
-            },
-          });
-          if (!m.AvailableMorning){
-            updateGuideSchedule({
-              variables: {
-                updateGuideScheduleId: exist._id,
-                updateGuideSchedulePeriod: "Morning",
-                updateGuideScheduleAvailable: false
-              },
-            });
-          }
-        } else if (m.AvailableMorning) {
-          updateGuideSchedule({
-            variables: {
-              updateGuideScheduleId: exist._id,
-              updateGuideSchedulePeriod: "Morning",
-              updateGuideScheduleAvailable: true
-            },
-          });
-          if (!m.AvailableAfternoon){
-            updateGuideSchedule({
-              variables: {
-                updateGuideScheduleId: exist._id,
-                updateGuideSchedulePeriod: "Afternoon",
-                updateGuideScheduleAvailable: false
-              },
-            });
-          }
-        } else {
-          updateGuideSchedule({
-            variables: {
-              updateGuideScheduleId: exist._id,
-              updateGuideSchedulePeriod: "All-day",
-              updateGuideScheduleAvailable: false
-            },
-          });
-        }
-      } else {
-        if (m.AvailableMorning && m.AvailableAfternoon) {
-          createGuideSchedule({
-            variables: {
-              createGuideScheduleInput: {
-                ScheduleDate: m.ScheduleDate,
-                Period: "All-day",
-                Createdby: m.Createdby,
-              },
-            },
-          });
-        } else if (m.AvailableAfternoon) {
-          createGuideSchedule({
-            variables: {
-              createGuideScheduleInput: {
-                ScheduleDate: m.ScheduleDate,
-                Period: "Afternoon",
-                Createdby: m.Createdby,
-              },
-            },
-          });
-        } else if (m.AvailableMorning) {
-          createGuideSchedule({
-            variables: {
-              createGuideScheduleInput: {
-                ScheduleDate: m.ScheduleDate,
-                Period: "Morning",
-                Createdby: m.Createdby,
-              },
-            },
-          });
-        } 
-      }
+      // if (exist) {
+      //   if (m.AvailableMorning && m.AvailableAfternoon) {
+      //     updateGuideSchedule({
+      //       variables: {
+      //         updateGuideScheduleId: exist._id,
+      //         updateGuideSchedulePeriod: "All-day",
+      //         updateGuideScheduleAvailable: true
+      //       },
+      //     });
+      //   } else if (m.AvailableAfternoon) {
+      //     updateGuideSchedule({
+      //       variables: {
+      //         updateGuideScheduleId: exist._id,
+      //         updateGuideSchedulePeriod: "Afternoon",
+      //         updateGuideScheduleAvailable: true
+      //       },
+      //     });
+      //     if (!m.AvailableMorning){
+      //       updateGuideSchedule({
+      //         variables: {
+      //           updateGuideScheduleId: exist._id,
+      //           updateGuideSchedulePeriod: "Morning",
+      //           updateGuideScheduleAvailable: false
+      //         },
+      //       });
+      //     }
+      //   } else if (m.AvailableMorning) {
+      //     updateGuideSchedule({
+      //       variables: {
+      //         updateGuideScheduleId: exist._id,
+      //         updateGuideSchedulePeriod: "Morning",
+      //         updateGuideScheduleAvailable: true
+      //       },
+      //     });
+      //     if (!m.AvailableAfternoon){
+      //       updateGuideSchedule({
+      //         variables: {
+      //           updateGuideScheduleId: exist._id,
+      //           updateGuideSchedulePeriod: "Afternoon",
+      //           updateGuideScheduleAvailable: false
+      //         },
+      //       });
+      //     }
+      //   } else {
+      //     updateGuideSchedule({
+      //       variables: {
+      //         updateGuideScheduleId: exist._id,
+      //         updateGuideSchedulePeriod: "All-day",
+      //         updateGuideScheduleAvailable: false
+      //       },
+      //     });
+      //   }
+      // } else {
+      //   if (m.AvailableMorning && m.AvailableAfternoon) {
+      //     createGuideSchedule({
+      //       variables: {
+      //         createGuideScheduleInput: {
+      //           ScheduleDate: m.ScheduleDate,
+      //           Period: "All-day",
+      //           Createdby: m.Createdby,
+      //         },
+      //       },
+      //     });
+      //   } else if (m.AvailableAfternoon) {
+      //     createGuideSchedule({
+      //       variables: {
+      //         createGuideScheduleInput: {
+      //           ScheduleDate: m.ScheduleDate,
+      //           Period: "Afternoon",
+      //           Createdby: m.Createdby,
+      //         },
+      //       },
+      //     });
+      //   } else if (m.AvailableMorning) {
+      //     createGuideSchedule({
+      //       variables: {
+      //         createGuideScheduleInput: {
+      //           ScheduleDate: m.ScheduleDate,
+      //           Period: "Morning",
+      //           Createdby: m.Createdby,
+      //         },
+      //       },
+      //     });
+      //   }
+      // }
 
-      console.log(exist, key);
+      console.log(m, key);
     });
     setSuccess(true);
   };
@@ -243,9 +243,12 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           ).toISOString(),
           Createdby: id,
           AvailableMorning: data.getAllGuidescheduleByGuide.find(
-            (g: GuideSchedule) =>
-              moment(g.ScheduleDate).format("DD MMMM yyyy") ===
-              moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+            (g: GuideSchedule) => {
+              return (
+                moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+              );
+            }
           )
             ? data.getAllGuidescheduleByGuide.find(
                 (g: GuideSchedule) =>
