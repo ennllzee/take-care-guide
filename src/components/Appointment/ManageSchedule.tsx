@@ -220,6 +220,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
       // }
 
       console.log(m, key);
+      // console.log(exist);
     });
     setSuccess(true);
   };
