@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   makeStyles,
   Theme,
@@ -79,8 +79,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
   const {
     GET_ALL_GUIDESCHEDULE_BYGUIDE,
-    CREATE_GUIDESCHEDULE,
-    UPDATE_GUIDESCHEDULE,
   } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_ALL_GUIDESCHEDULE_BYGUIDE, {
@@ -123,18 +121,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   };
 
   const [success, setSuccess] = useState<boolean>(false);
-
-  const [createGuideSchedule] = useMutation(CREATE_GUIDESCHEDULE, {
-    onCompleted: (data: any) => {
-      console.log(data);
-    },
-  });
-
-  const [updateGuideSchedule] = useMutation(UPDATE_GUIDESCHEDULE, {
-    onCompleted: (data: any) => {
-      console.log(data);
-    },
-  });
 
   const onSubmit = () => {
     setSubmit(false);
@@ -251,9 +237,8 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
       for (let i = 1; i < 15; i++) {
         let newSch: GuideScheduleForm = {
-          ScheduleDate: new Date(
-            moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-          ).toISOString(),
+          ScheduleDate: 
+            moment(new Date()).add(i, "days").format(),
           Createdby: id,
           AvailableMorning: data.getAllGuidescheduleByGuide.find(
             (g: GuideSchedule) => {
