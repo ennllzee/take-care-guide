@@ -409,12 +409,23 @@ const useGuideApi = () => {
       createGuideSchedule(input: $createGuideScheduleInput) {
         _id
         ScheduleDate
-        Available
+        AvailableMorning
+        AvailableAfternoon
         Period
-        WorkOnAppointment {
+        WorkOnMorningAppointment {
           _id
         }
-        Status {
+        WorkOnAfternoonAppointment {
+          _id
+        }
+        Createdby {
+          _id
+        }
+        ScheduleMorningStatus {
+          Tag
+          Details
+        }
+        ScheduleAfternoonStatus {
           Tag
           Details
         }
