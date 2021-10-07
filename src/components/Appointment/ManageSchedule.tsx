@@ -77,9 +77,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   const classes = useStyles();
   const id = localStorage.getItem("_id");
 
-  const {
-    GET_ALL_GUIDESCHEDULE_BYGUIDE,
-  } = useGuideApi();
+  const { GET_ALL_GUIDESCHEDULE_BYGUIDE } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_ALL_GUIDESCHEDULE_BYGUIDE, {
     variables: { getAllGuidescheduleByGuideGuideId: id },
@@ -103,20 +101,21 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
       let arr = scheduleForm;
       if (period === "morning") {
         arr[i] = {
-          AvailableAfternoon: a.AvailableAfternoon,
-          AvailableMorning: !a.AvailableMorning,
+          AvailableMorning: !arr[i].AvailableMorning,
+          AvailableAfternoon: arr[i].AvailableAfternoon,
           Createdby: a.Createdby,
           ScheduleDate: a.ScheduleDate,
         };
       } else {
         arr[i] = {
-          AvailableAfternoon: !a.AvailableAfternoon,
-          AvailableMorning: a.AvailableMorning,
+          AvailableMorning: arr[i].AvailableMorning,
+          AvailableAfternoon: !arr[i].AvailableAfternoon,
           Createdby: a.Createdby,
           ScheduleDate: a.ScheduleDate,
         };
       }
       setScheduleForm(arr);
+      console.log(arr);
     }
   };
 
@@ -219,8 +218,9 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
       //   }
       // }
 
-      console.log(m, key);
-      // console.log(exist);
+      // console.log(m, key);
+      console.log(exist);
+      return 0;
     });
     setSuccess(true);
   };
@@ -235,40 +235,49 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         ]);
       }
       setGuideSchedule(data.getAllGuidescheduleByGuide);
-
-      for (let i = 1; i < 15; i++) {
-        let newSch: GuideScheduleForm = {
-          ScheduleDate: 
-            moment(new Date()).add(i, "days").format(),
-          Createdby: id,
-          AvailableMorning: data.getAllGuidescheduleByGuide.find(
-            (g: GuideSchedule) => {
-              return (
+      // if (
+      //   scheduleForm.length === 0 ||
+      //   scheduleForm.find(
+      //     (e) =>
+      //       moment(e.ScheduleDate).format("DD MMMM yyyy") ===
+      //       moment(new Date()).format("DD MMMM yyyy")
+      //   )
+      // ) {
+        setScheduleForm([]);
+        for (let i = 1; i < 15; i++) {
+          let newSch: GuideScheduleForm = {
+            ScheduleDate: moment(new Date()).add(i, "days").format(),
+            Createdby: id,
+            AvailableMorning: data.getAllGuidescheduleByGuide.find(
+              (g: GuideSchedule) => {
+                return (
+                  moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                  moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+                );
+              }
+            )
+              ? data.getAllGuidescheduleByGuide.find(
+                  (g: GuideSchedule) =>
+                    moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                    moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+                ).AvailableMorning
+              : true,
+            AvailableAfternoon: data.getAllGuidescheduleByGuide.find(
+              (g: GuideSchedule) =>
                 moment(g.ScheduleDate).format("DD MMMM yyyy") ===
                 moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-              );
-            }
-          )
-            ? data.getAllGuidescheduleByGuide.find(
-                (g: GuideSchedule) =>
-                  moment(g.ScheduleDate).format("DD MMMM yyyy") ===
-                  moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-              ).AvailableMorning
-            : true,
-          AvailableAfternoon: data.getAllGuidescheduleByGuide.find(
-            (g: GuideSchedule) =>
-              moment(g.ScheduleDate).format("DD MMMM yyyy") ===
-              moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-          )
-            ? data.getAllGuidescheduleByGuide.find(
-                (g: GuideSchedule) =>
-                  moment(g.ScheduleDate).format("DD MMMM yyyy") ===
-                  moment(new Date()).add(i, "days").format("DD MMMM yyyy")
-              ).AvailableAfternoon
-            : true,
-        };
+            )
+              ? data.getAllGuidescheduleByGuide.find(
+                  (g: GuideSchedule) =>
+                    moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                    moment(new Date()).add(i, "days").format("DD MMMM yyyy")
+                ).AvailableAfternoon
+              : true,
+          };
+          setScheduleForm((s) => [...s, newSch]);
+        // }
+
         if (error) console.log(error?.graphQLErrors);
-        setScheduleForm((s) => [...s, newSch]);
       }
     }
   }, [loading, data, error, id]);
@@ -414,15 +423,15 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             </Typography>
           </Grid>
         </Grid>
-          <Submit
-            submit={submit}
-            title="จัดการตารางงาน"
-            text="ยืนยันข้อมูลหรือไม่"
-            denyText="ยกเลิก"
-            submitText="ยืนยัน"
-            denyAction={() => setSubmit(false)}
-            submitAction={onSubmit}
-          />
+        <Submit
+          submit={submit}
+          title="จัดการตารางงาน"
+          text="ยืนยันข้อมูลหรือไม่"
+          denyText="ยกเลิก"
+          submitText="ยืนยัน"
+          denyAction={() => setSubmit(false)}
+          submitAction={onSubmit}
+        />
         <Alert
           closeAlert={() => setSuccess(false)}
           alert={success}
