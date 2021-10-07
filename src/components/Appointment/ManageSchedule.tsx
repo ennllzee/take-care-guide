@@ -325,7 +325,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             </Typography>
           </Grid>
         </Grid>
-        {submit && (
           <Submit
             submit={submit}
             title="จัดการตารางงาน"
@@ -335,7 +334,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             denyAction={() => setSubmit(false)}
             submitAction={onSubmit}
           />
-        )}
         <Alert
           closeAlert={() => setSuccess(false)}
           alert={success}

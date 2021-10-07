@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "1%",
     },
     saturday: {
-      backgroundColor: "#C78FDC",
+      backgroundColor: "#D4B7DE",
       padding: "1%",
     },
     sunday: {
@@ -156,7 +156,12 @@ function RequestCard({ appointment, setAcceptAlert, setDenyAlert }: RequestCardP
           </Grid>
           <Grid item xs={7}>
             <Typography variant="body1" align="left">
-              {moment(appointment.AppointTime).format("HH.mm น.")}
+              {moment(appointment.AppointTime).format("H.mm น.")}{" "}
+              {appointment.Period === "Morning"
+                ? "(เช้า)"
+                : appointment.Period === "Afternoon"
+                ? "(บ่าย)"
+                : "(ทั้งวัน)"}
             </Typography>
           </Grid>
           <Grid item xs={5}>
@@ -187,6 +192,16 @@ function RequestCard({ appointment, setAcceptAlert, setDenyAlert }: RequestCardP
           <Grid item xs={7}>
             <Typography variant="body1" align="left">
               {appointment.Note !== null ? appointment.Note : "-"}
+            </Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Typography variant="body1" align="left">
+              ค่าบริการเริ่มต้น:
+            </Typography>
+          </Grid>
+          <Grid item xs={7}>
+            <Typography variant="body1" align="left">
+              {appointment.Price} บาท
             </Typography>
           </Grid>
         </Grid>
@@ -304,7 +319,11 @@ function RequestCard({ appointment, setAcceptAlert, setDenyAlert }: RequestCardP
                   type="button"
                   fullWidth={true}
                   // variant="contained"
-                  style={{ padding: "5%" }}
+                  style={{
+                    backgroundColor: "#D86060",
+                    color: "white",
+                    padding: "3%",
+                  }}
                   onClick={() => setDenySubmit(true)}
                 >
                   <Grid
@@ -323,7 +342,11 @@ function RequestCard({ appointment, setAcceptAlert, setDenyAlert }: RequestCardP
                 <Button
                   type="button"
                   fullWidth={true}
-                  style={{ padding: "5%" }}
+                  style={{
+                    backgroundColor: "#4CB85C",
+                    color: "white",
+                    padding: "3%",
+                  }}
                   onClick={() => setAcceptSubmit(true)}
                 >
                   <Grid

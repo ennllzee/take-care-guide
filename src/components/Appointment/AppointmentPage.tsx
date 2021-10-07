@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
 import useGuideApi from "../../hooks/guidehooks";
+import Alert from "../Alert/Alert";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
 import AppointmentCard from "./AppointmentCard";
@@ -40,14 +41,14 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "fixed",
       bottom: theme.spacing(10),
       right: theme.spacing(2),
-      backgroundColor: "#E59B07",
+      backgroundColor: "#4884E6",
       color: "white",
     },
     fab: {
       position: "fixed",
       bottom: theme.spacing(10),
       right: theme.spacing(2),
-      backgroundColor: "#4884E6",
+      backgroundColor: "#508F7F",
       color: "white",
     },
   })
@@ -98,6 +99,8 @@ function AppointmentPage() {
     if (error) console.log(error?.graphQLErrors);
   }, [loading, data, error]);
 
+  const [alert, setAlert] = useState<boolean>(false);
+
   return (
     <Grid>
       <TopBar page="การนัดหมาย" />
@@ -128,9 +131,9 @@ function AppointmentPage() {
               appointment.find(
                 (a) =>
                   (a.Status.Tag === "Guide Confirm" ||
-                    a.Status.Tag === "In process") &&
+                    a.Status.Tag === "In process" || a.Status.Tag === "Expired") &&
                   rangeDate.find(
-                    (d) => d === moment(a.AppointTime).format("DD MMMM yyyy")
+                    (d) => moment(d).format("DD MMMM yyyy") === moment(a.AppointTime).format("DD MMMM yyyy")
                   )
               ) ? (
                 rangeDate.map((d, k) => {
@@ -139,7 +142,7 @@ function AppointmentPage() {
                     appointment.find(
                       (a) =>
                         (a.Status.Tag === "Guide Confirm" ||
-                          a.Status.Tag === "In process") &&
+                          a.Status.Tag === "In process" || a.Status.Tag === "Expired") &&
                         moment(a.AppointTime).format("DD MMMM yyyy") ===
                           moment(d).format("DD MMMM yyyy")
                     ) && (
@@ -169,9 +172,9 @@ function AppointmentPage() {
                             ?.filter(
                               (a) =>
                                 (a.Status.Tag === "Guide Confirm" ||
-                                  a.Status.Tag === "In process") &&
+                                  a.Status.Tag === "In process" || a.Status.Tag === "Expired") &&
                                 moment(a.AppointTime).format("DD MMMM yyyy") ===
-                                  d
+                                moment(d).format("DD MMMM yyyy")
                             )
                             .slice()
                             .sort((a, b) => {
@@ -190,7 +193,7 @@ function AppointmentPage() {
                                     lg={8}
                                     className={classes.card}
                                   >
-                                    <AppointmentCard appointment={a} />
+                                    <AppointmentCard appointment={a} setAlert={setAlert}/>
                                   </Grid>
                                 </>
                               );
@@ -223,6 +226,13 @@ function AppointmentPage() {
         </Grid>
       </Grid>
       <BottomBar page="Appointment" />
+      <Alert
+          closeAlert={() => setAlert(false)}
+          alert={alert}
+          title="สำเร็จ"
+          text="สิ้นสุดการบริการเรียบร้อยแล้ว"
+          buttonText="ตกลง"
+        />
       <ManageSchedule open={manage} setOpen={setManage} />
     </Grid>
   );

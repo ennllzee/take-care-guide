@@ -74,8 +74,7 @@ function ScheduleRow({
                 setCheckMor((s) => !s);
                 check(morning, morIndex, "morning");
               }}
-              color="primary"
-              style={{ padding: 0 }}
+              style={{ padding: 0, color: "#7794DE" }}
             />
             <Typography variant="caption">{checkMor ? "ว่าง" : "ไม่ว่าง"}</Typography>
           </>
@@ -92,8 +91,7 @@ function ScheduleRow({
                 setCheckAft((s) => !s);
                 check(afternoon, aftIndex, "afternoon");
               }}
-              color="primary"
-              style={{ padding: 0 }}
+              style={{ padding: 0, color: "#E58A47" }}
             />
             <Typography variant="caption">{checkAft ? "ว่าง" : "ไม่ว่าง"}</Typography>
           </>

@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "1%",
     },
     saturday: {
-      backgroundColor: "#C78FDC",
+      backgroundColor: "#D4B7DE",
       padding: "1%",
     },
     sunday: {
@@ -109,7 +109,12 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
           </Grid>
           <Grid item xs={7}>
             <Typography variant="body1" align="left">
-              {moment(appointment.AppointTime).format("HH.mm น.")}
+              {moment(appointment.AppointTime).format("H.mm น.")}{" "}
+              {appointment.Period === "Morning"
+                ? "(เช้า)"
+                : appointment.Period === "Afternoon"
+                ? "(บ่าย)"
+                : "(ทั้งวัน)"}
             </Typography>
           </Grid>
           <Grid item xs={5}>

@@ -45,7 +45,6 @@ import useGuideApi from "../../hooks/guidehooks";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: "4%",
       paddingBottom: 0,
     },
     expand: {
@@ -86,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "1%",
     },
     saturday: {
-      backgroundColor: "#C78FDC",
+      backgroundColor: "#D4B7DE",
       padding: "1%",
     },
     sunday: {
@@ -127,9 +126,10 @@ const StyledTableCell = withStyles((theme: Theme) =>
 
 interface AppointmentCardProps {
   appointment: Appointment;
+  setAlert: any;
 }
 
-function AppointmentCard({ appointment }: AppointmentCardProps) {
+function AppointmentCard({ appointment, setAlert }: AppointmentCardProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState<boolean>(false);
 
@@ -139,7 +139,6 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
 
   const [addRecord, setAddRecord] = useState<boolean>(false);
   const [end, setEnd] = useState<boolean>(false);
-  const [alert, setAlert] = useState<boolean>(false);
   const [alertAdd, setAlertAdd] = useState<boolean>(false);
 
   const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
@@ -157,7 +156,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
       },
     });
     setAlert(true);
-    setEnd(false)
+    setEnd(false);
   };
 
   return (
@@ -193,7 +192,12 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
           </Grid>
           <Grid item xs={7}>
             <Typography variant="body1" align="left">
-              {moment(appointment.AppointTime).format("HH.mm น.")}
+              {moment(appointment.AppointTime).format("H.mm น.")}{" "}
+              {appointment.Period === "Morning"
+                ? "(เช้า)"
+                : appointment.Period === "Afternoon"
+                ? "(บ่าย)"
+                : "(ทั้งวัน)"}
             </Typography>
           </Grid>
           <Grid item xs={5}>
@@ -226,6 +230,16 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
               {appointment.Note !== null ? appointment.Note : "-"}
             </Typography>
           </Grid>
+          <Grid item xs={5}>
+            <Typography variant="body1" align="left">
+              ค่าบริการเริ่มต้น:
+            </Typography>
+          </Grid>
+          <Grid item xs={7}>
+            <Typography variant="body1" align="left">
+              {appointment.Price} บาท
+            </Typography>
+          </Grid>
           <Grid item xs={12} className={classes.status}>
             <Typography variant="body1" align="center">
               {appointment.Status.Tag === "Guide Confirm" &&
@@ -254,7 +268,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
                   <Chip
                     size="small"
                     icon={<Cancel style={{ color: "white" }} />}
-                    label="การเพิ่มนัดหมายไม่สำเร็จ"
+                    label="นัดหมายถูกยกเลิก"
                     className={classes.cancel}
                   />
                   <Typography color="textSecondary">
@@ -326,22 +340,22 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
         <Submit
           submit={end}
           title="สิ้นสุดนัดหมาย"
-          text="ยืนยันการสิ้นสุดการบริการหรือไม่?"
+          text={`ยืนยันการสิ้นสุดการบริการหรือไม่? ${(<br />)} ค่าบริการ = ${
+            150 +
+            12 *
+              ((new Date().getMinutes() -
+                new Date(appointment.AppointTime).getMinutes()) /
+                60)
+          } บาท `}
           denyText="ยกเลิก"
           submitText="ยืนยัน"
           denyAction={() => setEnd(false)}
           submitAction={accept}
         />
-        <Alert
-          closeAlert={() => setAlert(false)}
-          alert={alert}
-          title="สำเร็จ"
-          text="สิ้นสุดการบริการเรียบร้อยแล้ว"
-          buttonText="ตกลง"
-        />
       </CardContent>
-      {new Date(moment(appointment.AppointTime).format("DD MMMM yyyy")) >=
-        new Date(moment(new Date()).format("DD MMMM yyyy")) && (
+      {(new Date(moment(appointment.AppointTime).format("DD MMMM yyyy")) >=
+        new Date(moment(new Date()).format("DD MMMM yyyy")) &&
+        appointment.Status.Tag !== "Expired") && (
         <CardActions disableSpacing>
           <IconButton
             className={clsx(classes.expand, {
