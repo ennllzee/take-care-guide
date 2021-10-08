@@ -3,7 +3,6 @@ import {
   createStyles,
   Fab,
   FormControl,
-  FormLabel,
   Grid,
   InputLabel,
   makeStyles,
@@ -18,12 +17,14 @@ import {
   School,
   Language,
   AttachFile,
-  CheckCircle,
+  NavigateBefore,
+  NavigateNext,
 } from "@material-ui/icons";
 import { useState } from "react";
 import GuideForm from "../../models/GuideForm";
 import LanguageSkill from "../../models/LanguageSkill";
 import Alert from "../Alert/Alert";
+import Image from "material-ui-image";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,9 +62,17 @@ interface EducationFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
+  setDisplayImg: any;
+  displayImg: any;
 }
 
-function EducationForm({ user, setUser, setStep }: EducationFormProps) {
+function EducationForm({
+  user,
+  setUser,
+  setStep,
+  setDisplayImg,
+  displayImg,
+}: EducationFormProps) {
   const classes = useStyles();
   const [degree, setDegree] = useState<string | undefined>(
     user.Education?.Degree
@@ -74,6 +83,29 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
   const [certificate, setCertificate] = useState<any | undefined>(
     user.Education?.Certificate
   );
+
+  const convertBase64 = (file: any) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const uploadFile = async (e: any) => {
+    const file = e.target.files[0];
+    const base64 = await convertBase64(file);
+    setCertificate(file);
+    setDisplayImg(base64);
+  };
+
   const [languageSkill, setLanguageSkill] = useState<LanguageSkill[]>(
     user.LangSkill !== undefined ? user.LangSkill : []
   );
@@ -81,7 +113,7 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
   const [newLevel, setNewLevel] = useState<number>();
   const [langAlert, setLangAlert] = useState<boolean>(false);
   const addLang = () => {
-    if (newLang !== undefined && newLevel !== undefined) {
+    if (newLang !== undefined && newLevel !== undefined && newLang !== "" ) {
       let newSkill: LanguageSkill = {
         Language: newLang,
         Level: newLevel,
@@ -90,20 +122,14 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
         setLangAlert(true);
       } else {
         setLanguageSkill((l) => [...l, newSkill]);
-        setNewLang(undefined);
-        setNewLevel(undefined);
+        setNewLang("");
+        setNewLevel(undefined); 
       }
     }
   };
 
   const deleteLang = (m: LanguageSkill) => {
     setLanguageSkill(languageSkill.filter((l) => l !== m));
-  };
-
-  const uploadFile = async (e: any) => {
-    const file = e.target.files[0];
-    // const base64 = await convertBase64(file);
-    setCertificate(file);
   };
 
   const next = () => {
@@ -228,44 +254,56 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
               <AttachFile />
             </Grid>
             <Grid item xs={10}>
-              <FormLabel component="legend">แนบหลักฐานทางการศึกษา</FormLabel>
+              <Typography variant="body1">แนบหลักฐานทางการศึกษา</Typography>
             </Grid>
-            {certificate !== undefined && (
-              <Grid item xs={10}>
-                <Grid
-                  container
-                  spacing={1}
-                  alignItems="flex-end"
-                  justify="flex-start"
-                >
-                  <CheckCircle />
-                  <Typography align="left">อัปโหลดสำเร็จ</Typography>
-                </Grid>
-              </Grid>
-            )}
-            <Grid item xs={10}>
+            <Grid item xs={4}  style={{backgroundColor: "#EFEFEF"}}>
+              <Image
+                src={displayImg}
+                loading={displayImg === undefined ? false : true}
+                // cover={true}
+              />
+            </Grid>
+            <Grid item xs={6}>
               <Typography align="center">
                 <input
                   type="file"
                   accept="image/*"
                   id="contained-button-file"
-                  //   key={imgName}
                   onChange={(e: any) => {
-                    // setImgName(e.currentTarget.files[0].name);
                     uploadFile(e);
                   }}
                   hidden
                 />
                 <label htmlFor="contained-button-file">
-                  <Button variant="contained" color="primary" component="span">
-                    อัปโหลด
+                  <Button
+                    component="span"
+                    style={{
+                      padding: "7%",
+                      backgroundColor: "#508F7F",
+                      color: "white",
+                    }}
+                  >
+                    <Grid
+                      container
+                      direction="row"
+                      spacing={1}
+                      justify="center"
+                      alignItems="center"
+                    >
+                      <Typography variant="body1">อัปโหลด</Typography>
+                    </Grid>
                   </Button>
                 </label>
+              </Typography>
+              <Typography variant="body1" align="center">
+                {certificate !== undefined
+                  ? " อัปโหลดสำเร็จ"
+                  : " ยังไม่ได้อัปโหลดไฟล์"}
               </Typography>
             </Grid>
           </Grid>
         </div>
-        
+
         <div className={classes.margin}>
           <Grid container spacing={1} justify="center" alignItems="center">
             <Grid item>
@@ -274,7 +312,7 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
               {/* </Typography> */}
             </Grid>
             <Grid item xs={10}>
-              <FormLabel component="legend">ทักษะทางด้านภาษา</FormLabel>
+              <Typography variant="body1">ทักษะทางด้านภาษา</Typography>
             </Grid>
           </Grid>
 
@@ -303,7 +341,15 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
                     />
                   </Grid>
                   <Grid item xs={2}>
-                    <Button type="button" onClick={() => deleteLang(m)}>
+                    <Button
+                      type="button"
+                      onClick={() => deleteLang(m)}
+                      style={{
+                        padding: 0,
+                        color: "white",
+                        backgroundColor: "black",
+                      }}
+                    >
                       ลบ
                     </Button>
                   </Grid>
@@ -317,14 +363,19 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
                 id="input-with-icon-grid"
                 label="ชื่อภาษา"
                 fullWidth={true}
-                value={newLang !== undefined ? newLang : null}
+                value={newLang}
                 onChange={(e) => setNewLang(e.target.value)}
                 type="text"
+                InputLabelProps={{
+                  shrink: newLang !== undefined && newLang !== ""
+                }}
               />
             </Grid>
             <Grid item xs={5} md={4} lg={4}>
               <FormControl required fullWidth={true}>
-                <InputLabel id="level-label" shrink={newLevel !== undefined}>ความชำนาญ</InputLabel>
+                <InputLabel id="level-label" shrink={newLevel !== undefined}>
+                  ความชำนาญ
+                </InputLabel>
                 <Select
                   labelId="level-label"
                   value={newLevel !== undefined ? newLevel : null}
@@ -342,7 +393,16 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
             </Grid>
             <Grid item xs={11} md={2} lg={1}>
               <Typography align="center">
-                <Button type="button" fullWidth={true} onClick={addLang}>
+                <Button
+                  type="button"
+                  fullWidth={true}
+                  onClick={addLang}
+                  style={{
+                    padding: 0,
+                    color: "white",
+                    backgroundColor: "#508F7F",
+                  }}
+                >
                   เพิ่ม
                 </Button>
               </Typography>
@@ -365,26 +425,52 @@ function EducationForm({ user, setUser, setStep }: EducationFormProps) {
           alignItems="center"
           className={classes.button}
         >
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="button"
-              onClick={back}
               // color="primary"
-              variant="contained"
+              onClick={back}
+              style={{
+                padding: "7%",
+                // backgroundColor: "#508F7F",
+                color: "black",
+              }}
             >
-              ก่อนหน้า
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <NavigateBefore />
+                <Typography variant="body1">ก่อนหน้า</Typography>
+              </Grid>
             </Button>
           </Grid>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="submit"
-              onClick={next}
               // color="primary"
-              variant="contained"
+              onClick={next}
+              style={{
+                padding: "7%",
+                backgroundColor: "#508F7F",
+                color: "white",
+              }}
             >
-              ถัดไป
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <Typography variant="body1">ถัดไป</Typography>
+                <NavigateNext />
+              </Grid>
             </Button>
           </Grid>
         </Grid>

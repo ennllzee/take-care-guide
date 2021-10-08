@@ -4,7 +4,6 @@ import {
   Fab,
   FormControl,
   FormControlLabel,
-  FormLabel,
   Grid,
   makeStyles,
   Radio,
@@ -16,6 +15,8 @@ import {
 import {
   Work,
   AssignmentInd,
+  NavigateBefore,
+  NavigateNext,
 } from "@material-ui/icons";
 import { useState } from "react";
 import GuideForm from "../../models/GuideForm";
@@ -85,7 +86,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
   const [hasExp, setHasExp] = useState<boolean>(user.WorkExp?.length !== 0);
 
   const addWork = () => {
-    if (newTitle !== undefined && newWorkPlace !== undefined) {
+    if (newTitle !== undefined && newWorkPlace !== undefined && newTitle !== "" && newWorkPlace !== "") {
       let newExp: WorkExp = {
         JobTitle: newTitle,
         WorkPlace: newWorkPlace,
@@ -94,8 +95,8 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
         setDuplicate(true);
       } else {
         setWorkExp((w) => [...w, newExp]);
-        setNewTitle(undefined);
-        setNewWorkPlace(undefined);
+        setNewTitle("");
+        setNewWorkPlace("");
       }
     }
   };
@@ -105,9 +106,10 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
   };
 
   const handleChangeExp = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHasExp((event.target as HTMLInputElement).value === "true" ? true : false);
+    setHasExp(
+      (event.target as HTMLInputElement).value === "true" ? true : false
+    );
   };
-
 
   return (
     <Grid>
@@ -153,17 +155,13 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
               {/* </Typography> */}
             </Grid>
             <Grid item xs={10}>
-              <FormLabel component="legend">
+              <Typography variant="body1">
                 คุณมีประสบการณ์การทำงานหรือไม่?
-              </FormLabel>
+              </Typography>
             </Grid>
           </Grid>
           <FormControl component="fieldset" fullWidth={true}>
-            <RadioGroup
-              name="exp"
-              value={hasExp}
-              onChange={handleChangeExp}
-            >
+            <RadioGroup name="exp" value={hasExp} onChange={handleChangeExp}>
               <Grid
                 container
                 direction="row"
@@ -206,7 +204,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                   {/* </Typography> */}
                 </Grid>
                 <Grid item xs={10}>
-                  <FormLabel component="legend">ประสบการณ์การทำงาน</FormLabel>
+                  <Typography variant="body1">ประสบการณ์การทำงาน</Typography>
                 </Grid>
               </Grid>
               <Grid container spacing={1} justify="center" alignItems="center">
@@ -234,7 +232,15 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                         />
                       </Grid>
                       <Grid item xs={2}>
-                        <Button type="button" onClick={() => deleteWork(m)}>
+                        <Button
+                          type="button"
+                          onClick={() => deleteWork(m)}
+                          style={{
+                            padding: 0,
+                            color: "white",
+                            backgroundColor: "black",
+                          }}
+                        >
                           ลบ
                         </Button>
                       </Grid>
@@ -259,18 +265,27 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                   />
                 </Grid>
                 <Grid item xs={5} md={4} lg={4}>
-                    <TextField
-                      id="input-with-icon-grid"
-                      label="สถานที่ทำงาน"
-                      fullWidth={true}
-                      value={newWorkPlace !== undefined ? newWorkPlace : null}
-                      onChange={(e) => setNewWorkPlace(e.target.value)}
-                      type="text"
-                    />
+                  <TextField
+                    id="input-with-icon-grid"
+                    label="สถานที่ทำงาน"
+                    fullWidth={true}
+                    value={newWorkPlace !== undefined ? newWorkPlace : null}
+                    onChange={(e) => setNewWorkPlace(e.target.value)}
+                    type="text"
+                  />
                 </Grid>
                 <Grid item xs={11} md={2} lg={1}>
                   <Typography align="center">
-                    <Button type="button" fullWidth={true} onClick={addWork}>
+                    <Button
+                      type="button"
+                      fullWidth={true}
+                      onClick={addWork}
+                      style={{
+                        padding: 0,
+                        color: "white",
+                        backgroundColor: "#508F7F",
+                      }}
+                    >
                       เพิ่ม
                     </Button>
                   </Typography>
@@ -293,26 +308,52 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
           alignItems="center"
           className={classes.button}
         >
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="button"
-              onClick={back}
               // color="primary"
-              variant="contained"
+              onClick={back}
+              style={{
+                padding: "7%",
+                // backgroundColor: "#508F7F",
+                color: "black",
+              }}
             >
-              ก่อนหน้า
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <NavigateBefore />
+                <Typography variant="body1">ก่อนหน้า</Typography>
+              </Grid>
             </Button>
           </Grid>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="submit"
-              onClick={next}
               // color="primary"
-              variant="contained"
+              onClick={next}
+              style={{
+                padding: "7%",
+                backgroundColor: "#508F7F",
+                color: "white",
+              }}
             >
-              ถัดไป
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <Typography variant="body1">ถัดไป</Typography>
+                <NavigateNext />
+              </Grid>
             </Button>
           </Grid>
         </Grid>
