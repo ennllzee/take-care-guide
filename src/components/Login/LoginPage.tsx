@@ -5,12 +5,16 @@ import {
   Theme,
   Typography,
   Paper,
+  Button,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
-import GoogleLogin from "react-google-login";
-import Image from "material-ui-image";
 import { useQuery } from "@apollo/client";
+import Image from "material-ui-image";
+import { useGoogleLogin } from "react-google-login";
+import { ExitToApp } from "@material-ui/icons";
 import useGuideApi from "../../hooks/guidehooks";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,9 +28,11 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       background: "white",
       width: "80vw",
+      height: "80vh",
     },
     login: {
       padding: "5%",
+      height: "80vh",
     },
     form: {
       paddingTop: "2%",
@@ -48,13 +54,12 @@ function LoginPage() {
   const classes = useStyles();
 
   const accessToken = localStorage.getItem("accessToken");
-  const id = localStorage.getItem("_id")
 
   useEffect(() => {
-    if (accessToken !== null && id !== null) {
+    if (accessToken !== null) {
       history.push(`/appointment&=${accessToken}`);
     }
-  }, [accessToken, id]);
+  }, [accessToken]);
 
   const [res, setRes] = useState<any>();
   const [token, setToken] = useState<string>();
@@ -67,8 +72,8 @@ function LoginPage() {
   });
 
   useEffect(() => {
-    if (!loading && res !== undefined && token !== undefined) {
-      if (data) {
+    if (!loading && res !== undefined && token !== undefined && data !== undefined) {
+      if (data.loginGuide) {
         localStorage.setItem("_id", data.loginGuide._id);
         localStorage.setItem("accessToken", res.accessToken);
         history.push(`/appointment&=${localStorage.getItem("accessToken")}`);
@@ -79,24 +84,30 @@ function LoginPage() {
       }
     }
     if (error) console.log(error?.graphQLErrors);
-  }, [loading, data, error, res, token]);
+  }, [loading, res, token, error, data]);
 
   const responseGoogle = async (response: any) => {
-    console.log(response.tokenId);
     setRes(response);
     setToken(response.tokenId);
   };
+
+  const { signIn } = useGoogleLogin({
+    clientId:
+      "907374215732-jc7l3sk84f05vlsf9e23ceo674ek0sbe.apps.googleusercontent.com",
+    onSuccess: responseGoogle,
+    isSignedIn: true,
+    onFailure: responseGoogle,
+    cookiePolicy: "single_host_origin",
+  });
 
   return (
     <Grid
       container
       direction="column"
       alignItems="center"
-      justify="space-between"
+      justify="center"
       className={classes.root}
     >
-      <Grid item></Grid>
-
       <Grid item>
         <Paper className={classes.paper}>
           <Grid
@@ -106,26 +117,37 @@ function LoginPage() {
             alignItems="center"
             className={classes.login}
           >
-            <Grid xs={12} md={12} lg={12}>
+            <Grid xs={12} md={6} lg={6} className={classes.form}>
               <Grid
                 container
                 direction="row"
                 alignItems="center"
-                justify="flex-start"
+                justify="center"
               >
-                <Grid item xs={2} md={1} lg={1}>
-                  <Image
-                    src="./logo.png"
-                    cover={true}
-                    // style={{padding: 0}}
-                  />
+                <Grid item xs={6} md={6} lg={6}>
+                  <Image src="./logo.png" cover={true} />
                 </Grid>
-                <Grid item xs={10} md={11} lg={11} className={classes.name}>
-                  <Typography variant="h4">ลงชื่อเข้าระบบไกด์</Typography>
+                <Grid item xs={12} md={12} lg={12} className={classes.form}>
+                  <Typography
+                    variant="h6"
+                    align="center"
+                    noWrap
+                    color="textSecondary"
+                  >
+                    Hospital Care Guide Service
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    align="center"
+                    noWrap
+                    color="textSecondary"
+                  >
+                    For Guide
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
-            <Grid xs={12} md={12} lg={12} className={classes.form}>
+            <Grid xs={12} md={6} lg={6} className={classes.form}>
               <Grid
                 container
                 direction="row"
@@ -133,21 +155,45 @@ function LoginPage() {
                 alignItems="center"
                 className={classes.google}
               >
-                <GoogleLogin
-                  clientId="907374215732-jc7l3sk84f05vlsf9e23ceo674ek0sbe.apps.googleusercontent.com"
-                  buttonText="Sign in with Google"
-                  onSuccess={responseGoogle}
-                  onFailure={responseGoogle}
-                  cookiePolicy={"single_host_origin"}
-                  isSignedIn={true}
-                />
+                <Grid item xs={12} md={12} lg={12} className={classes.form}>
+                  <Typography variant="h4" align="center" noWrap>
+                    ลงชื่อเข้าระบบ
+                  </Typography>
+                </Grid>
+                <Grid item xs={8} md={8} lg={8} className={classes.form}>
+                  <Button
+                    onClick={signIn}
+                    fullWidth={true}
+                    style={{
+                      padding: "3%",
+                      backgroundColor: "#508F7F",
+                      color: "white",
+                    }}
+                  >
+                    <Grid
+                      container
+                      direction="row"
+                      // spacing={1}
+                      justify="center"
+                      alignItems="center"
+                    >
+                      <ExitToApp />
+                      <Typography variant="body1">
+                        Sign In with Google
+                      </Typography>
+                    </Grid>
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Paper>
+        <Backdrop open={loading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Grid>
-      <Grid item></Grid>
     </Grid>
   );
 }
+
 export default LoginPage;
