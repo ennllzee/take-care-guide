@@ -196,7 +196,7 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
                 value={phoneNum}
                 onChange={(e) => setPhoneNum(e.target.value)}
                 required
-                type="text"
+                type="number"
               />
             </Grid>
           </Grid>

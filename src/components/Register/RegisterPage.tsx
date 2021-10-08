@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(10),
       paddingRight: "5%",
       paddingLeft: "5%",
-      // minWidth: "100vw",
-      width: "90vw",
+      minWidth: "100vw",
+      maxWidth: "100vw",
     },
     form: {
       paddingTop: "5%",
@@ -239,15 +239,12 @@ function RegisterPage() {
         <Submit
           submit={submit}
           title="ยืนยันการลงทะเบียน?"
-          text="กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนกดยืนยัน"
+          text="กรุณาตรวจสอบความถูกต้องก่อนกดยืนยัน"
           denyText="ยกเลิก"
           submitText="ยืนยัน"
           denyAction={() => setSubmit(false)}
           submitAction={onSubmit}
         />
-        {/* {mutationLoading && <p>Loading...</p>}
-        {mutationError && <p>Error :( Please try again</p>} */}
-        {/* <Grid item className={classes.end}></Grid> */}
       </Grid>
     </Grid>
   );
