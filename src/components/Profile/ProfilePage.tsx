@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(10),
       paddingRight: "5%",
       paddingLeft: "5%",
-      minWidth: "80vw",
+      minWidth: "100vw",
       maxWidth: "100vw",
     },
     form: {

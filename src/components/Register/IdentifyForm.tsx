@@ -165,14 +165,14 @@ function IdentifyForm({ user, setUser, setStep, setDisplayImg, displayImg  }: Id
                 แนบรูปคู่บัตรประจำตัวประชาชน
               </Typography>
             </Grid>
-            <Grid item xs={4} style={{backgroundColor: "#EFEFEF"}}>
+            <Grid item xs={4} md={3} lg={2} style={{backgroundColor: "#EFEFEF"}}>
               <Image
                 src={displayImg}
                 loading={displayImg === undefined ? false : true}
                 // cover={true}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4} md={3} lg={2}>
               <Typography align="center">
                 <input
                   type="file"

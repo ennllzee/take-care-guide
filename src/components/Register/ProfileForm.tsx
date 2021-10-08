@@ -55,11 +55,17 @@ interface ProfileFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
-  setDisplayImg: any
-  displayImg: any
+  setDisplayImg: any;
+  displayImg: any;
 }
 
-function ProfileForm({ user, setUser, setStep, setDisplayImg, displayImg }: ProfileFormProps) {
+function ProfileForm({
+  user,
+  setUser,
+  setStep,
+  setDisplayImg,
+  displayImg,
+}: ProfileFormProps) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState<string | undefined>(
     user.FirstName
@@ -169,7 +175,6 @@ function ProfileForm({ user, setUser, setStep, setDisplayImg, displayImg }: Prof
             </Grid>
           </Grid>
         </Grid>
-        {/* <Typography variant="h4">ข้อมูลส่วนตัว</Typography> */}
         <div className={classes.margin}>
           <Grid
             container
@@ -178,14 +183,14 @@ function ProfileForm({ user, setUser, setStep, setDisplayImg, displayImg }: Prof
             alignItems="center"
             className={classes.card}
           >
-            <Grid item xs={4} style={{backgroundColor: "#EFEFEF"}}>
+            <Grid item xs={4} md={3} lg={2} style={{ backgroundColor: "#EFEFEF" }}>
               <Image
                 src={displayImg}
                 loading={displayImg === undefined ? false : true}
                 cover={true}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4} md={3} lg={2}>
               <Typography align="center">
                 <input
                   type="file"
@@ -355,15 +360,14 @@ function ProfileForm({ user, setUser, setStep, setDisplayImg, displayImg }: Prof
           </Grid>
         </Grid>
       </form>
-      {alert && (
-        <Alert
-          closeAlert={() => setAlert(false)}
-          alert={alert}
-          title="ข้อมูลการนัดหมาย"
-          text="กรุณากรอกข้อมูลให้ครบ"
-          buttonText="ตกลง"
-        />
-      )}
+
+      <Alert
+        closeAlert={() => setAlert(false)}
+        alert={alert}
+        title="ข้อมูลไม่ครบ"
+        text="กรุณากรอกข้อมูลที่จำเป็นให้ครบ"
+        buttonText="ปิด"
+      />
     </Grid>
   );
 }

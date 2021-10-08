@@ -13,6 +13,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Grid } from "@material-ui/core";
 import moment from "moment";
 import Appointment from "../../models/Appointment";
+import { Rating } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -201,7 +202,13 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
             <Grid item xs={7}>
               <Typography variant="body1" align="left">
                 {appointment.Review?.Star !== null ? (
-                  <>{appointment.Review?.Star}</>
+                  <>
+                    <Rating
+                      max={5}
+                      value={appointment.Review?.Star}
+                      style={{ color: "#FFC300" }}
+                    />
+                  </>
                 ) : (
                   "ยังไม่ได้รับการประเมิน"
                 )}
