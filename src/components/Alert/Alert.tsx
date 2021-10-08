@@ -1,13 +1,10 @@
 import {
   Button,
-  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  makeStyles,
-  Theme,
 } from "@material-ui/core";
 
 interface AlertProps {
@@ -18,25 +15,10 @@ interface AlertProps {
   buttonText: string
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100vw'
-    }
-  })
-);
-
 function Alert({ closeAlert, alert, title, text, buttonText }: AlertProps) {
-
-  const classes = useStyles()
   return (
     <Dialog
-    //   onClose={closeAlert}
-      aria-describedby="alert-dialog-description"
-      aria-labelledby="alert-dialog-title"
       open={alert}
-      className={classes.root}
-      fullWidth={true}
     >
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>
@@ -45,8 +27,8 @@ function Alert({ closeAlert, alert, title, text, buttonText }: AlertProps) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={closeAlert} color="primary">
-          OK
+        <Button onClick={closeAlert}>
+          {buttonText}
         </Button>
       </DialogActions>
     </Dialog>

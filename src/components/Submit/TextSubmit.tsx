@@ -19,15 +19,15 @@ interface TextSubmitProps {
   submitText: string;
   denyAction: any;
   submitAction: any;
-  denyDetail?: string
-  setDenyDetail: any
+  denyDetail?: string;
+  setDenyDetail: any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100vw'
-    }
+      width: "100vw",
+    },
   })
 );
 
@@ -40,10 +40,9 @@ function TextSubmit({
   denyAction,
   submitAction,
   denyDetail,
-  setDenyDetail
+  setDenyDetail,
 }: TextSubmitProps) {
-
-  const classes = useStyles()
+  const classes = useStyles();
   return (
     <Dialog
       //   onClose={closeSubmit}
@@ -63,15 +62,19 @@ function TextSubmit({
           label="ข้อความปฏิเสธ"
           fullWidth={true}
           value={denyDetail}
-          onChange = {e => setDenyDetail(e.target.value)}
+          onChange={(e) => setDenyDetail(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
         <DialogActions>
-          <Button onClick={denyAction} color="primary">
-            {denyText}
-          </Button>
-          <Button onClick={submitAction} color="primary">
+          <Button onClick={denyAction}>{denyText}</Button>
+          <Button
+            onClick={submitAction}
+            style={{
+              backgroundColor: "#508F7F",
+              color: "white",
+            }}
+          >
             {submitText}
           </Button>
         </DialogActions>
