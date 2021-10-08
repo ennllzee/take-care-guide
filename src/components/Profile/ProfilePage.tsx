@@ -27,7 +27,7 @@ import { history } from "../../helper/history";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
 import ProfileCard from "./ProfileCard";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation} from "@apollo/client";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
@@ -62,7 +62,7 @@ function ProfilePage() {
   const accessToken = localStorage.getItem("accessToken");
   const id = localStorage.getItem("_id");
 
-  const { GET_SINGLE_GUIDE } = useGuideApi();
+  const { GET_SINGLE_GUIDE, UPDATE_GUIDE } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_SINGLE_GUIDE, {
     variables: { getGuideId: id },
@@ -132,6 +132,12 @@ function ProfilePage() {
   const [alert, setAlert] = useState<boolean>(false);
   const [alertData, setAlertData] = useState<boolean>(false);
 
+  const [updateProfile] = useMutation(UPDATE_GUIDE, {
+    onCompleted: (data) => {
+      console.log(data)
+    }
+  })
+
   const editProfile = () => {
     if (
       firstName !== "" &&
@@ -142,6 +148,33 @@ function ProfilePage() {
       email !== ""
     ) {
       //waiting update profile
+
+      // updateProfile({
+      //   variables: {
+      //     updateCustomerId: id,
+      //     updateCustomerInput: {
+      //       FirstName: firstName,
+      //       LastName: lastName,
+      //       Gender: gender,
+      //       DOB: dob,
+      //       PhoneNumber: phoneNum,
+      //       EmergencyTel: emerNum,
+      //       CongenitalDisorders: disorder,
+      //     },
+      //   },
+      //   refetchQueries: [
+      //     {
+      //       query: GET_SINGLE_CUSTOMER,
+      //       variables: { getCustomerId: id },
+      //     },
+      //   ],
+      // });
+      console.log(firstName)
+      console.log(lastName)
+      console.log(gender)
+      console.log(dob)
+      console.log(phoneNum)
+      console.log(email)
       setAlert(true);
       setConfirmEdit(false);
       setEdit(false);

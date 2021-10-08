@@ -66,38 +66,6 @@ const useGuideApi = () => {
     ) {
       updateGuide(_id: $updateGuideId, input: $updateGuideInput) {
         _id
-        FirstName
-        LastName
-        Gender
-        DOB
-        Address
-        ContactAddress
-        PhoneNumber
-        Email
-        IsValidated
-        Education {
-          Degree
-          Acadamy
-          Certificate
-        }
-        WorkExp {
-          JobTitle
-          WorkPlace
-          JobPosition
-        }
-        LangSkill {
-          Languages
-          Level
-        }
-        IdCard
-        FaceWithIdCard
-        ValidatedDate
-        GoogleId
-        Avatar
-        CongenitalDisorders
-        Role
-        CreatedAt
-        UpdatedAt
       }
     }
   `;

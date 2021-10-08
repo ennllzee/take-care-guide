@@ -139,8 +139,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
   const onSubmit = () => {
     setSubmit(false);
-    scheduleForm.forEach((m, key) => {
-      //waiting for add or update
+    scheduleForm.forEach((m): void => {
       const exist = guideSchedule.find((s: any) => {
         return (
           moment(s.ScheduleDate).startOf("day").format() ===
