@@ -1,10 +1,8 @@
 import {
   Button,
-  CardMedia,
   createStyles,
   Fab,
   FormControl,
-  FormLabel,
   Grid,
   InputLabel,
   makeStyles,
@@ -26,9 +24,11 @@ import {
   Language,
   Work,
   CreditCard,
+  NavigateBefore,
 } from "@material-ui/icons";
 import moment from "moment";
 import GuideForm from "../../models/GuideForm";
+import Image from "material-ui-image";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,19 +76,14 @@ interface RegisterSubmitProps {
   user: GuideForm;
   setStep: any;
   setSubmit: any;
-  displayImg: any;
+  displayImg: any
 }
 
-function RegisterSubmit({
-  user,
-  setStep,
-  setSubmit,
-  displayImg,
-}: RegisterSubmitProps) {
+function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmitProps) {
   const classes = useStyles();
 
-  const back = (step: number) => {
-    setStep(step);
+  const back = () => {
+    setStep(5);
   };
 
   return (
@@ -134,8 +129,12 @@ function RegisterSubmit({
             alignItems="center"
             className={classes.card}
           >
-            <Grid item xs={4}>
-              <CardMedia image={displayImg} className={classes.img} />
+            <Grid item xs={5} md={4} lg={2}  style={{backgroundColor: "#EFEFEF"}}>
+              <Image
+                src={displayImg}
+                loading={displayImg === undefined ? false : true}
+                cover={true}
+              />
             </Grid>
           </Grid>
         </div>
@@ -287,7 +286,7 @@ function RegisterSubmit({
               <Language />
             </Grid>
             <Grid item xs={10}>
-              <FormLabel component="legend">ทักษะทางด้านภาษา</FormLabel>
+              <Typography variant="body1">ทักษะทางด้านภาษา</Typography>
             </Grid>
           </Grid>
           <Grid container spacing={1} justify="center" alignItems="center">
@@ -331,7 +330,7 @@ function RegisterSubmit({
               <Work />
             </Grid>
             <Grid item xs={10}>
-              <FormLabel component="legend">ประสบการณ์การทำงาน</FormLabel>
+              <Typography variant="body1">ประสบการณ์การทำงาน</Typography>
             </Grid>
           </Grid>
           <Grid container spacing={1} justify="center" alignItems="center">
@@ -425,26 +424,51 @@ function RegisterSubmit({
           alignItems="center"
           className={classes.button}
         >
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="button"
-              onClick={() => back(4)}
               // color="primary"
-              variant="contained"
+              onClick={back}
+              style={{
+                padding: "7%",
+                // backgroundColor: "#508F7F",
+                color: "black",
+              }}
             >
-              ก่อนหน้า
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <NavigateBefore/>
+                <Typography variant="body1">ก่อนหน้า</Typography>
+              </Grid>
             </Button>
           </Grid>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="button"
-              onClick={() => setSubmit(true)}
               // color="primary"
-              variant="contained"
+              onClick={() => setSubmit(true)}
+              style={{
+                padding: "7%",
+                backgroundColor: "#508F7F",
+                color: "white",
+              }}
             >
-              ยืนยัน
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <Typography variant="body1">ยืนยัน</Typography>
+              </Grid>
             </Button>
           </Grid>
         </Grid>

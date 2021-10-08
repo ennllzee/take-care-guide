@@ -13,7 +13,9 @@ import {
 import {
   Email,
   PhoneAndroid,
-  Home,
+  Business,
+  NavigateBefore,
+  NavigateNext,
 } from "@material-ui/icons";
 import { useState } from "react";
 import GuideForm from "../../models/GuideForm";
@@ -71,7 +73,8 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
   const [phoneNum, setPhoneNum] = useState<string | undefined>(
     user.PhoneNumber
   );
-  const [email, setEmail] = useState<string | undefined>(user.Email);
+  const gmail = localStorage.getItem('gmail')
+  const [email, setEmail] = useState<string | undefined | null>(user.Email !== undefined ? user.Email : gmail);
   const [address, setAddress] = useState<string | undefined>(
     user.ContactAddress
   );
@@ -144,12 +147,12 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
         <div className={classes.margin}>
           <Grid container spacing={2} justify="center" alignItems="flex-end">
             <Grid item>
-              <Home />
+              <Business />
             </Grid>
             <Grid item xs={10}>
               <TextField
                 id="input-with-icon-grid"
-                label="ที่อยู่ที่ติดต่อได้"
+                label="ที่อยู่ปัจจุบัน"
                 fullWidth={true}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
@@ -223,26 +226,52 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
           alignItems="center"
           className={classes.button}
         >
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="button"
-              onClick={back}
               // color="primary"
-              variant="contained"
+              onClick={back}
+              style={{
+                padding: "7%",
+                // backgroundColor: "#508F7F",
+                color: "black",
+              }}
             >
-              ก่อนหน้า
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <NavigateBefore/>
+                <Typography variant="body1">ก่อนหน้า</Typography>
+              </Grid>
             </Button>
           </Grid>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="submit"
-              onClick={next}
               // color="primary"
-              variant="contained"
+              onClick={next}
+              style={{
+                padding: "7%",
+                backgroundColor: "#508F7F",
+                color: "white",
+              }}
             >
-              ถัดไป
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <Typography variant="body1">ถัดไป</Typography>
+                <NavigateNext/>
+              </Grid>
             </Button>
           </Grid>
         </Grid>

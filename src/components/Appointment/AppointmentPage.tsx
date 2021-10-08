@@ -100,6 +100,7 @@ function AppointmentPage() {
   }, [loading, data, error]);
 
   const [alert, setAlert] = useState<boolean>(false);
+  const [price, setPrice] = useState<number>(0)
 
   return (
     <Grid>
@@ -193,7 +194,7 @@ function AppointmentPage() {
                                     lg={8}
                                     className={classes.card}
                                   >
-                                    <AppointmentCard appointment={a} setAlert={setAlert}/>
+                                    <AppointmentCard appointment={a} setAlert={setAlert} setPrice={setPrice}/>
                                   </Grid>
                                 </>
                               );
@@ -229,8 +230,8 @@ function AppointmentPage() {
       <Alert
           closeAlert={() => setAlert(false)}
           alert={alert}
-          title="สำเร็จ"
-          text="สิ้นสุดการบริการเรียบร้อยแล้ว"
+          title="สิ้นสุดการบริการ"
+          text={`ค่าบริการ: ${price} บาท`}
           buttonText="ตกลง"
         />
       <ManageSchedule open={manage} setOpen={setManage} />

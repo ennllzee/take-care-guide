@@ -62,7 +62,8 @@ function RegisterPage() {
   const [alert, setAlert] = useState<boolean>(false);
 
   const logout = () => {
-    setAlert(true);
+    localStorage.clear()
+    history.push("/")
   };
 
   const { signOut } = useGoogleLogout({
@@ -88,6 +89,10 @@ function RegisterPage() {
     UPLOAD_CERTIFICATE,
     UPLOAD_FACEWITHIDCARD,
   } = useGuideApi();
+
+  const [displayImg, setDisplayImg] = useState<any | undefined>();
+  const [displayIdImg, setDisplayIdImg] = useState<any | undefined>();
+  const [displayCerImg, setDisplayCerImg] = useState<any | undefined>();
 
   const [createGuide] = useMutation(SIGNUP_GUIDE, {
     onCompleted: (data) => {
@@ -138,8 +143,6 @@ function RegisterPage() {
     },
   });
 
-  const [displayImg, setdisplayImg] = useState<any | undefined>("");
-
   //NEEDED BACKEND
   const onSubmit = async () => {
     console.log(user);
@@ -153,8 +156,7 @@ function RegisterPage() {
         },
       },
     });
-
-    signOut();
+    setAlert(true);
   };
 
   const [step, setStep] = useState<number>(1);
@@ -180,42 +182,13 @@ function RegisterPage() {
             justify="center"
           >
             <Grid item xs={12} md={12} lg={12}>
-              {/* <Paper className={classes.box}>         */}
-              {/* <div className={classes.margin}>
-                <Grid
-                  container
-                  spacing={2}
-                  justify="center"
-                  alignItems="flex-end"
-                >
-                  <Grid item>
-                    <AccountCircle />
-                  </Grid>
-                  <Grid item xs={10}>
-                    <TextField
-                      id="input-with-icon-grid"
-                      label="Google Account"
-                      fullWidth={true}
-                      value={gmail}
-                      type="text"
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </div> */}
-              {/* </Paper> */}
-              {/* </form> */}
-            </Grid>
-            <Grid item xs={12} md={12} lg={12}>
               {step === 1 && (
                 <ProfileForm
                   user={user}
                   setUser={setUser}
                   setStep={setStep}
-                  displayImg={displayImg}
-                  setdisplayImg={setdisplayImg}
+                  setDisplayImg={setDisplayImg}
+                  displayImg={displayImg} 
                 />
               )}
               {step === 2 && (
@@ -223,6 +196,8 @@ function RegisterPage() {
                   user={user}
                   setUser={setUser}
                   setStep={setStep}
+                  setDisplayImg={setDisplayIdImg}
+                  displayImg={displayIdImg} 
                 />
               )}
               {step === 3 && (
@@ -230,6 +205,8 @@ function RegisterPage() {
                   user={user}
                   setUser={setUser}
                   setStep={setStep}
+                  setDisplayImg={setDisplayCerImg}
+                  displayImg={displayCerImg} 
                 />
               )}
               {step === 4 && (
@@ -243,7 +220,7 @@ function RegisterPage() {
                   user={user}
                   setStep={setStep}
                   setSubmit={setSubmit}
-                  displayImg={displayImg}
+                  displayImg={displayCerImg} 
                 />
               )}
             </Grid>
@@ -252,11 +229,11 @@ function RegisterPage() {
         <Alert
           closeAlert={() => {
             setAlert(false);
-            history.push("/");
+            signOut();
           }}
           alert={alert}
-          title="ลงทะเบียนสำเร็จ"
-          text="โปรดยืนยันตัวตนอีกครั้งผ่านแบบฟอร์มที่ส่งไปยังอีเมล์ที่ติดต่อได้ของท่าน"
+          title="สำเร็จ"
+          text="ลงทะเบียนสำเร็จ กรุณาลงชื่อเข้าระบเพื่อเริ่มใช้งาน"
           buttonText="ตกลง"
         />
         <Submit

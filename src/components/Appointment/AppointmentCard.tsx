@@ -127,9 +127,10 @@ const StyledTableCell = withStyles((theme: Theme) =>
 interface AppointmentCardProps {
   appointment: Appointment;
   setAlert: any;
+  setPrice: any
 }
 
-function AppointmentCard({ appointment, setAlert }: AppointmentCardProps) {
+function AppointmentCard({ appointment, setAlert, setPrice }: AppointmentCardProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState<boolean>(false);
 
@@ -144,12 +145,12 @@ function AppointmentCard({ appointment, setAlert }: AppointmentCardProps) {
   const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
   const [endAppointment] = useMutation(UPDATE_APPOINTMENT_ENDTIME, {
     onCompleted: (data) => {
-      console.log(data);
+      setPrice(data.Price)
     },
   });
 
-  const accept = () => {
-    endAppointment({
+  const accept = async () => {
+    await endAppointment({
       variables: {
         updateAppointmentEndTimeId: appointment._id,
         updateAppointmentEndTimeEndTime: new Date().toISOString(),
@@ -340,13 +341,7 @@ function AppointmentCard({ appointment, setAlert }: AppointmentCardProps) {
         <Submit
           submit={end}
           title="สิ้นสุดนัดหมาย"
-          text={`ยืนยันการสิ้นสุดการบริการหรือไม่? ${(<br />)} ค่าบริการ = ${
-            150 +
-            12 *
-              ((new Date().getMinutes() -
-                new Date(appointment.AppointTime).getMinutes()) /
-                60)
-          } บาท `}
+          text={`ยืนยันการสิ้นสุดการบริการหรือไม่?`}
           denyText="ยกเลิก"
           submitText="ยืนยัน"
           denyAction={() => setEnd(false)}

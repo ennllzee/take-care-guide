@@ -14,7 +14,7 @@ import {
   Theme,
   Typography,
 } from "@material-ui/core";
-import { Person, Wc, Cake, Home } from "@material-ui/icons";
+import { Person, Wc, Cake, Home, NavigateNext } from "@material-ui/icons";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { useState } from "react";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
@@ -55,39 +55,15 @@ interface ProfileFormProps {
   user: GuideForm;
   setUser: any;
   setStep: any;
-  displayImg: any;
-  setdisplayImg: any;
+  setDisplayImg: any
+  displayImg: any
 }
 
-function ProfileForm({
-  user,
-  setUser,
-  setStep,
-  displayImg,
-  setdisplayImg,
-}: ProfileFormProps) {
+function ProfileForm({ user, setUser, setStep, setDisplayImg, displayImg }: ProfileFormProps) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState<string | undefined>(
     user.FirstName
   );
-  const [lastName, setLastName] = useState<string | undefined>(user.LastName);
-  const [dob, setDOB] = useState<string | undefined>(user.DOB);
-  const [address, setAddress] = useState<string | undefined>(user.Address);
-
-  const [gender, setGender] = useState<string | undefined>(user.Gender);
-  //   const [imgName, setImgName] = useState<any | undefined>(user.FirstName);
-  const [avatar, setavatar] = useState<any | undefined>("");
-
-  const uploadImage = async (e: any) => {
-    const file = e.target.files[0];
-    setavatar(file);
-    console.log(avatar);
-
-    const base64 = await convertBase64(file);
-    setdisplayImg(base64);
-  };
-
-  const [alert, setAlert] = useState<boolean>(false);
 
   const convertBase64 = (file: any) => {
     return new Promise((resolve, reject) => {
@@ -103,6 +79,23 @@ function ProfileForm({
       };
     });
   };
+  const [lastName, setLastName] = useState<string | undefined>(user.LastName);
+  const [dob, setDOB] = useState<string | undefined>(user.DOB);
+  const [address, setAddress] = useState<string | undefined>(user.Address);
+
+  const [gender, setGender] = useState<string | undefined>(user.Gender);
+  //   const [imgName, setImgName] = useState<any | undefined>(user.FirstName);
+  const [avatar, setAvatar] = useState<any | undefined>(user.Avatar);
+
+  const uploadImage = async (e: any) => {
+    const file = e.target.files[0];
+    setAvatar(file);
+
+    const base64 = await convertBase64(file);
+    setDisplayImg(base64);
+  };
+
+  const [alert, setAlert] = useState<boolean>(false);
 
   const next = () => {
     if (
@@ -185,9 +178,12 @@ function ProfileForm({
             alignItems="center"
             className={classes.card}
           >
-            <Grid item xs={4}>
-              {/* <CardMedia image={displayImg} className={classes.img} /> */}
-              <Image src={displayImg} cover={true} />
+            <Grid item xs={4} style={{backgroundColor: "#EFEFEF"}}>
+              <Image
+                src={displayImg}
+                loading={displayImg === undefined ? false : true}
+                cover={true}
+              />
             </Grid>
             <Grid item xs={6}>
               <Typography align="center">
@@ -195,18 +191,36 @@ function ProfileForm({
                   type="file"
                   accept="image/*"
                   id="contained-button-file"
-                  //   key={imgName}
                   onChange={(e: any) => {
-                    // setImgName(e.currentTarget.files[0].name);
                     uploadImage(e);
                   }}
                   hidden
                 />
                 <label htmlFor="contained-button-file">
-                  <Button variant="contained" color="primary" component="span">
-                    อัปโหลด
+                  <Button
+                    component="span"
+                    style={{
+                      padding: "7%",
+                      backgroundColor: "#508F7F",
+                      color: "white",
+                    }}
+                  >
+                    <Grid
+                      container
+                      direction="row"
+                      spacing={1}
+                      justify="center"
+                      alignItems="center"
+                    >
+                      <Typography variant="body1">อัปโหลดรูปโปรไฟล์</Typography>
+                    </Grid>
                   </Button>
                 </label>
+              </Typography>
+              <Typography variant="body1" align="center">
+                {avatar !== undefined
+                  ? " อัปโหลดสำเร็จ"
+                  : " ยังไม่ได้อัปโหลดไฟล์"}
               </Typography>
             </Grid>
           </Grid>
@@ -315,15 +329,28 @@ function ProfileForm({
           alignItems="center"
           className={classes.button}
         >
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={3} md={3} lg={2}>
             <Button
               fullWidth={true}
               type="button"
               // color="primary"
               onClick={next}
-              variant="contained"
+              style={{
+                padding: "7%",
+                backgroundColor: "#508F7F",
+                color: "white",
+              }}
             >
-              ถัดไป
+              <Grid
+                container
+                direction="row"
+                spacing={1}
+                justify="center"
+                alignItems="center"
+              >
+                <Typography variant="body1">ถัดไป</Typography>
+                <NavigateNext />
+              </Grid>
             </Button>
           </Grid>
         </Grid>
