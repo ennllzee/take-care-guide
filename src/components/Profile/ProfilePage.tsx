@@ -45,7 +45,7 @@ import { history } from "../../helper/history";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
 import ProfileCard from "./ProfileCard";
-import { useQuery, useMutation} from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
@@ -94,7 +94,13 @@ function ProfilePage() {
   const accessToken = localStorage.getItem("accessToken");
   const id = localStorage.getItem("_id");
 
-  const { GET_SINGLE_GUIDE, UPDATE_GUIDE } = useGuideApi();
+  const {
+    GET_SINGLE_GUIDE,
+    UPDATE_GUIDE,
+    UPLOAD_PROFILE,
+    UPLOAD_CERTIFICATE,
+    UPLOAD_FACEWITHIDCARD,
+  } = useGuideApi();
 
   const { loading, error, data } = useQuery(GET_SINGLE_GUIDE, {
     variables: { getGuideId: id },
@@ -211,7 +217,7 @@ function ProfilePage() {
     user?.FaceWithIdCard !== null && user?.FaceWithIdCard !== undefined
       ? `data:${user?.FaceWithIdCard?.mimetype};base64,${user?.FaceWithIdCard?.data}`
       : undefined
-  );
+  ); 
   const [education, setEducation] = useState<any | undefined>(
     user?.Education.Certificate !== null &&
       user?.Education.Certificate !== undefined
@@ -323,9 +329,27 @@ function ProfilePage() {
 
   const [updateProfile] = useMutation(UPDATE_GUIDE, {
     onCompleted: (data) => {
-      console.log(data)
-    }
-  })
+      console.log(data);
+    },
+  });
+
+  const [uploadProfileImg] = useMutation(UPLOAD_PROFILE, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [uploadProfileCer] = useMutation(UPLOAD_CERTIFICATE, {
+    onCompleted: (data) => {
+      console.log(data);
+    }, 
+  });
+
+  const [uploadProfileFacewuthId] = useMutation(UPLOAD_FACEWITHIDCARD, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
 
   const editProfile = () => {
     if (
@@ -344,30 +368,49 @@ function ProfilePage() {
 
       // updateProfile({
       //   variables: {
-      //     updateCustomerId: id,
-      //     updateCustomerInput: {
+      //     id: null,
+      //     input: {
       //       FirstName: firstName,
       //       LastName: lastName,
       //       Gender: gender,
       //       DOB: dob,
+      //       Address: address,
+      //       ContactAddress: contactAddress,
       //       PhoneNumber: phoneNum,
-      //       EmergencyTel: emerNum,
-      //       CongenitalDisorders: disorder,
-      //     },
+      //       Education: {
+      //         Degree: degree,
+      //         Acadamy: acadamy
+      //       },
+      //       WorkExp: workExp,
+      //       LangSkill: langSkill,
+      //       IdCard: idCard
+      //     }
       //   },
       //   refetchQueries: [
       //     {
-      //       query: GET_SINGLE_CUSTOMER,
-      //       variables: { getCustomerId: id },
+      //       query: GET_SINGLE_GUIDE,
+      //       variables: { getGuideId: id },
       //     },
       //   ],
       // });
-      console.log(firstName)
-      console.log(lastName)
-      console.log(gender)
-      console.log(dob)
-      console.log(phoneNum)
-      console.log(email)
+      console.log(firstName);
+      console.log(lastName);
+      console.log(gender);
+      console.log(dob);
+      console.log(phoneNum);
+      console.log(address);
+      console.log(contactAddress);
+      console.log(idCard);
+      console.log(email);
+      console.log(gender);
+      console.log(degree);
+      console.log(acadamy);
+      console.log(langSkill);
+      console.log(workExp);
+      console.log(avatar);
+      console.log(idCardPic);
+      console.log(education); 
+
       setAlert(true);
       setConfirmEdit(false);
       setEdit(false);
@@ -573,7 +616,7 @@ function ProfilePage() {
                           </Grid>
                         </Grid>
                       </Grid>
-                      <Divider variant="middle"/>
+                      <Divider variant="middle" />
                     </Grid>
                   )}
                 </>
@@ -582,7 +625,7 @@ function ProfilePage() {
                 <form className={classes.form}>
                   {edit ? (
                     <>
-                    <Divider variant="middle"/>
+                      <Divider variant="middle" />
                       <div className={classes.margin}>
                         <Grid item xs={12}>
                           <Typography variant="h4">Profile</Typography>
@@ -759,7 +802,11 @@ function ProfilePage() {
                               แนบรูปคู่บัตรประจำตัวประชาชน
                             </Typography>
                           </Grid>
-                          <Grid item xs={4} style={{backgroundColor: "#EFEFEF"}}>
+                          <Grid
+                            item
+                            xs={4}
+                            style={{ backgroundColor: "#EFEFEF" }}
+                          >
                             <Image
                               src={displayImg}
                               loading={displayImg === undefined ? false : true}
@@ -890,7 +937,11 @@ function ProfilePage() {
                               แนบหลักฐานทางการศึกษา
                             </Typography>
                           </Grid>
-                          <Grid item xs={4} style={{backgroundColor: "#EFEFEF"}}>
+                          <Grid
+                            item
+                            xs={4}
+                            style={{ backgroundColor: "#EFEFEF" }}
+                          >
                             <Image
                               src={displayCerImg}
                               loading={
@@ -971,7 +1022,11 @@ function ProfilePage() {
                                   <Button
                                     type="button"
                                     onClick={() => deleteLang(m)}
-                                    style={{padding: 0, color: "white", backgroundColor: "black"}}
+                                    style={{
+                                      padding: 0,
+                                      color: "white",
+                                      backgroundColor: "black",
+                                    }}
                                   >
                                     ลบ
                                   </Button>
@@ -1031,7 +1086,11 @@ function ProfilePage() {
                                 type="button"
                                 fullWidth={true}
                                 onClick={addLang}
-                                style={{padding: 0, color: "white", backgroundColor: "#508F7F"}}
+                                style={{
+                                  padding: 0,
+                                  color: "white",
+                                  backgroundColor: "#508F7F",
+                                }}
                               >
                                 เพิ่ม
                               </Button>
@@ -1089,7 +1148,9 @@ function ProfilePage() {
                               <Grid item xs={5} md={4} lg={4}>
                                 <FormControlLabel
                                   value={false}
-                                  control={<Radio style={{color: "#508F7F"}}/>}
+                                  control={
+                                    <Radio style={{ color: "#508F7F" }} />
+                                  }
                                   label={
                                     <>
                                       <Typography variant="body2">
@@ -1102,7 +1163,9 @@ function ProfilePage() {
                               <Grid item xs={5} md={4} lg={4}>
                                 <FormControlLabel
                                   value={true}
-                                  control={<Radio style={{color: "#508F7F"}}/>}
+                                  control={
+                                    <Radio style={{ color: "#508F7F" }} />
+                                  }
                                   label={
                                     <>
                                       <Typography variant="body2">
@@ -1169,7 +1232,11 @@ function ProfilePage() {
                                       <Button
                                         type="button"
                                         onClick={() => deleteWork(m)}
-                                        style={{padding: 0, backgroundColor: "black", color: "white"}}
+                                        style={{
+                                          padding: 0,
+                                          backgroundColor: "black",
+                                          color: "white",
+                                        }}
                                       >
                                         ลบ
                                       </Button>
@@ -1218,7 +1285,11 @@ function ProfilePage() {
                                     type="button"
                                     fullWidth={true}
                                     onClick={addWork}
-                                    style={{padding: 0, color: "white", backgroundColor: "#508F7F"}}
+                                    style={{
+                                      padding: 0,
+                                      color: "white",
+                                      backgroundColor: "#508F7F",
+                                    }}
                                   >
                                     เพิ่ม
                                   </Button>
@@ -1276,7 +1347,7 @@ function ProfilePage() {
                                     }
                                     setSame((s) => !s);
                                   }}
-                                  style={{color: "#508F7F"}}
+                                  style={{ color: "#508F7F" }}
                                 />
                               }
                               label="ที่อยู่เดียวกับข้อมูลบนบัตรประชาชน"

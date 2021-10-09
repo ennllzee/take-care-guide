@@ -60,11 +60,8 @@ const useGuideApi = () => {
   `;
 
   const UPDATE_GUIDE = gql`
-    mutation UPDATE_GUIDE(
-      $updateGuideId: ID!
-      $updateGuideInput: GuideUpdateInput!
-    ) {
-      updateGuide(_id: $updateGuideId, input: $updateGuideInput) {
+    mutation UPDATE_GUIDE($id: ID!, $input: GuideUpdateInput!) {
+      updateGuide(_id: $id, input: $input) {
         _id
       }
     }
