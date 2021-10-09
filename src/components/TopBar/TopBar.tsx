@@ -1,4 +1,3 @@
-import Appointment from "../../models/Appointment";
 import { history } from "../../helper/history";
 import {
   makeStyles,
@@ -7,22 +6,9 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Popper,
-  Fade,
-  Paper,
-  Divider,
-  IconButton,
   Button,
-  CircularProgress,
-  Grid,
 } from "@material-ui/core";
-import { ViewList } from "@material-ui/icons";
-import React, { useEffect, useState } from "react";
 import { GoogleLogout } from "react-google-login";
-import moment from "moment";
-import { useQuery } from "@apollo/client";
-import useGuideApi from "../../hooks/guidehooks";
-import convertToThaiDate from "../../hooks/convertToThaiDate";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
