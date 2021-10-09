@@ -100,8 +100,8 @@ function RegisterPage() {
       if (user.Avatar) {
         addProfile({
           variables: {
-            addGuideProfileFile: user.Avatar,
-            addGuideProfileGuideId: data.createdGuide._id,
+            file: user.Avatar,
+            guideId: data.createdGuide._id,
           },
         });
       }
