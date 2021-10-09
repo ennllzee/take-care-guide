@@ -217,7 +217,7 @@ function ProfilePage() {
     user?.FaceWithIdCard !== null && user?.FaceWithIdCard !== undefined
       ? `data:${user?.FaceWithIdCard?.mimetype};base64,${user?.FaceWithIdCard?.data}`
       : undefined
-  ); 
+  );
   const [education, setEducation] = useState<any | undefined>(
     user?.Education.Certificate !== null &&
       user?.Education.Certificate !== undefined
@@ -274,7 +274,7 @@ function ProfilePage() {
         setNewWorkPlace(undefined);
       }
     }
-  }; 
+  };
 
   const deleteWork = (w: WorkExp) => {
     setWorkExp(workExp.filter((e) => e !== w));
@@ -293,21 +293,17 @@ function ProfilePage() {
 
     if (t === "id") {
       await setIdCardPic(file);
-    }
-    if (t === "cer") {
+    } else if (t === "cer") {
       await setEducation(file);
-    }
-    if (t === "avatar") {
+    } else if (t === "avatar") {
       await setAvatar(file);
     }
 
     if (t === "id") {
       await setDisplayImg(base64);
-    }
-    if (t === "cer") {
+    } else if (t === "cer") {
       await setDisplayCerImg(base64);
-    }
-    if (t === "avatar") {
+    } else if (t === "avatar") {
       await setProfile(base64);
     }
   };
@@ -342,7 +338,7 @@ function ProfilePage() {
   const [uploadProfileCer] = useMutation(UPLOAD_CERTIFICATE, {
     onCompleted: (data) => {
       console.log(data);
-    }, 
+    },
   });
 
   const [uploadProfileFacewuthId] = useMutation(UPLOAD_FACEWITHIDCARD, {
@@ -393,23 +389,23 @@ function ProfilePage() {
       //     },
       //   ],
       // });
-      console.log(firstName);
-      console.log(lastName);
-      console.log(gender);
-      console.log(dob);
-      console.log(phoneNum);
-      console.log(address);
-      console.log(contactAddress);
-      console.log(idCard);
-      console.log(email);
-      console.log(gender);
-      console.log(degree);
-      console.log(acadamy);
-      console.log(langSkill);
-      console.log(workExp);
-      console.log(avatar);
+      // console.log(firstName);
+      // console.log(lastName);
+      // console.log(gender);
+      // console.log(dob);
+      // console.log(phoneNum);
+      // console.log(address);
+      // console.log(contactAddress);
+      // console.log(idCard);
+      // console.log(email);
+      // console.log(gender);
+      // console.log(degree);
+      // console.log(acadamy);
+      // console.log(langSkill);
+      // console.log(workExp);
+      // console.log(avatar);
       console.log(idCardPic);
-      console.log(education); 
+      // console.log(education);
 
       setAlert(true);
       setConfirmEdit(false);
@@ -478,13 +474,13 @@ function ProfilePage() {
                         <input
                           type="file"
                           accept="image/*"
-                          id="contained-button-file"
+                          id="contained-button-0-file"
                           onChange={(e: any) => {
                             uploadFile(e, "avatar");
                           }}
                           hidden
                         />
-                        <label htmlFor="contained-button-file">
+                        <label htmlFor="contained-button-0-file">
                           <Button
                             component="span"
                             style={{
@@ -802,7 +798,13 @@ function ProfilePage() {
                               แนบรูปคู่บัตรประจำตัวประชาชน
                             </Typography>
                           </Grid>
-                          <Grid item xs={4} md={3} lg={2} style={{backgroundColor: "#EFEFEF"}}>
+                          <Grid
+                            item
+                            xs={4}
+                            md={3}
+                            lg={2}
+                            style={{ backgroundColor: "#EFEFEF" }}
+                          >
                             <Image
                               src={displayImg}
                               loading={displayImg === undefined ? false : true}
@@ -933,7 +935,13 @@ function ProfilePage() {
                               แนบหลักฐานทางการศึกษา
                             </Typography>
                           </Grid>
-                          <Grid item xs={4} md={3} lg={2} style={{backgroundColor: "#EFEFEF"}}>
+                          <Grid
+                            item
+                            xs={4}
+                            md={3}
+                            lg={2}
+                            style={{ backgroundColor: "#EFEFEF" }}
+                          >
                             <Image
                               src={displayCerImg}
                               loading={
