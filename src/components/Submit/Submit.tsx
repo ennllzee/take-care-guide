@@ -1,16 +1,13 @@
 import {
   Button,
-  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  makeStyles,
-  Theme,
 } from "@material-ui/core";
 
-interface SubmitProps {
+interface AlertProps {
   submit: boolean;
   title: string;
   text: string;
@@ -20,14 +17,6 @@ interface SubmitProps {
   submitAction: any;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: "100vw",
-    },
-  })
-);
-
 function Submit({
   submit,
   title,
@@ -36,18 +25,16 @@ function Submit({
   submitText,
   denyAction,
   submitAction,
-}: SubmitProps) {
-  const classes = useStyles();
+}: AlertProps) {
   return (
     <Dialog
-      //   onClose={closeSubmit}
       aria-describedby="alert-dialog-description"
       aria-labelledby="alert-dialog-title"
       open={submit}
-      className={classes.root}
-      fullWidth={true}
     >
-      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">
+        {title}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {text}
@@ -55,10 +42,18 @@ function Submit({
       </DialogContent>
       <DialogActions>
         <DialogActions>
-          <Button onClick={denyAction} color="primary">
+          <Button
+            onClick={denyAction}
+          >
             {denyText}
           </Button>
-          <Button onClick={submitAction} color="primary">
+          <Button
+            onClick={submitAction}
+            style={{
+              backgroundColor: "#508F7F",
+              color: "white",
+            }}
+          >
             {submitText}
           </Button>
         </DialogActions>

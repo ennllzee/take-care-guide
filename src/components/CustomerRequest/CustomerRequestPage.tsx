@@ -49,9 +49,9 @@ function CustomerRequestPage() {
     }
   }, [accessToken, id]);
 
-  const { loading, error, data } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
+  const { loading, error, data, refetch } = useQuery(GET_ALL_APPOINTMENT_BY_GUIDE, {
     variables: { getAllAppointmentByGuideGuideId: id },
-    pollInterval: 1000,
+    pollInterval: 60000,
   });
 
   const [appointment, setAppointment] = useState<any[]>(
@@ -136,7 +136,7 @@ function CustomerRequestPage() {
                           className={classes.card}
                         >
                           <Grid item xs={12} md={10} lg={8}>
-                            <RequestCard appointment={a} setAcceptAlert={setAcceptAlert} setDenyAlert={setDenyAlert}/>
+                            <RequestCard appointment={a} setAcceptAlert={setAcceptAlert} setDenyAlert={setDenyAlert} refresh={() => refetch()}/>
                           </Grid>
                         </Grid>
                       </>

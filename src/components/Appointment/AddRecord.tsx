@@ -7,6 +7,8 @@ import {
   Button,
   Typography,
   Grid,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import { AccessTime } from "@material-ui/icons";
 import { makeStyles, createStyles } from "@material-ui/styles";
@@ -26,7 +28,8 @@ interface AddRecordProps {
   appointment: Appointment;
   add: boolean;
   setAdd: any;
-  setAlert: any
+  setAlert: any;
+  refresh: any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,7 +40,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
+function AddRecord({
+  appointment,
+  add,
+  setAdd,
+  setAlert,
+  refresh,
+}: AddRecordProps) {
   const classes = useStyles();
 
   const { GET_ALL_RECORDTITLE } = useGuideApi();
@@ -60,13 +69,16 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
   }, [loading, data, error]);
 
   const { UPDATE_APPOINTMENT_RECORD } = useGuideApi();
-  const [addRecord] = useMutation(UPDATE_APPOINTMENT_RECORD, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
+  const [addRecord, { loading: mutationLoading, error: mutationError }] =
+    useMutation(UPDATE_APPOINTMENT_RECORD, {
+      onCompleted: (data) => {
+        console.log(data);
+      },
+    });
 
-  const submit = () => {
+  const [failed, setFailed] = useState<boolean>(false);
+
+  const submit = async () => {
     if (title !== undefined) {
       let newRecord: Record = {
         At: time.toISOString(),
@@ -74,14 +86,21 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
         Description: des,
       };
 
-      addRecord({
+      await addRecord({
         variables: {
           updateAppointmentRecordId: appointment._id,
           updateAppointmentRecordRecordinput: { ...newRecord },
         },
       });
-      setAlert(true);
-      setAdd(false);
+
+      if (mutationError) {
+        console.log(mutationError.graphQLErrors);
+        setFailed(true);
+      } else {
+        setAlert(true);
+        refresh();
+        setAdd(false);
+      }
     } else {
       setAlertData(true);
     }
@@ -102,6 +121,16 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
       className={classes.root}
       fullWidth={true}
     >
+      <Backdrop open={mutationLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Alert
+        closeAlert={() => setFailed(false)}
+        alert={failed}
+        title="ผิดพลาด"
+        text="กรุณาลองใหม่อีกครั้ง"
+        buttonText="ปิด"
+      />
       <DialogTitle id="alert-dialog-title">เพิ่มบันทึก</DialogTitle>
       <DialogContent>
         <Grid container direction="row" alignItems="center">
@@ -125,7 +154,7 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
             />
           )}
           onChange={(e, val) => {
-            if(val !== null){
+            if (val !== null) {
               setTitle(val);
             }
           }}
@@ -149,14 +178,14 @@ function AddRecord({ appointment, add, setAdd, setAlert }: AddRecordProps) {
         </DialogActions>
       </DialogActions>
       <Submit
-          submit={confirm}
-          title="บันทึกข้อมูล"
-          text="ยืนยันการบันทึกข้อมูลหรือไม่?"
-          denyText="ยกเลิก"
-          submitText="ยืนยัน"
-          denyAction={() => setConfirm(false)}
-          submitAction={addRecord}
-        />
+        submit={confirm}
+        title="บันทึกข้อมูล"
+        text="ยืนยันการบันทึกข้อมูลหรือไม่?"
+        denyText="ยกเลิก"
+        submitText="ยืนยัน"
+        denyAction={() => setConfirm(false)}
+        submitAction={addRecord}
+      />
       <Alert
         closeAlert={() => setAlertData(false)}
         alert={alertData}

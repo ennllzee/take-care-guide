@@ -18,6 +18,7 @@ import {
   TableBody,
   Button,
   CircularProgress,
+  Backdrop,
 } from "@material-ui/core";
 import { Close, Save } from "@material-ui/icons";
 import moment from "moment";
@@ -124,22 +125,29 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   };
 
   const [success, setSuccess] = useState<boolean>(false);
+  const [failed, setFailed] = useState<boolean>(false);
 
-  const [createGuideSchedule] = useMutation(CREATE_GUIDESCHEDULE, {
+  const [
+    createGuideSchedule,
+    { loading: mutationLoading, error: mutationError },
+  ] = useMutation(CREATE_GUIDESCHEDULE, {
     onCompleted: (data: any) => {
       console.log(data);
     },
   });
 
-  const [updateGuideSchedule] = useMutation(UPDATE_GUIDESCHEDULE, {
+  const [
+    updateGuideSchedule,
+    { loading: mutationUpdateLoading, error: mutationUpdateError },
+  ] = useMutation(UPDATE_GUIDESCHEDULE, {
     onCompleted: (data: any) => {
       console.log(data);
     },
   });
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setSubmit(false);
-    scheduleForm.forEach((m): void => {
+    scheduleForm.forEach(async (m, key) => {
       const exist = guideSchedule.find((s: any) => {
         return (
           moment(s.ScheduleDate).startOf("day").format() ===
@@ -156,7 +164,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
               m.AvailableAfternoon !== exist.AvailableAfternoon)
           ) {
             console.log("TakeSpecialV");
-            updateGuideSchedule({
+            await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
                 updateGuideSchedulePeriod: "All-day",
@@ -171,7 +179,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             exist.AvailableAfternoon !== m.AvailableAfternoon
           ) {
             console.log("Take2.1");
-            updateGuideSchedule({
+            await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
                 updateGuideSchedulePeriod: "Afternoon",
@@ -181,7 +189,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           }
           if (!m.AvailableMorning !== !exist.AvailableMorning) {
             console.log("Take2.2");
-            updateGuideSchedule({
+            await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
                 updateGuideSchedulePeriod: "Morning",
@@ -196,7 +204,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             exist.AvailableMorning !== m.AvailableMorning
           ) {
             console.log("Take3.1");
-            updateGuideSchedule({
+            await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
                 updateGuideSchedulePeriod: "Morning",
@@ -207,7 +215,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
           if (!m.AvailableAfternoon !== !exist.AvailableAfternoon) {
             console.log("Take3.2");
-            updateGuideSchedule({
+            await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
                 updateGuideSchedulePeriod: "Afternoon",
@@ -217,9 +225,12 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           }
           console.log("Take3");
         } else {
-          if (exist.AvailableAfternoon !== m.AvailableAfternoon || m.AvailableMorning !== exist.AvailableMorning) {
+          if (
+            exist.AvailableAfternoon !== m.AvailableAfternoon ||
+            m.AvailableMorning !== exist.AvailableMorning
+          ) {
             console.log("Special4");
-            updateGuideSchedule({
+            await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
                 updateGuideSchedulePeriod: "All-day",
@@ -232,7 +243,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         }
       } else {
         if (m.AvailableMorning && m.AvailableAfternoon) {
-          createGuideSchedule({
+          await createGuideSchedule({
             variables: {
               createGuideScheduleInput: {
                 ScheduleDate: m.ScheduleDate,
@@ -242,7 +253,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             },
           });
         } else if (m.AvailableAfternoon) {
-          createGuideSchedule({
+          await createGuideSchedule({
             variables: {
               createGuideScheduleInput: {
                 ScheduleDate: m.ScheduleDate,
@@ -252,7 +263,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             },
           });
         } else if (m.AvailableMorning) {
-          createGuideSchedule({
+          await createGuideSchedule({
             variables: {
               createGuideScheduleInput: {
                 ScheduleDate: m.ScheduleDate,
@@ -263,10 +274,16 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           });
         }
       }
-
       console.log(exist?.ScheduleDate + " === " + m.ScheduleDate);
     });
-    setSuccess(true);
+
+    if (mutationError || mutationUpdateError) {
+      console.log(mutationError?.graphQLErrors);
+      console.log(mutationUpdateError?.graphQLErrors);
+      setFailed(true);
+    } else {
+      setSuccess(true);
+    }
   };
 
   useEffect(() => {
@@ -329,6 +346,16 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
   return (
     <Modal open={open} className={classes.modal}>
       <Paper className={classes.paper}>
+        <Backdrop open={mutationLoading || mutationUpdateLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <Alert
+          closeAlert={() => setFailed(false)}
+          alert={failed}
+          title="ผิดพลาด"
+          text="กรุณาลองใหม่อีกครั้ง"
+          buttonText="ปิด"
+        />
         <Typography align="right">
           <IconButton onClick={() => setOpen(false)} style={{ padding: "0" }}>
             <Close />
@@ -454,17 +481,37 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             </TableContainer>
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
-            <Typography align="right">
-              <Button
-                // fullWidth={true}
-                type="button"
-                onClick={() => setSubmit(true)}
-                variant="contained"
-              >
-                <Save />
-                บันทึก
-              </Button>
-            </Typography>
+            <Grid
+              container
+              direction="row"
+              justify="flex-end"
+              alignItems="center"
+              style={{ paddingTop: "1%" }}
+            >
+              <Grid item xs={4} md={3} lg={2}>
+                <Button
+                  fullWidth={true}
+                  type="button"
+                  onClick={() => setSubmit(true)}
+                  style={{
+                    padding: "7%",
+                    backgroundColor: "#508F7F",
+                    color: "white",
+                  }}
+                >
+                  <Grid
+                    container
+                    direction="row"
+                    spacing={1}
+                    justify="center"
+                    alignItems="center"
+                  >
+                    <Save />
+                    <Typography variant="body1">บันทึก</Typography>
+                  </Grid>
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
         <Submit
