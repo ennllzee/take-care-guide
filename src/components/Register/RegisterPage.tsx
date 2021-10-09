@@ -145,7 +145,6 @@ function RegisterPage() {
 
   //NEEDED BACKEND
   const onSubmit = async () => {
-    console.log(user);
     createGuide({
       variables: {
         createdGuideInput: {
