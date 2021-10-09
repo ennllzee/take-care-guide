@@ -492,14 +492,8 @@ const useGuideApi = () => {
   `;
 
   const UPLOAD_PROFILE = gql`
-    mutation UPLOAD_PROFILE(
-      $addGuideProfileGuideId: ID!
-      $addGuideProfileFile: Upload
-    ) {
-      addGuideProfile(
-        guideId: $addGuideProfileGuideId
-        file: $addGuideProfileFile
-      )
+    mutation UPLOAD_PROFILE($guideId: ID!, $file: Upload) {
+      addGuideProfile(guideId: $guideId, file: $file)
     }
   `;
 

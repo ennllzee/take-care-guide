@@ -165,11 +165,17 @@ function ProfilePage() {
           ? `data:${data.getGuide?.Education.Certificate?.mimetype};base64,${data.getGuide?.Education.Certificate?.data}`
           : undefined
       );
-      setLangSkill(data.getGuide.LangSkill);
+      const filterLangskill = data.getGuide.LangSkill.map((data: any) => {
+        return { Language: data.Language, Level: data.Level };
+      }); 
+      setLangSkill(filterLangskill);
       setIdCard(data.getGuide.IdCard);
       setDegree(data.getGuide.Education.Degree);
       setAcadamy(data.getGuide.Education.Acadamy);
-      setWorkExp(data.getGuide.WorkExp);
+      const filterWorkExp = data.getGuide.WorkExp.map((data: any) => {
+        return { JobTitle: data.JobTitle, WorkPlace: data.WorkPlace };
+      });
+      setWorkExp(filterWorkExp);
       setProfile(
         data.getGuide?.Avatar !== null
           ? `data:${data.getGuide?.Avatar?.mimetype};base64,${data.getGuide?.Avatar?.data}`
@@ -361,51 +367,58 @@ function ProfilePage() {
       acadamy !== ""
     ) {
       //waiting update profile
+      if (avatar.type !== undefined) {
+        uploadProfileImg({
+          variables: {
+            guideId: id,
+            file: avatar,
+          },
+        });
+      }
+      if (idCardPic.type !== undefined) {
+        uploadProfileFacewuthId({
+          variables: {
+            uploadFaceWithIdcardGuideGuideId: id,
+            uploadFaceWithIdcardGuideFile: idCardPic,
+          },
+        });
+      }
+      if (education !== undefined) {
+        uploadProfileCer({
+          variables: {
+            uploadCertificateGuideGuideId: id,
+            uploadCertificateGuideFile: education,
+          },
+        });
+      }
 
-      // updateProfile({
-      //   variables: {
-      //     id: null,
-      //     input: {
-      //       FirstName: firstName,
-      //       LastName: lastName,
-      //       Gender: gender,
-      //       DOB: dob,
-      //       Address: address,
-      //       ContactAddress: contactAddress,
-      //       PhoneNumber: phoneNum,
-      //       Education: {
-      //         Degree: degree,
-      //         Acadamy: acadamy
-      //       },
-      //       WorkExp: workExp,
-      //       LangSkill: langSkill,
-      //       IdCard: idCard
-      //     }
-      //   },
-      //   refetchQueries: [
-      //     {
-      //       query: GET_SINGLE_GUIDE,
-      //       variables: { getGuideId: id },
-      //     },
-      //   ],
-      // });
-      // console.log(firstName);
-      // console.log(lastName);
-      // console.log(gender);
-      // console.log(dob);
-      // console.log(phoneNum);
-      // console.log(address);
-      // console.log(contactAddress);
-      // console.log(idCard);
-      // console.log(email);
-      // console.log(gender);
-      // console.log(degree);
-      // console.log(acadamy);
-      // console.log(langSkill);
-      // console.log(workExp);
-      // console.log(avatar);
-      console.log(idCardPic);
-      // console.log(education);
+      updateProfile({
+        variables: {
+          id: id,
+          input: {
+            FirstName: firstName,
+            LastName: lastName,
+            Gender: gender,
+            DOB: dob,
+            Address: address,
+            ContactAddress: contactAddress,
+            PhoneNumber: phoneNum,
+            Education: {
+              Degree: degree,
+              Acadamy: acadamy,
+            },
+            WorkExp: workExp,
+            LangSkill: langSkill,
+            IdCard: idCard,
+          },
+        },
+        refetchQueries: [
+          {
+            query: GET_SINGLE_GUIDE,
+            variables: { getGuideId: id },
+          },
+        ],
+      });
 
       setAlert(true);
       setConfirmEdit(false);
