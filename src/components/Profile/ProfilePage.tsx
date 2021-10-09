@@ -497,7 +497,6 @@ function ProfilePage() {
                           <Button
                             component="span"
                             style={{
-                              padding: "2d%",
                               backgroundColor: "#508F7F",
                               color: "white",
                             }}
@@ -505,7 +504,6 @@ function ProfilePage() {
                             <Grid
                               container
                               direction="row"
-                              spacing={1}
                               justify="center"
                               alignItems="center"
                             >
@@ -838,7 +836,6 @@ function ProfilePage() {
                                 <Button
                                   component="span"
                                   style={{
-                                    padding: "3%",
                                     backgroundColor: "#508F7F",
                                     color: "white",
                                   }}
@@ -977,7 +974,6 @@ function ProfilePage() {
                                 <Button
                                   component="span"
                                   style={{
-                                    padding: "3%",
                                     backgroundColor: "#508F7F",
                                     color: "white",
                                   }}
@@ -1100,7 +1096,6 @@ function ProfilePage() {
                                 fullWidth={true}
                                 onClick={addLang}
                                 style={{
-                                  padding: 0,
                                   color: "white",
                                   backgroundColor: "#508F7F",
                                 }}
@@ -1299,7 +1294,6 @@ function ProfilePage() {
                                     fullWidth={true}
                                     onClick={addWork}
                                     style={{
-                                      padding: 0,
                                       color: "white",
                                       backgroundColor: "#508F7F",
                                     }}
@@ -1580,7 +1574,7 @@ function ProfilePage() {
                       alignItems="center"
                       style={{ padding: "3%" }}
                     >
-                      <Grid item xs={3}>
+                      <Grid item>
                         {edit && (
                           <Button
                             onClick={() => setEdit(false)}
@@ -1589,13 +1583,11 @@ function ProfilePage() {
                             style={{
                               backgroundColor: "#D86060",
                               color: "white",
-                              padding: "7%",
                             }}
                           >
                             <Grid
                               container
                               direction="row"
-                              spacing={1}
                               justify="center"
                               alignItems="center"
                             >
@@ -1605,14 +1597,13 @@ function ProfilePage() {
                           </Button>
                         )}
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item>
                         {edit ? (
                           <Button
                             onClick={() => setConfirmEdit(true)}
                             type="button"
                             fullWidth={true}
                             style={{
-                              padding: "7%",
                               backgroundColor: "#4CB85C",
                               color: "white",
                             }}
@@ -1620,7 +1611,6 @@ function ProfilePage() {
                             <Grid
                               container
                               direction="row"
-                              spacing={1}
                               justify="center"
                               alignItems="center"
                             >
@@ -1634,7 +1624,6 @@ function ProfilePage() {
                             type="button"
                             fullWidth={true}
                             style={{
-                              padding: "7%",
                               backgroundColor: "#508F7F",
                               color: "white",
                             }}
@@ -1642,7 +1631,6 @@ function ProfilePage() {
                             <Grid
                               container
                               direction="row"
-                              spacing={1}
                               justify="center"
                               alignItems="center"
                             >
