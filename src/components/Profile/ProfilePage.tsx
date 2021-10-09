@@ -484,7 +484,7 @@ function ProfilePage() {
                           <Button
                             component="span"
                             style={{
-                              padding: "2%",
+                              padding: "2d%",
                               backgroundColor: "#508F7F",
                               color: "white",
                             }}

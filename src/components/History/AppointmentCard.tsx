@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: red[500],
     },
     monday: {
-      backgroundColor: "#FFD68F",
+      backgroundColor: "#FFDF8E",
       padding: "1%",
     },
     tuesday: {
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "1%",
     },
     thursday: {
-      backgroundColor: "#F3BE95",
+      backgroundColor: "#FFD0AC",
       padding: "1%",
     },
     friday: {
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "1%",
     },
     sunday: {
-      backgroundColor: "#EA7C7C",
+      backgroundColor: "#FF9A9A",
       padding: "1%",
     },
   })

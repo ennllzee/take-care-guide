@@ -19,6 +19,7 @@ function Alert({ closeAlert, alert, title, text, buttonText }: AlertProps) {
   return (
     <Dialog
       open={alert}
+      fullWidth={true}
     >
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>
