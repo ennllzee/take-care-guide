@@ -9,7 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { Button, CardHeader, Grid } from "@material-ui/core";
+import { Backdrop, Button, CardHeader, CircularProgress, Grid } from "@material-ui/core";
 import moment from "moment";
 import Appointment from "../../models/Appointment";
 import Image from "material-ui-image";
@@ -18,6 +18,7 @@ import TextSubmit from "../Submit/TextSubmit";
 import useGuideApi from "../../hooks/guidehooks";
 import { useMutation } from "@apollo/client";
 import { Cancel, CheckCircle } from "@material-ui/icons";
+import Alert from "../Alert/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -75,11 +76,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface RequestCardProps {
   appointment: Appointment;
-  setAcceptAlert: any
-  setDenyAlert: any
+  setAcceptAlert: any;
+  setDenyAlert: any;
+  refresh: any;
 }
 
-function RequestCard({ appointment, setAcceptAlert, setDenyAlert }: RequestCardProps) {
+function RequestCard({
+  appointment,
+  setAcceptAlert,
+  setDenyAlert,
+  refresh,
+}: RequestCardProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState<boolean>(false);
   const [acceptSubmit, setAcceptSubmit] = useState<boolean>(false);
@@ -92,14 +99,17 @@ function RequestCard({ appointment, setAcceptAlert, setDenyAlert }: RequestCardP
     setExpanded(!expanded);
   };
 
-  const [sendResponse] = useMutation(RESPONSE_CUSTOMER_REQUEST, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
+  const [sendResponse, { loading: mutationLoading, error: mutationError }] =
+    useMutation(RESPONSE_CUSTOMER_REQUEST, {
+      onCompleted: (data) => {
+        console.log(data);
+      },
+    });
 
-  const deny = () => {
-    sendResponse({
+  const [failed, setFailed] = useState<boolean>(false);
+
+  const deny = async () => {
+    await sendResponse({
       variables: {
         updateGuideScheduleResponseAppointmentResponse: false,
         updateGuideScheduleResponseAppointmentWorkOnAppointmentId:
@@ -107,24 +117,47 @@ function RequestCard({ appointment, setAcceptAlert, setDenyAlert }: RequestCardP
         updateGuideScheduleResponseAppointmentCancleDetails: denyDetail,
       },
     });
-    setDenySubmit(false);
-    setDenyAlert(true);
+    if (mutationError) {
+      console.log(mutationError.graphQLErrors);
+      setFailed(true);
+    } else {
+      setDenySubmit(false);
+      setDenyAlert(true);
+      refresh();
+    }
   };
 
-  const accept = () => {
-    sendResponse({
+  const accept = async () => {
+    await sendResponse({
       variables: {
         updateGuideScheduleResponseAppointmentResponse: true,
         updateGuideScheduleResponseAppointmentWorkOnAppointmentId:
           appointment._id,
       },
     });
-    setAcceptSubmit(false);
-    setAcceptAlert(true);
+
+    if (mutationError) {
+      console.log(mutationError.graphQLErrors);
+      setFailed(true);
+    } else {
+      setAcceptSubmit(false);
+      setAcceptAlert(true);
+      refresh();
+    }
   };
 
   return (
     <Card>
+      <Backdrop open={mutationLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Alert
+        closeAlert={() => setFailed(false)}
+        alert={failed}
+        title="ผิดพลาด"
+        text="กรุณาลองใหม่อีกครั้ง"
+        buttonText="ปิด"
+      />
       <CardHeader
         className={
           new Date(appointment.AppointTime).getDay() === 0

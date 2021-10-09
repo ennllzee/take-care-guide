@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     card: {
       padding: "2%",
-      paddingTop: 0
+      paddingTop: 0,
     },
     waitfab: {
       position: "fixed",
@@ -66,11 +66,10 @@ function AppointmentPage() {
   }, [accessToken, id]);
 
   const { GET_DATA_APPOINTMENTPAGE } = useGuideApi();
-  
 
-  const { loading, error, data } = useQuery(GET_DATA_APPOINTMENTPAGE, {
+  const { loading, error, data, refetch } = useQuery(GET_DATA_APPOINTMENTPAGE, {
     variables: { getAllAppointmentByGuideGuideId: id, getGuideId: id },
-    pollInterval: 1000,
+    pollInterval: 60000,
   });
 
   const [appointment, setAppointment] = useState<any[]>(
@@ -101,7 +100,7 @@ function AppointmentPage() {
   }, [loading, data, error]);
 
   const [alert, setAlert] = useState<boolean>(false);
-  const [price, setPrice] = useState<number>(0)
+  const [price, setPrice] = useState<number>(0);
 
   return (
     <Grid>
@@ -133,9 +132,12 @@ function AppointmentPage() {
               appointment.find(
                 (a) =>
                   (a.Status.Tag === "Guide Confirm" ||
-                    a.Status.Tag === "In process" || a.Status.Tag === "Expired") &&
+                    a.Status.Tag === "In process" ||
+                    a.Status.Tag === "Expired") &&
                   rangeDate.find(
-                    (d) => moment(d).format("DD MMMM yyyy") === moment(a.AppointTime).format("DD MMMM yyyy")
+                    (d) =>
+                      moment(d).format("DD MMMM yyyy") ===
+                      moment(a.AppointTime).format("DD MMMM yyyy")
                   )
               ) ? (
                 rangeDate.map((d, k) => {
@@ -144,7 +146,8 @@ function AppointmentPage() {
                     appointment.find(
                       (a) =>
                         (a.Status.Tag === "Guide Confirm" ||
-                          a.Status.Tag === "In process" || a.Status.Tag === "Expired") &&
+                          a.Status.Tag === "In process" ||
+                          a.Status.Tag === "Expired") &&
                         moment(a.AppointTime).format("DD MMMM yyyy") ===
                           moment(d).format("DD MMMM yyyy")
                     ) && (
@@ -174,9 +177,10 @@ function AppointmentPage() {
                             ?.filter(
                               (a) =>
                                 (a.Status.Tag === "Guide Confirm" ||
-                                  a.Status.Tag === "In process" || a.Status.Tag === "Expired") &&
+                                  a.Status.Tag === "In process" ||
+                                  a.Status.Tag === "Expired") &&
                                 moment(a.AppointTime).format("DD MMMM yyyy") ===
-                                moment(d).format("DD MMMM yyyy")
+                                  moment(d).format("DD MMMM yyyy")
                             )
                             .slice()
                             .sort((a, b) => {
@@ -195,7 +199,12 @@ function AppointmentPage() {
                                     lg={8}
                                     className={classes.card}
                                   >
-                                    <AppointmentCard appointment={a} setAlert={setAlert} setPrice={setPrice}/>
+                                    <AppointmentCard
+                                      appointment={a}
+                                      setAlert={setAlert}
+                                      setPrice={setPrice}
+                                      refresh={() => refetch()}
+                                    />
                                   </Grid>
                                 </>
                               );
@@ -229,12 +238,12 @@ function AppointmentPage() {
       </Grid>
       <BottomBar page="Appointment" />
       <Alert
-          closeAlert={() => setAlert(false)}
-          alert={alert}
-          title="สิ้นสุดการบริการ"
-          text={`ค่าบริการ: ${price} บาท`}
-          buttonText="ตกลง"
-        />
+        closeAlert={() => setAlert(false)}
+        alert={alert}
+        title="สิ้นสุดการบริการ"
+        text={`ค่าบริการ: ${price} บาท`}
+        buttonText="ตกลง"
+      />
       <ManageSchedule open={manage} setOpen={setManage} />
     </Grid>
   );

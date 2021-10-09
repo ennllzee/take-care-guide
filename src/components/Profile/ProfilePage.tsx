@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "white",
     },
     status: {
-      paddingTop: "5%",
+      paddingTop: "2%",
     },
   })
 );
@@ -726,7 +726,7 @@ function ProfilePage() {
                               แนบรูปคู่บัตรประจำตัวประชาชน
                             </Typography>
                           </Grid>
-                          <Grid item xs={4} style={{backgroundColor: "#EFEFEF"}}>
+                          <Grid item xs={4} md={3} lg={2} style={{backgroundColor: "#EFEFEF"}}>
                             <Image
                               src={displayImg}
                               loading={displayImg === undefined ? false : true}
@@ -857,7 +857,7 @@ function ProfilePage() {
                               แนบหลักฐานทางการศึกษา
                             </Typography>
                           </Grid>
-                          <Grid item xs={4} style={{backgroundColor: "#EFEFEF"}}>
+                          <Grid item xs={4} md={3} lg={2} style={{backgroundColor: "#EFEFEF"}}>
                             <Image
                               src={displayCerImg}
                               loading={

@@ -15,8 +15,10 @@ import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
+  Backdrop,
   CardHeader,
   Chip,
+  CircularProgress,
   Grid,
   Table,
   TableBody,
@@ -128,9 +130,10 @@ interface AppointmentCardProps {
   appointment: Appointment;
   setAlert: any;
   setPrice: any
+  refresh: any
 }
 
-function AppointmentCard({ appointment, setAlert, setPrice }: AppointmentCardProps) {
+function AppointmentCard({ appointment, setAlert, setPrice, refresh }: AppointmentCardProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState<boolean>(false);
 
@@ -143,25 +146,43 @@ function AppointmentCard({ appointment, setAlert, setPrice }: AppointmentCardPro
   const [alertAdd, setAlertAdd] = useState<boolean>(false);
 
   const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
-  const [endAppointment] = useMutation(UPDATE_APPOINTMENT_ENDTIME, {
+  const [endAppointment, {loading: mutationLoading, error : mutationError}] = useMutation(UPDATE_APPOINTMENT_ENDTIME, {
     onCompleted: (data) => {
       setPrice(data.Price)
     },
   });
 
+  const [failed,setFailed] = useState<boolean>(false)
+
   const accept = async () => {
     await endAppointment({
       variables: {
         updateAppointmentEndTimeId: appointment._id,
-        updateAppointmentEndTimeEndTime: new Date().toISOString(),
+        updateAppointmentEndTimeEndTime: moment(new Date()).format(),
       },
     });
-    setAlert(true);
+    if(mutationError){
+      setFailed(true)
+    }else{
+      setAlert(true);
+      refresh()
+    }
     setEnd(false);
+    
   };
 
   return (
     <Card>
+      <Backdrop open={mutationLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Alert
+        closeAlert={() => setFailed(false)}
+        alert={failed}
+        title="ผิดพลาด"
+        text="กรุณาลองใหม่อีกครั้ง"
+        buttonText="ปิด"
+      />
       <CardHeader
         className={
           new Date(appointment.AppointTime).getDay() === 0
@@ -330,6 +351,7 @@ function AppointmentCard({ appointment, setAlert, setPrice }: AppointmentCardPro
           add={addRecord}
           setAdd={setAddRecord}
           setAlert={setAlertAdd}
+          refresh={() => refresh()}
         />
         <Alert
           closeAlert={() => setAlertAdd(false)}
