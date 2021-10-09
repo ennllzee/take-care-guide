@@ -322,7 +322,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                   moment(g.ScheduleDate).format("DD MMMM yyyy") ===
                   moment(new Date()).add(i, "days").format("DD MMMM yyyy")
               ).AvailableMorning
-            : true,
+            : false,
           AvailableAfternoon: data.getAllGuidescheduleByGuide.find(
             (g: GuideSchedule) =>
               moment(g.ScheduleDate).format("DD MMMM yyyy") ===
@@ -333,7 +333,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                   moment(g.ScheduleDate).format("DD MMMM yyyy") ===
                   moment(new Date()).add(i, "days").format("DD MMMM yyyy")
               ).AvailableAfternoon
-            : true,
+            : false,
         };
         setScheduleForm((s) => [...s, newSch]);
         // }

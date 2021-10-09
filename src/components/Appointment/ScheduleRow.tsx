@@ -52,10 +52,10 @@ function ScheduleRow({
   check,
 }: ScheduleRowProps) {
   const [checkMor, setCheckMor] = useState<boolean>(
-    morning !== undefined ? morning?.AvailableMorning : true
+    morning !== undefined ? morning?.AvailableMorning : false
   );
   const [checkAft, setCheckAft] = useState<boolean>(
-    afternoon !== undefined ? afternoon?.AvailableAfternoon : true
+    afternoon !== undefined ? afternoon?.AvailableAfternoon : false
   );
 
   return (
