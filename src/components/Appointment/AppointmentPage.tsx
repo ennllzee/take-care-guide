@@ -21,7 +21,6 @@ import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
 import AppointmentCard from "./AppointmentCard";
 import ManageSchedule from "./ManageSchedule";
-import Appointment from "../../models/Appointment";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

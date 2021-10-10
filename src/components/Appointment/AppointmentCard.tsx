@@ -147,15 +147,15 @@ function AppointmentCard({ appointment, setAlert, setPrice, refresh }: Appointme
 
   const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
   const [endAppointment, {loading: mutationLoading, error : mutationError}] = useMutation(UPDATE_APPOINTMENT_ENDTIME, {
-    onCompleted: (data) => {
-      setPrice(data.Price)
+    onCompleted: async (data) => {
+      await setPrice(data.Price)
     },
   });
 
   const [failed,setFailed] = useState<boolean>(false)
 
   const accept = async () => {
-    await endAppointment({
+    endAppointment({
       variables: {
         updateAppointmentEndTimeId: appointment._id,
         updateAppointmentEndTimeEndTime: moment(new Date()).format(),
