@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { history } from "../../helper/history";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
 import useGuideApi from "../../hooks/guidehooks";
+import Appointment from "../../models/Appointment";
 import Alert from "../Alert/Alert";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
@@ -72,7 +73,7 @@ function AppointmentPage() {
     pollInterval: 60000,
   });
 
-  const [appointment, setAppointment] = useState<any[]>(
+  const [appointment, setAppointment] = useState<Appointment[]>(
     data !== undefined ? data.getAllAppointmentByGuide : []
   );
 
