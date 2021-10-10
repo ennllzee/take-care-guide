@@ -1,17 +1,18 @@
-FROM node:15.6-alpine AS development
-# Add a work directory
-WORKDIR .
-# Cache and Install dependencies
-COPY package.json ./
-COPY . .
-RUN npm install
-RUN npm run build
-# Copy app files
+FROM node:14.17.3-buster
 
-# Expose port   
-EXPOSE 3001
-# Start the app
-CMD [ "npm", "start" ]
+WORKDIR /guides
+
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+
+RUN npm install
+
+COPY . .
+
+CMD [ "npm","run","start" ]
+
+
+
 
 
 
