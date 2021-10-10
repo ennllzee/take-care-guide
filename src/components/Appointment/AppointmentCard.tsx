@@ -176,11 +176,12 @@ function AppointmentCard({
     while(mutationLoading){
 
     }
-    setPrice(mutationData.Price)
+
     if (mutationError) {
       setFailed(true);
       console.log(mutationError.graphQLErrors)
     } else {
+      setPrice(mutationData.Price)
       setAlert(true);
       refresh();
     }
