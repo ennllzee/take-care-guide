@@ -120,7 +120,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         };
       }
       setScheduleForm(arr);
-      console.log(arr);
     }
   };
 
@@ -163,7 +162,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             (m.AvailableMorning !== exist.AvailableMorning ||
               m.AvailableAfternoon !== exist.AvailableAfternoon)
           ) {
-            console.log("TakeSpecialV");
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -172,13 +170,11 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
               },
             });
           }
-          console.log("Take1");
         } else if (m.AvailableAfternoon) {
           if (
             !exist.WorkOnAfternoonAppointment &&
             exist.AvailableAfternoon !== m.AvailableAfternoon
           ) {
-            console.log("Take2.1");
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -188,7 +184,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             });
           }
           if (!m.AvailableMorning !== !exist.AvailableMorning) {
-            console.log("Take2.2");
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -197,13 +192,11 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
               },
             });
           }
-          console.log("Take2");
         } else if (m.AvailableMorning) {
           if (
             !exist.WorkOnMorningAppointment &&
             exist.AvailableMorning !== m.AvailableMorning
           ) {
-            console.log("Take3.1");
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -214,7 +207,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           }
 
           if (!m.AvailableAfternoon !== !exist.AvailableAfternoon) {
-            console.log("Take3.2");
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -223,13 +215,11 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
               },
             });
           }
-          console.log("Take3");
         } else {
           if (
             exist.AvailableAfternoon !== m.AvailableAfternoon ||
             m.AvailableMorning !== exist.AvailableMorning
           ) {
-            console.log("Special4");
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -238,8 +228,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
               },
             });
           }
-
-          console.log("Take4");
         }
       } else {
         if (m.AvailableMorning && m.AvailableAfternoon) {

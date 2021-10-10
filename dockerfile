@@ -1,10 +1,17 @@
-FROM node:15.6-alpine
+FROM node:15.6-alpine AS development
+# Add a work directory
 WORKDIR .
-ENV PATH = "./node_modules/.bin:$PATH"
+# Cache and Install dependencies
+COPY package.json ./
 COPY . .
-EXPOSE 3001
+RUN npm install
 RUN npm run build
+# Copy app files
 
-
+# Expose port   
+EXPOSE 3001
+# Start the app
 CMD [ "npm", "start" ]
+
+
 
