@@ -1,9 +1,4 @@
-import {
-  createStyles,
-  Grid,
-  makeStyles,
-  Theme,
-} from "@material-ui/core";
+import { Backdrop, CircularProgress, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useGoogleLogout } from "react-google-login";
 import { history } from "../../helper/history";
@@ -62,8 +57,8 @@ function RegisterPage() {
   const [alert, setAlert] = useState<boolean>(false);
 
   const logout = () => {
-    localStorage.clear()
-    history.push("/")
+    localStorage.clear();
+    history.push("/");
   };
 
   const { signOut } = useGoogleLogout({
@@ -94,68 +89,108 @@ function RegisterPage() {
   const [displayIdImg, setDisplayIdImg] = useState<any | undefined>();
   const [displayCerImg, setDisplayCerImg] = useState<any | undefined>();
 
-  const [createGuide] = useMutation(SIGNUP_GUIDE, {
-    onCompleted: (data) => {
-      console.log(data);
-      if (user.Avatar) {
-        addProfile({
-          variables: {
-            file: user.Avatar,
-            guideId: data.createdGuide._id,
-          },
-        });
-      }
-      if (user.Education?.Certificate) {
-        addCertificate({
-          variables: {
-            uploadCertificateGuideFile: user.Education?.Certificate,
-            uploadCertificateGuideGuideId: data.createdGuide._id,
-          },
-        });
-      }
+  const [createGuide, { loading: mutationLoading, error: mutationError }] =
+    useMutation(SIGNUP_GUIDE, {
+      onCompleted: (data) => {
+        console.log(data);
+        if (user.Avatar) {
+          addProfile({
+            variables: {
+              file: user.Avatar,
+              guideId: data.createdGuide._id,
+            },
+          });
+        }
+        if (user.Education?.Certificate) {
+          addCertificate({
+            variables: {
+              uploadCertificateGuideFile: user.Education?.Certificate,
+              uploadCertificateGuideGuideId: data.createdGuide._id,
+            },
+          });
+        }
 
-      if (user.FaceWithIdCard) {
-        addFaceWithIdCard({
-          variables: {
-            uploadFaceWithIdcardGuideFile: user.FaceWithIdCard,
-            uploadFaceWithIdcardGuideGuideId: data.createdGuide._id,
-          },
-        });
-      }
-    },
-  });
+        if (user.FaceWithIdCard) {
+          addFaceWithIdCard({
+            variables: {
+              uploadFaceWithIdcardGuideFile: user.FaceWithIdCard,
+              uploadFaceWithIdcardGuideGuideId: data.createdGuide._id,
+            },
+          });
+        }
+      },
+    });
 
-  const [addProfile] = useMutation(UPLOAD_PROFILE, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
-
-  const [addCertificate] = useMutation(UPLOAD_CERTIFICATE, {
+  const [
+    addProfile,
+    { loading: mutationProfileLoading, error: mutationProfileError },
+  ] = useMutation(UPLOAD_PROFILE, {
     onCompleted: (data) => {
       console.log(data);
     },
   });
 
-  const [addFaceWithIdCard] = useMutation(UPLOAD_FACEWITHIDCARD, {
+  const [
+    addCertificate,
+    { loading: mutationCerLoading, error: mutationCerError },
+  ] = useMutation(UPLOAD_CERTIFICATE, {
     onCompleted: (data) => {
       console.log(data);
     },
   });
+
+  const [
+    addFaceWithIdCard,
+    { loading: mutationIdLoading, error: mutationIdError },
+  ] = useMutation(UPLOAD_FACEWITHIDCARD, {
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [failed, setFailed] = useState<boolean>(false);
 
   //NEEDED BACKEND
   const onSubmit = async () => {
-    createGuide({
+    await createGuide({
       variables: {
         createdGuideInput: {
           ...user,
           Avatar: null,
           Education: { ...user.Education, Certificate: null },
-          FaceWithIdCard: null
+          FaceWithIdCard: null,
         },
       },
     });
-    setAlert(true);
+    while (
+      mutationCerLoading ||
+      mutationIdLoading ||
+      mutationProfileLoading ||
+      mutationLoading
+    ) {}
+
+    if (
+      mutationCerError ||
+      mutationIdError ||
+      mutationProfileError ||
+      mutationError
+    ) {
+      if (mutationCerError) {
+        console.log(mutationCerError?.graphQLErrors);
+      }
+      if (mutationIdError) {
+        console.log(mutationIdError?.graphQLErrors);
+      }
+      if (mutationProfileError) {
+        console.log(mutationProfileError?.graphQLErrors);
+      }
+      if (mutationError) {
+        console.log(mutationError?.graphQLErrors);
+      }
+      setFailed(true);
+    } else {
+      setAlert(true);
+    }
   };
 
   const [step, setStep] = useState<number>(1);
@@ -173,6 +208,23 @@ function RegisterPage() {
         alignItems="center"
         justify="flex-start"
       >
+        <Backdrop
+          open={
+            mutationCerLoading ||
+            mutationIdLoading ||
+            mutationProfileLoading ||
+            mutationLoading
+          }
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <Alert
+          closeAlert={() => setFailed(false)}
+          alert={failed}
+          title="ผิดพลาด"
+          text="กรุณาลองใหม่อีกครั้ง"
+          buttonText="ปิด"
+        />
         <Grid item className={classes.main}>
           <Grid
             container
@@ -187,7 +239,7 @@ function RegisterPage() {
                   setUser={setUser}
                   setStep={setStep}
                   setDisplayImg={setDisplayImg}
-                  displayImg={displayImg} 
+                  displayImg={displayImg}
                 />
               )}
               {step === 2 && (
@@ -196,7 +248,7 @@ function RegisterPage() {
                   setUser={setUser}
                   setStep={setStep}
                   setDisplayImg={setDisplayIdImg}
-                  displayImg={displayIdImg} 
+                  displayImg={displayIdImg}
                 />
               )}
               {step === 3 && (
@@ -205,7 +257,7 @@ function RegisterPage() {
                   setUser={setUser}
                   setStep={setStep}
                   setDisplayImg={setDisplayCerImg}
-                  displayImg={displayCerImg} 
+                  displayImg={displayCerImg}
                 />
               )}
               {step === 4 && (
@@ -219,7 +271,7 @@ function RegisterPage() {
                   user={user}
                   setStep={setStep}
                   setSubmit={setSubmit}
-                  displayImg={displayCerImg} 
+                  displayImg={displayCerImg}
                 />
               )}
             </Grid>

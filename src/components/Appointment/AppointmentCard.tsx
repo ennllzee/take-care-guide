@@ -151,15 +151,15 @@ function AppointmentCard({
   const [alertAdd, setAlertAdd] = useState<boolean>(false);
 
   const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
-  const [endAppointment, { loading: mutationLoading, error: mutationError }] =
+  const [endAppointment, { data: mutationData, loading: mutationLoading, error: mutationError }] =
     useMutation(UPDATE_APPOINTMENT_ENDTIME, {
-      onCompleted: async (data) => {
+      onCompleted: (data) => {
         while (mutationLoading) {}
         if (mutationError) {
           console.log(mutationError.graphQLErrors);
           setFailed(true);
         } else {
-          await setPrice(data.Price);
+          setPrice(data.Price);
         }
       },
     });
@@ -176,6 +176,7 @@ function AppointmentCard({
     while(mutationLoading){
 
     }
+    setPrice(mutationData.Price)
     if (mutationError) {
       setFailed(true);
       console.log(mutationError.graphQLErrors)
