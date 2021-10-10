@@ -196,6 +196,16 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
             </Grid>
             <Grid item xs={5}>
               <Typography variant="body1" align="left">
+                ค่าบริการ:
+              </Typography>
+            </Grid>
+            <Grid item xs={7}>
+              <Typography variant="body1" align="left">
+                {appointment.Price}
+              </Typography>
+            </Grid>
+            <Grid item xs={5}>
+              <Typography variant="body1" align="left">
                 ระดับความพึงพอใจ:
               </Typography>
             </Grid>
