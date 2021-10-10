@@ -47,6 +47,8 @@ const useGuideApi = () => {
           mimetype
           data
         }
+        Rating
+        Tips
       }
     }
   `;
@@ -162,6 +164,7 @@ const useGuideApi = () => {
           Details
         }
         Period
+        Price
       }
     }
   `;
@@ -344,6 +347,7 @@ const useGuideApi = () => {
         _id
         BeginTime
         EndTime
+        Price
       }
     }
   `;
@@ -619,6 +623,7 @@ const useGuideApi = () => {
           Details
         }
         Period
+        Price
       }
       getGuide(_id: $getGuideId) {
         IsVerified
