@@ -13,6 +13,7 @@ import { history } from "../../helper/history";
 import convertToThaiDate from "../../hooks/convertToThaiDate";
 import useGuideApi from "../../hooks/guidehooks";
 import Appointment from "../../models/Appointment";
+import Alert from "../Alert/Alert";
 import BottomBar from "../BottomBar/BottomBar";
 import TopBar from "../TopBar/TopBar";
 import AppointmentCard from "./AppointmentCard";
@@ -56,16 +57,31 @@ function HistoryPage() {
     data !== undefined ? data.getAllAppointmentByGuide : []
   );
 
+  
+const [failed, setFailed] = useState<boolean>(false)
+
   useEffect(() => {
     if (!loading && data) {
       setAppointment(data.getAllAppointmentByGuide);
     }
-    if (error) console.log(error?.graphQLErrors);
+    if (error) {
+      setFailed(true)
+      console.log(error?.graphQLErrors)
+    };
   }, [loading, data, error]);
 
   return (
     <Grid>
       <TopBar page="ประวัติการนัดหมาย" />
+
+      <Alert
+        closeAlert={() => setFailed(false)}
+        alert={failed}
+        title="ผิดพลาด"
+        text="กรุณาลองใหม่อีกครั้ง"
+        buttonText="ปิด"
+      />
+      
       <Grid
         container
         direction="column"

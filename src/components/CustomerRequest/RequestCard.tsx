@@ -272,7 +272,7 @@ function RequestCard({
               >
                 <Grid item xs={4}>
                   <Image
-                    src={`data:${appointment.Customer.Avatar.mimetype};base64,${appointment.Customer.Avatar?.data}`}
+                    src={appointment.Customer.Avatar !== null ? `data:${appointment.Customer.Avatar.mimetype};base64,${appointment.Customer.Avatar?.data}` : `data:${undefined};base64,${undefined}`}
                     cover={true}
                     // style={{padding: 0}}
                   />

@@ -85,6 +85,8 @@ function AppointmentPage() {
     data !== undefined ? data.getGuide.IsVerified : false
   );
 
+  const [failed, setFailed] = useState<boolean>(false);
+
   useEffect(() => {
     setRangeDate([]);
     for (let i = 0; i < 8; i++) {
@@ -97,7 +99,10 @@ function AppointmentPage() {
       setAppointment(data.getAllAppointmentByGuide);
       setIsValidate(data.getGuide.IsVerified);
     }
-    if (error) console.log(error?.graphQLErrors);
+    if (error) {
+      setFailed(true);
+      console.log(error?.graphQLErrors);
+    }
   }, [loading, data, error]);
 
   const [alert, setAlert] = useState<boolean>(false);
@@ -106,6 +111,13 @@ function AppointmentPage() {
   return (
     <Grid>
       <TopBar page="การนัดหมาย" />
+      <Alert
+        closeAlert={() => setFailed(false)}
+        alert={failed}
+        title="ผิดพลาด"
+        text="กรุณาลองใหม่อีกครั้ง"
+        buttonText="ปิด"
+      />
       <Grid
         container
         direction="column"

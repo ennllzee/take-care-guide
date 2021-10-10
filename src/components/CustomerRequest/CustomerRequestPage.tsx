@@ -66,12 +66,24 @@ function CustomerRequestPage() {
     if (!loading && data) {
       setAppointment(data.getAllAppointmentByGuide);
     }
-    if (error) console.log(error?.graphQLErrors);
+    if (error) {
+      setFailed(true)
+      console.log(error?.graphQLErrors)
+    };
   }, [loading, data, error]);
+
+  const [failed, setFailed] = useState<boolean>(false)
 
   return (
     <Grid>
       <TopBar page="คำขอรับบริการ" />
+      <Alert
+        closeAlert={() => setFailed(false)}
+        alert={failed}
+        title="ผิดพลาด"
+        text="กรุณาลองใหม่อีกครั้ง"
+        buttonText="ปิด"
+      />
       <Grid
         container
         direction="column"

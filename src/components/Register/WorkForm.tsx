@@ -259,9 +259,12 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                     id="input-with-icon-grid"
                     label="ตำแหน่งงาน"
                     fullWidth={true}
-                    value={newTitle !== undefined ? newTitle : null}
+                    value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
                     type="text"
+                    InputLabelProps={{
+                      shrink: newTitle !== "" && newTitle !== undefined
+                    }}
                   />
                 </Grid>
                 <Grid item xs={5} md={4} lg={4}>
@@ -269,9 +272,12 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                     id="input-with-icon-grid"
                     label="สถานที่ทำงาน"
                     fullWidth={true}
-                    value={newWorkPlace !== undefined ? newWorkPlace : null}
+                    value={newWorkPlace}
                     onChange={(e) => setNewWorkPlace(e.target.value)}
                     type="text"
+                    InputLabelProps={{
+                      shrink: newWorkPlace !== "" && newWorkPlace !== undefined
+                    }}
                   />
                 </Grid>
                 <Grid item xs={11} md={2} lg={1}>

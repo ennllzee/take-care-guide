@@ -11,9 +11,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { AccessTime } from "@material-ui/icons";
-import { makeStyles, createStyles } from "@material-ui/styles";
 import moment from "moment";
-import { Theme } from "pretty-format";
 import { useEffect, useState } from "react";
 import Appointment from "../../models/Appointment";
 import Record from "../../models/Record";
@@ -32,14 +30,6 @@ interface AddRecordProps {
   refresh: any;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: "100vw",
-    },
-  })
-);
-
 function AddRecord({
   appointment,
   add,
@@ -47,7 +37,6 @@ function AddRecord({
   setAlert,
   refresh,
 }: AddRecordProps) {
-  const classes = useStyles();
 
   const { GET_ALL_RECORDTITLE } = useGuideApi();
   const { loading, error, data } = useQuery(GET_ALL_RECORDTITLE, {});
@@ -65,7 +54,10 @@ function AddRecord({
     if (!loading && data) {
       setKeyword(data.getAllRecordTitles);
     }
-    if (error) console.log(error?.graphQLErrors);
+    if (error) {
+      setFailed(true);
+      console.log(error?.graphQLErrors);
+    }
   }, [loading, data, error]);
 
   const { UPDATE_APPOINTMENT_RECORD } = useGuideApi();
@@ -93,6 +85,8 @@ function AddRecord({
         },
       });
 
+      while (mutationLoading) {}
+
       if (mutationError) {
         console.log(mutationError.graphQLErrors);
         setFailed(true);
@@ -118,7 +112,6 @@ function AddRecord({
       aria-describedby="alert-dialog-description"
       aria-labelledby="alert-dialog-title"
       open={add}
-      className={classes.root}
       fullWidth={true}
     >
       <Backdrop open={mutationLoading}>
@@ -139,7 +132,7 @@ function AddRecord({
           </Grid>
           <Grid item xs={10}>
             <Typography variant="h4">
-              {moment(time).format("HH.mm น.")}
+              {moment(time).format("H.mm น.")}
             </Typography>
           </Grid>
         </Grid>
@@ -169,10 +162,14 @@ function AddRecord({
       </DialogContent>
       <DialogActions>
         <DialogActions>
-          <Button onClick={() => setAdd(false)} color="primary">
-            ยกเลิก
-          </Button>
-          <Button onClick={submit} color="primary">
+          <Button onClick={() => setAdd(false)}>ยกเลิก</Button>
+          <Button
+            onClick={submit}
+            style={{
+              backgroundColor: "#508F7F",
+              color: "white",
+            }}
+          >
             เพิ่ม
           </Button>
         </DialogActions>

@@ -8,10 +8,13 @@ import {
   Typography,
   Card,
   Button,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import { history } from "../../helper/history";
 import { useGoogleLogout } from "react-google-login";
 import { ExitToApp } from "@material-ui/icons";
+import { useState } from "react";
 
 interface ProfileCardProps {
   name: string;
@@ -46,9 +49,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function ProfileCard({ name, gmail, img }: ProfileCardProps) {
   const classes = useStyles();
+  const [load, setLoad] = useState<boolean>(false);
 
-  const logout = () => {
-    localStorage.clear();
+  const logout = async () => {
+    setLoad(true);
+    await localStorage.clear();
+    setLoad(false);
     history.push("/");
   };
 
@@ -60,6 +66,9 @@ function ProfileCard({ name, gmail, img }: ProfileCardProps) {
 
   return (
     <Card className={classes.card}>
+      <Backdrop open={load}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <CardMedia className={classes.cover} image={img} title={name} />
       <div className={classes.details}>
         <CardContent className={classes.content}>

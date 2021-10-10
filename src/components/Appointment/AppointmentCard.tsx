@@ -129,11 +129,16 @@ const StyledTableCell = withStyles((theme: Theme) =>
 interface AppointmentCardProps {
   appointment: Appointment;
   setAlert: any;
-  setPrice: any
-  refresh: any
+  setPrice: any;
+  refresh: any;
 }
 
-function AppointmentCard({ appointment, setAlert, setPrice, refresh }: AppointmentCardProps) {
+function AppointmentCard({
+  appointment,
+  setAlert,
+  setPrice,
+  refresh,
+}: AppointmentCardProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState<boolean>(false);
 
@@ -146,29 +151,39 @@ function AppointmentCard({ appointment, setAlert, setPrice, refresh }: Appointme
   const [alertAdd, setAlertAdd] = useState<boolean>(false);
 
   const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
-  const [endAppointment, {loading: mutationLoading, error : mutationError}] = useMutation(UPDATE_APPOINTMENT_ENDTIME, {
-    onCompleted: async (data) => {
-      await setPrice(data.Price)
-    },
-  });
+  const [endAppointment, { loading: mutationLoading, error: mutationError }] =
+    useMutation(UPDATE_APPOINTMENT_ENDTIME, {
+      onCompleted: async (data) => {
+        while (mutationLoading) {}
+        if (mutationError) {
+          console.log(mutationError.graphQLErrors);
+          setFailed(true);
+        } else {
+          await setPrice(data.Price);
+        }
+      },
+    });
 
-  const [failed,setFailed] = useState<boolean>(false)
+  const [failed, setFailed] = useState<boolean>(false);
 
   const accept = async () => {
-    endAppointment({
+    await endAppointment({
       variables: {
         updateAppointmentEndTimeId: appointment._id,
         updateAppointmentEndTimeEndTime: moment(new Date()).format(),
       },
     });
-    if(mutationError){
-      setFailed(true)
-    }else{
+    while(mutationLoading){
+
+    }
+    if (mutationError) {
+      setFailed(true);
+      console.log(mutationError.graphQLErrors)
+    } else {
       setAlert(true);
-      refresh()
+      refresh();
     }
     setEnd(false);
-    
   };
 
   return (
@@ -370,25 +385,25 @@ function AppointmentCard({ appointment, setAlert, setPrice, refresh }: Appointme
           submitAction={accept}
         />
       </CardContent>
-      {(new Date(moment(appointment.AppointTime).format("DD MMMM yyyy")) >=
+      {new Date(moment(appointment.AppointTime).format("DD MMMM yyyy")) >=
         new Date(moment(new Date()).format("DD MMMM yyyy")) &&
-        appointment.Status.Tag !== "Expired") && (
-        <CardActions disableSpacing>
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="แสดงข้อมูลเพิ่มเติม"
-          >
-            {!expanded && (
-              <Typography variant="button">แสดงข้อมูลลูกค้า</Typography>
-            )}
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-      )}
+        appointment.Status.Tag !== "Expired" && (
+          <CardActions disableSpacing>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="แสดงข้อมูลเพิ่มเติม"
+            >
+              {!expanded && (
+                <Typography variant="button">แสดงข้อมูลลูกค้า</Typography>
+              )}
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+        )}
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent style={{ paddingTop: 0 }}>
@@ -408,7 +423,11 @@ function AppointmentCard({ appointment, setAlert, setPrice, refresh }: Appointme
                 >
                   <Grid item xs={4}>
                     <Image
-                      src={`data:${appointment.Customer?.Avatar.mimetype};base64,${appointment.Customer?.Avatar.data}`}
+                      src={
+                        appointment.Customer.Avatar !== null
+                          ? `data:${appointment.Customer?.Avatar.mimetype};base64,${appointment.Customer?.Avatar.data}`
+                          : `data:${undefined};base64,${undefined}`
+                      }
                       cover={true}
                       // style={{padding: 0}}
                     />

@@ -28,7 +28,7 @@ function Alert({ closeAlert, alert, title, text, buttonText }: AlertProps) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeAlert} style={{padding: '3%'}}>
+        <Button onClick={closeAlert}>
           {buttonText}
         </Button>
       </DialogActions>

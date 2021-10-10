@@ -72,18 +72,18 @@ function LoginPage() {
   });
 
   useEffect(() => {
-    if (!loading && res !== undefined && token !== undefined && data !== undefined) {
-      if (data.loginGuide) {
+    if (!loading && res !== undefined && token !== undefined) {
+      if (!error && data !== undefined) {
         localStorage.setItem("_id", data.loginGuide._id);
         localStorage.setItem("accessToken", res.accessToken);
         history.push(`/appointment&=${localStorage.getItem("accessToken")}`);
       } else {
+        console.log(error?.graphQLErrors)
         localStorage.setItem("token", res.tokenId);
         localStorage.setItem("gmail", res.profileObj.email);
         history.push("/register");
       }
     }
-    if (error) console.log(error?.graphQLErrors);
   }, [loading, res, token, error, data]);
 
   const responseGoogle = async (response: any) => {

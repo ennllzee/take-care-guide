@@ -18,6 +18,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  Backdrop,
 } from "@material-ui/core";
 import {
   Person,
@@ -125,6 +126,8 @@ function ProfilePage() {
     />
   );
 
+  const [edit, setEdit] = useState<boolean>(false);
+
   useEffect(() => {
     if (!loading && data) {
       setUser(data.getGuide);
@@ -136,38 +139,24 @@ function ProfilePage() {
       setPhoneNum(data.getGuide?.PhoneNumber);
       setEmail(data.getGuide?.Email);
       setGender(data.getGuide?.Gender);
-      setAvatar(
-        data.getGuide.Avatar !== null && data.getGuide.Avatar !== undefined
-          ? `data:${data.getGuide?.Avatar?.mimetype};base64,${data.getGuide?.Avatar?.data}`
-          : undefined
-      );
-      setIdCardPic(
-        data.getGuide.FaceWithIdCard !== null &&
-          data.getGuide.FaceWithIdCard !== undefined
-          ? `data:${data.getGuide?.FaceWithIdCardtar?.mimetype};base64,${data.getGuide?.FaceWithIdCard?.data}`
-          : undefined
-      );
-      setEducation(
-        data.getGuide.Education.Certificate !== null &&
-          data.getGuide.Education.Certificate !== undefined
-          ? `data:${data.getGuide?.Education.Certificate?.mimetype};base64,${data.getGuide?.Education.Certificate?.data}`
-          : undefined
-      );
+      setAvatar(undefined);
+      setIdCardPic(undefined);
+      setEducation(undefined);
       setDisplayImg(
         data.getGuide.FaceWithIdCard !== null &&
           data.getGuide.FaceWithIdCard !== undefined
           ? `data:${data.getGuide?.FaceWithIdCardtar?.mimetype};base64,${data.getGuide?.FaceWithIdCard?.data}`
-          : undefined
+          : `data:${undefined};base64,${undefined}`
       );
       setDisplayCerImg(
         data.getGuide.Education.Certificate !== null &&
           data.getGuide.Education.Certificate !== undefined
           ? `data:${data.getGuide?.Education.Certificate?.mimetype};base64,${data.getGuide?.Education.Certificate?.data}`
-          : undefined
+          : `data:${undefined};base64,${undefined}`
       );
       const filterLangskill = data.getGuide.LangSkill.map((data: any) => {
         return { Language: data.Language, Level: data.Level };
-      }); 
+      });
       setLangSkill(filterLangskill);
       setIdCard(data.getGuide.IdCard);
       setDegree(data.getGuide.Education.Degree);
@@ -179,11 +168,14 @@ function ProfilePage() {
       setProfile(
         data.getGuide?.Avatar !== null
           ? `data:${data.getGuide?.Avatar?.mimetype};base64,${data.getGuide?.Avatar?.data}`
-          : undefined
+          : `data:${undefined};base64,${undefined}`
       );
     }
-    if (error) console.log(error?.graphQLErrors);
-  }, [loading, data, error]);
+    if (error) {
+      setFailed(true);
+      console.log(error?.graphQLErrors);
+    }
+  }, [loading, data, error, edit]);
 
   const [firstName, setFirstName] = useState<string | undefined>(
     user?.FirstName
@@ -200,15 +192,11 @@ function ProfilePage() {
   const [idCard, setIdCard] = useState<string | undefined>(user?.IdCard);
   const [email, setEmail] = useState<string | undefined>(user?.Email);
   const [gender, setGender] = useState<string | undefined>(user?.Gender);
-  const [avatar, setAvatar] = useState<any | undefined>(
-    user?.Avatar !== null
-      ? `data:${user?.Avatar?.mimetype};base64,${user?.Avatar?.data}`
-      : undefined
-  );
+  const [avatar, setAvatar] = useState<any | undefined>(undefined);
   const [profile, setProfile] = useState<any | undefined>(
     user?.Avatar !== null
       ? `data:${user?.Avatar?.mimetype};base64,${user?.Avatar?.data}`
-      : undefined
+      : `data:${undefined};base64,${undefined}`
   );
   const [degree, setDegree] = useState<string | undefined>(
     user?.Education.Degree
@@ -219,18 +207,8 @@ function ProfilePage() {
   const [langSkill, setLangSkill] = useState<LanguageSkill[]>(
     user?.LangSkill !== undefined ? user.LangSkill : []
   );
-  const [idCardPic, setIdCardPic] = useState<any | undefined>(
-    user?.FaceWithIdCard !== null && user?.FaceWithIdCard !== undefined
-      ? `data:${user?.FaceWithIdCard?.mimetype};base64,${user?.FaceWithIdCard?.data}`
-      : undefined
-  );
-  const [education, setEducation] = useState<any | undefined>(
-    user?.Education.Certificate !== null &&
-      user?.Education.Certificate !== undefined
-      ? `data:${user?.Education.Certificate?.mimetype};base64,${user?.Education.Certificate?.data}`
-      : undefined
-  );
-  const [edit, setEdit] = useState<boolean>(false);
+  const [idCardPic, setIdCardPic] = useState<any | undefined>(undefined);
+  const [education, setEducation] = useState<any | undefined>(undefined);
   const [same, setSame] = useState<boolean>(
     user?.Address === user?.ContactAddress
   );
@@ -244,30 +222,30 @@ function ProfilePage() {
   const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
   const [alert, setAlert] = useState<boolean>(false);
   const [alertData, setAlertData] = useState<boolean>(false);
-  const [newLang, setNewLang] = useState<string | undefined>(undefined);
+  const [newLang, setNewLang] = useState<string>("");
   const [newLevel, setNewLevel] = useState<number>();
   const [langAlert, setLangAlert] = useState<boolean>(false);
   const [displayImg, setDisplayImg] = useState<any>(
     user?.FaceWithIdCard !== null && user?.FaceWithIdCard !== undefined
       ? `data:${user?.FaceWithIdCard?.mimetype};base64,${user?.FaceWithIdCard?.data}`
-      : undefined
+      : `data:${undefined};base64,${undefined}`
   );
   const [displayCerImg, setDisplayCerImg] = useState<any>(
     user?.Education.Certificate !== null &&
       user?.Education.Certificate !== undefined
       ? `data:${user?.Education.Certificate?.mimetype};base64,${user?.Education.Certificate?.data}`
-      : undefined
+      : `data:${undefined};base64,${undefined}`
   );
   const [workExp, setWorkExp] = useState<WorkExp[]>(
     user?.WorkExp !== undefined ? user?.WorkExp : []
   );
-  const [newTitle, setNewTitle] = useState<string>();
-  const [newWorkPlace, setNewWorkPlace] = useState<string>();
+  const [newTitle, setNewTitle] = useState<string>("");
+  const [newWorkPlace, setNewWorkPlace] = useState<string>("");
   const [duplicate, setDuplicate] = useState<boolean>(false);
   const [hasExp, setHasExp] = useState<boolean>(user?.WorkExp?.length !== 0);
 
   const addWork = () => {
-    if (newTitle !== undefined && newWorkPlace !== undefined) {
+    if (newTitle !== "" && newWorkPlace !== "") {
       let newExp: WorkExp = {
         JobTitle: newTitle,
         WorkPlace: newWorkPlace,
@@ -276,8 +254,8 @@ function ProfilePage() {
         setDuplicate(true);
       } else {
         setWorkExp((w) => [...w, newExp]);
-        setNewTitle(undefined);
-        setNewWorkPlace(undefined);
+        setNewTitle("");
+        setNewWorkPlace("");
       }
     }
   };
@@ -298,19 +276,19 @@ function ProfilePage() {
     const base64 = await convertBase64(file);
 
     if (t === "id") {
-      await setIdCardPic(file);
+      setIdCardPic(file);
     } else if (t === "cer") {
-      await setEducation(file);
+      setEducation(file);
     } else if (t === "avatar") {
-      await setAvatar(file);
+      setAvatar(file);
     }
 
     if (t === "id") {
-      await setDisplayImg(base64);
+      setDisplayImg(base64);
     } else if (t === "cer") {
-      await setDisplayCerImg(base64);
+      setDisplayCerImg(base64);
     } else if (t === "avatar") {
-      await setProfile(base64);
+      setProfile(base64);
     }
   };
 
@@ -329,31 +307,43 @@ function ProfilePage() {
     });
   };
 
-  const [updateProfile] = useMutation(UPDATE_GUIDE, {
+  const [updateProfile, { loading: mutationLoading, error: mutationError }] =
+    useMutation(UPDATE_GUIDE, {
+      onCompleted: (data) => {
+        console.log(data);
+      },
+    });
+
+  const [
+    uploadProfileImg,
+    { loading: mutationProfileLoading, error: mutationProfileError },
+  ] = useMutation(UPLOAD_PROFILE, {
     onCompleted: (data) => {
       console.log(data);
     },
   });
 
-  const [uploadProfileImg] = useMutation(UPLOAD_PROFILE, {
+  const [
+    uploadProfileCer,
+    { loading: mutationCerLoading, error: mutationCerError },
+  ] = useMutation(UPLOAD_CERTIFICATE, {
     onCompleted: (data) => {
       console.log(data);
     },
   });
 
-  const [uploadProfileCer] = useMutation(UPLOAD_CERTIFICATE, {
+  const [
+    uploadProfileFacewuthId,
+    { loading: mutationIdLoading, error: mutationIdError },
+  ] = useMutation(UPLOAD_FACEWITHIDCARD, {
     onCompleted: (data) => {
       console.log(data);
     },
   });
 
-  const [uploadProfileFacewuthId] = useMutation(UPLOAD_FACEWITHIDCARD, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
+  const [failed, setFailed] = useState<boolean>(false);
 
-  const editProfile = () => {
+  const editProfile = async () => {
     if (
       firstName !== "" &&
       lastName !== "" &&
@@ -367,16 +357,16 @@ function ProfilePage() {
       acadamy !== ""
     ) {
       //waiting update profile
-      if (avatar.type !== undefined) {
-        uploadProfileImg({
+      if (avatar !== undefined) {
+        await uploadProfileImg({
           variables: {
             guideId: id,
             file: avatar,
           },
         });
       }
-      if (idCardPic.type !== undefined) {
-        uploadProfileFacewuthId({
+      if (idCardPic !== undefined) {
+        await uploadProfileFacewuthId({
           variables: {
             uploadFaceWithIdcardGuideGuideId: id,
             uploadFaceWithIdcardGuideFile: idCardPic,
@@ -384,7 +374,7 @@ function ProfilePage() {
         });
       }
       if (education !== undefined) {
-        uploadProfileCer({
+        await uploadProfileCer({
           variables: {
             uploadCertificateGuideGuideId: id,
             uploadCertificateGuideFile: education,
@@ -392,7 +382,7 @@ function ProfilePage() {
         });
       }
 
-      updateProfile({
+      await updateProfile({
         variables: {
           id: id,
           input: {
@@ -420,17 +410,44 @@ function ProfilePage() {
         ],
       });
 
-      setAlert(true);
-      setConfirmEdit(false);
-      setEdit(false);
+      while (
+        mutationCerLoading ||
+        mutationIdLoading ||
+        mutationProfileLoading ||
+        mutationLoading
+      ) {}
+
+      if (
+        mutationCerError ||
+        mutationIdError ||
+        mutationProfileError ||
+        mutationError
+      ) {
+        if (mutationCerError) {
+          console.log(mutationCerError?.graphQLErrors);
+        }
+        if (mutationIdError) {
+          console.log(mutationIdError?.graphQLErrors);
+        }
+        if (mutationProfileError) {
+          console.log(mutationProfileError?.graphQLErrors);
+        }
+        if (mutationError) {
+          console.log(mutationError?.graphQLErrors);
+        }
+        setFailed(true);
+      } else {
+        setAlert(true);
+        setEdit(false);
+      }
     } else {
       setAlertData(true);
-      setConfirmEdit(false);
     }
+    setConfirmEdit(false);
   };
 
   const addLang = () => {
-    if (newLang !== undefined && newLevel !== undefined) {
+    if (newLang !== "" && newLevel !== undefined) {
       let newSkill: LanguageSkill = {
         Language: newLang,
         Level: newLevel,
@@ -439,7 +456,7 @@ function ProfilePage() {
         setLangAlert(true);
       } else {
         setLangSkill((l) => [...l, newSkill]);
-        setNewLang(undefined);
+        setNewLang("");
         setNewLevel(undefined);
       }
     }
@@ -449,10 +466,37 @@ function ProfilePage() {
     setLangSkill(langSkill?.filter((l) => l !== m));
   };
 
+  const [close,setClose] = useState<boolean>(false)
+
   return (
     <Grid>
       <TopBar page="ข้อมูลส่วนตัว" />
-
+      <Submit
+          submit={close}
+          title="ข้อมูลส่วนตัว"
+          text="ต้องการปิดตารางงานใช่หรือไม่? ข้อมูลที่ทำการแก้ไขจะไม่ถูกบันทึก กรุณาทำการบันทึกก่อนออกจากโหมดแก้ไข"
+          denyText="กลับ"
+          submitText="ออก"
+          denyAction={() => setClose(false)}
+          submitAction={() => setEdit(false)}
+        />
+      <Backdrop
+        open={
+          mutationCerLoading ||
+          mutationIdLoading ||
+          mutationProfileLoading ||
+          mutationLoading
+        }
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Alert
+        closeAlert={() => setFailed(false)}
+        alert={failed}
+        title="ผิดพลาด"
+        text="กรุณาลองใหม่อีกครั้ง"
+        buttonText="ปิด"
+      />
       <Grid
         container
         direction="column"
@@ -513,9 +557,7 @@ function ProfilePage() {
                             </Grid>
                           </Button>
                         </label>
-                        {avatar !== undefined
-                          ? " อัปโหลดสำเร็จ"
-                          : " ยังไม่ได้อัปโหลดไฟล์"}
+                        {avatar !== undefined && " อัปโหลดสำเร็จ"}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -594,8 +636,7 @@ function ProfilePage() {
                             <Grid item>
                               <Typography variant="body1">
                                 {" "}
-                                {user?.Rating !== undefined &&
-                                user?.Rating !== 0
+                                {user?.Rating !== null && user?.Rating !== 0
                                   ? user?.Rating
                                   : "new guide"}
                               </Typography>
@@ -816,10 +857,7 @@ function ProfilePage() {
                             lg={2}
                             style={{ backgroundColor: "#EFEFEF" }}
                           >
-                            <Image
-                              src={displayImg}
-                              loading={displayImg === undefined ? false : true}
-                            />
+                            <Image src={displayImg} />
                           </Grid>
                           <Grid item xs={6}>
                             <Typography align="left">
@@ -843,9 +881,7 @@ function ProfilePage() {
                                   อัปโหลด
                                 </Button>
                               </label>
-                              {idCardPic !== undefined
-                                ? " อัปโหลดสำเร็จ"
-                                : " ยังไม่ได้อัปโหลดไฟล์"}
+                              {idCardPic !== undefined && " อัปโหลดสำเร็จ"}
                             </Typography>
                           </Grid>
                         </Grid>
@@ -952,12 +988,7 @@ function ProfilePage() {
                             lg={2}
                             style={{ backgroundColor: "#EFEFEF" }}
                           >
-                            <Image
-                              src={displayCerImg}
-                              loading={
-                                displayCerImg === undefined ? false : true
-                              }
-                            />
+                            <Image src={displayCerImg} />
                           </Grid>
                           <Grid item xs={6}>
                             <Typography align="left">
@@ -981,9 +1012,7 @@ function ProfilePage() {
                                   อัปโหลด
                                 </Button>
                               </label>
-                              {education !== undefined
-                                ? " อัปโหลดสำเร็จ"
-                                : " ยังไม่ได้อัปโหลดไฟล์"}
+                              {education !== undefined && " อัปโหลดสำเร็จ"}
                             </Typography>
                           </Grid>
                         </Grid>
@@ -1055,8 +1084,11 @@ function ProfilePage() {
                               id="input-with-icon-grid"
                               label="ชื่อภาษา"
                               fullWidth={true}
-                              value={newLang !== undefined ? newLang : null}
+                              value={newLang}
                               onChange={(e) => setNewLang(e.target.value)}
+                              InputLabelProps={{
+                                shrink: newLang !== "",
+                              }}
                               type="text"
                             />
                           </Grid>
@@ -1157,7 +1189,7 @@ function ProfilePage() {
                                 <FormControlLabel
                                   value={false}
                                   control={
-                                    <Radio style={{ color: "#508F7F" }} />
+                                    <Radio style={{ color: "black" }} />
                                   }
                                   label={
                                     <>
@@ -1172,7 +1204,7 @@ function ProfilePage() {
                                 <FormControlLabel
                                   value={true}
                                   control={
-                                    <Radio style={{ color: "#508F7F" }} />
+                                    <Radio style={{ color: "black" }} />
                                   }
                                   label={
                                     <>
@@ -1264,11 +1296,12 @@ function ProfilePage() {
                                   id="input-with-icon-grid"
                                   label="ตำแหน่งงาน"
                                   fullWidth={true}
-                                  value={
-                                    newTitle !== undefined ? newTitle : null
-                                  }
+                                  value={newTitle}
                                   onChange={(e) => setNewTitle(e.target.value)}
                                   type="text"
+                                  InputLabelProps={{
+                                    shrink: newTitle !== "",
+                                  }}
                                 />
                               </Grid>
                               <Grid item xs={5} md={4} lg={4}>
@@ -1276,15 +1309,14 @@ function ProfilePage() {
                                   id="input-with-icon-grid"
                                   label="สถานที่ทำงาน"
                                   fullWidth={true}
-                                  value={
-                                    newWorkPlace !== undefined
-                                      ? newWorkPlace
-                                      : null
-                                  }
+                                  value={newWorkPlace}
                                   onChange={(e) =>
                                     setNewWorkPlace(e.target.value)
                                   }
                                   type="text"
+                                  InputLabelProps={{
+                                    shrink: newWorkPlace !== "",
+                                  }}
                                 />
                               </Grid>
                               <Grid item xs={11} md={2} lg={1}>
@@ -1577,7 +1609,7 @@ function ProfilePage() {
                       <Grid item>
                         {edit && (
                           <Button
-                            onClick={() => setEdit(false)}
+                            onClick={() => setClose(false)}
                             type="button"
                             fullWidth={true}
                             style={{

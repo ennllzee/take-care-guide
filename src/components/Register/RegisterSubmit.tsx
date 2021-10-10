@@ -1,13 +1,14 @@
 import {
   Button,
   createStyles,
+  Divider,
   Fab,
   FormControl,
+  FormControlLabel,
   Grid,
-  InputLabel,
   makeStyles,
-  MenuItem,
-  Select,
+  Radio,
+  RadioGroup,
   TextField,
   Theme,
   Typography,
@@ -21,14 +22,16 @@ import {
   Home,
   Book,
   School,
-  Language,
   Work,
-  CreditCard,
   NavigateBefore,
+  AssignmentInd,
+  AttachFile,
+  Business,
+  Fingerprint,
 } from "@material-ui/icons";
-import moment from "moment";
 import GuideForm from "../../models/GuideForm";
 import Image from "material-ui-image";
+import convertToThaiDate from "../../hooks/convertToThaiDate";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,10 +79,15 @@ interface RegisterSubmitProps {
   user: GuideForm;
   setStep: any;
   setSubmit: any;
-  displayImg: any
+  displayImg: any;
 }
 
-function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmitProps) {
+function RegisterSubmit({
+  user,
+  setStep,
+  setSubmit,
+  displayImg,
+}: RegisterSubmitProps) {
   const classes = useStyles();
 
   const back = () => {
@@ -122,19 +130,17 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
         </Grid>
         {/* <Typography variant="h4">ยืนยันการลงทะเบียน</Typography> */}
         <div className={classes.margin}>
-          <Grid
-            container
-            spacing={1}
-            justify="center"
-            alignItems="center"
-            className={classes.card}
-          >
-            <Grid item xs={5} md={4} lg={2}  style={{backgroundColor: "#EFEFEF"}}>
-              <Image
-                src={displayImg}
-                loading={displayImg === undefined ? false : true}
-                cover={true}
-              />
+          <Grid item xs={12}>
+            <Typography variant="h4">Profile</Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              ข้อมูลส่วนตัว
+            </Typography>
+          </Grid>
+        </div>
+        <div className={classes.margin}>
+          <Grid container spacing={2} justify="center" alignItems="flex-end">
+            <Grid item xs={5} md={4} lg={3} style={{ backgroundColor: "#EFEFEF" }}>
+              <Image src={displayImg} cover={true} loading={displayImg === undefined ? false : true}/>
             </Grid>
           </Grid>
         </div>
@@ -149,8 +155,8 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                 label="ชื่อ"
                 fullWidth={true}
                 value={user.FirstName}
+                disabled
                 type="text"
-                disabled={true}
               />
             </Grid>
             <Grid item xs={5}>
@@ -159,8 +165,8 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                 label="นามสกุล"
                 fullWidth={true}
                 value={user.LastName}
+                disabled
                 type="text"
-                disabled={true}
               />
             </Grid>
           </Grid>
@@ -171,24 +177,20 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
               <Wc />
             </Grid>
             <Grid item xs={10}>
-              <FormControl fullWidth={true}>
-                <InputLabel id="gender-label" shrink={true}>
-                  เพศ
-                </InputLabel>
-                <Select
-                  labelId="gender-label"
-                  value={user.Gender}
-                  fullWidth={true}
-                  disabled={true}
-                >
-                  <MenuItem value={undefined} disabled>
-                    เพศ
-                  </MenuItem>
-                  <MenuItem value="male">ชาย</MenuItem>
-                  <MenuItem value="female">หญิง</MenuItem>
-                  <MenuItem value="others">อื่น ๆ</MenuItem>
-                </Select>
-              </FormControl>
+              <TextField
+                id="input-with-icon-grid"
+                label="เพศ"
+                fullWidth={true}
+                value={
+                  user.Gender === "male"
+                    ? "ชาย"
+                    : user?.Gender === "female"
+                    ? "หญิง"
+                    : "อื่น ๆ"
+                }
+                disabled
+                type="text"
+              />
             </Grid>
           </Grid>
         </div>
@@ -199,15 +201,12 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
             </Grid>
             <Grid item xs={10}>
               <TextField
-                id="date"
+                id="input-with-icon-grid"
                 label="วันเกิด"
-                type="date"
-                defaultValue={moment(user.DOB).format("YYYY-MM-DD")}
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 fullWidth={true}
-                disabled={true}
+                value={convertToThaiDate(new Date(user.DOB))}
+                disabled
+                type="text"
               />
             </Grid>
           </Grid>
@@ -223,16 +222,25 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                 label="ที่อยู่"
                 fullWidth={true}
                 value={user.Address}
+                disabled
                 type="text"
-                disabled={true}
               />
             </Grid>
+          </Grid>
+        </div>
+        <Divider variant="middle" />
+        <div className={classes.margin}>
+          <Grid item xs={12}>
+            <Typography variant="h4">Identity Card</Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              บัตรประจำตัวประชาชน
+            </Typography>
           </Grid>
         </div>
         <div className={classes.margin}>
           <Grid container spacing={2} justify="center" alignItems="flex-end">
             <Grid item>
-              <CreditCard />
+              <Fingerprint />
             </Grid>
             <Grid item xs={10}>
               <TextField
@@ -240,10 +248,38 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                 label="เลขประจำตัวประชาชน"
                 fullWidth={true}
                 value={user.IdCard}
+                disabled
                 type="text"
-                disabled={true}
               />
             </Grid>
+          </Grid>
+        </div>
+        <div className={classes.margin}>
+          <Grid container spacing={2} justify="center" alignItems="center">
+            <Grid item>
+              <AttachFile />
+            </Grid>
+            <Grid item xs={10}>
+              <Typography variant="body1">
+                แนบรูปคู่บัตรประจำตัวประชาชน
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography align="center">
+                {user.FaceWithIdCard !== undefined
+                  ? " อัปโหลดสำเร็จ"
+                  : " ยังไม่ได้อัปโหลด"}
+              </Typography>
+            </Grid>
+          </Grid>
+        </div>
+        <Divider variant="middle" />
+        <div className={classes.margin}>
+          <Grid item xs={12}>
+            <Typography variant="h4">Education</Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              ข้อมูลการศึกษา
+            </Typography>
           </Grid>
         </div>
         <div className={classes.margin}>
@@ -254,11 +290,11 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
             <Grid item xs={10}>
               <TextField
                 id="input-with-icon-grid"
-                label="วุฒิการศึกษา"
+                label="ระดับการศึกษา"
                 fullWidth={true}
                 value={user.Education?.Degree}
+                disabled
                 type="text"
-                disabled={true}
               />
             </Grid>
           </Grid>
@@ -274,43 +310,156 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                 label="สถาบันการศึกษา"
                 fullWidth={true}
                 value={user.Education?.Acadamy}
+                disabled
                 type="text"
-                disabled={true}
               />
             </Grid>
+          </Grid>
+        </div>
+
+        <div className={classes.margin}>
+          <Grid container spacing={2} justify="center" alignItems="center">
+            <Grid item>
+              <AttachFile />
+            </Grid>
+            <Grid item xs={10}>
+              <Typography variant="body1">แนบหลักฐานทางการศึกษา</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography align="center">
+                {user.Education?.Certificate !== undefined
+                  ? " อัปโหลดสำเร็จ"
+                  : " ยังไม่ได้อัปโหลด"}
+              </Typography>
+            </Grid>
+          </Grid>
+        </div>
+        <Divider variant="middle" />
+        <div className={classes.margin}>
+          <Grid item xs={12}>
+            <Typography variant="h4">Language Skills</Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              ทักษะทางด้านภาษา
+            </Typography>
+          </Grid>
+        </div>
+        {user.LangSkill?.length !== 0 && user.LangSkill !== undefined && (
+          <div className={classes.margin}>
+            <Grid container spacing={1} justify="center" alignItems="center">
+              {user?.LangSkill.map((m) => {
+                return (
+                  <>
+                    <Grid item xs={5}>
+                      <TextField
+                        id="input-with-icon-grid"
+                        label="ชื่อภาษา"
+                        fullWidth={true}
+                        value={m.Language}
+                        disabled={true}
+                        type="text"
+                      />
+                    </Grid>
+                    <Grid item xs={5}>
+                      <TextField
+                        id="input-with-icon-grid"
+                        label="ความชำนาญ"
+                        fullWidth={true}
+                        value={"ระดับ " + m.Level}
+                        disabled={true}
+                        type="text"
+                      />
+                    </Grid>
+                  </>
+                );
+              })}
+            </Grid>
+          </div>
+        )}
+        <Divider variant="middle" />
+        <div className={classes.margin}>
+          <Grid item xs={12}>
+            <Typography variant="h4">Work Experiences</Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              ประสบการณ์การทำงาน
+            </Typography>
           </Grid>
         </div>
         <div className={classes.margin}>
           <Grid container spacing={1} justify="center" alignItems="center">
             <Grid item>
-              <Language />
+              <AssignmentInd />
             </Grid>
             <Grid item xs={10}>
-              <Typography variant="body1">ทักษะทางด้านภาษา</Typography>
+              <Typography variant="body1">
+                คุณมีประสบการณ์การทำงานหรือไม่?
+              </Typography>
             </Grid>
           </Grid>
-          <Grid container spacing={1} justify="center" alignItems="center">
-            {user.LangSkill?.length !== 0 ? (
-              <>
-                {user.LangSkill?.map((m) => {
+          <FormControl component="fieldset" fullWidth={true}>
+            <RadioGroup name="exp" value={user.WorkExp?.length !== 0}>
+              <Grid
+                container
+                direction="row"
+                justify="space-evenly"
+                alignItems="flex-end"
+              >
+                <Grid item xs={5} md={4} lg={4}>
+                  <FormControlLabel
+                    value={false}
+                    control={<Radio style={{ color: "black" }} disabled/>}
+                    label={
+                      <>
+                        <Typography variant="body2">ไม่มี</Typography>
+                      </>
+                    }
+                  />
+                </Grid>
+                <Grid item xs={5} md={4} lg={4}>
+                  <FormControlLabel
+                    value={true}
+                    control={<Radio style={{ color: "black" }} disabled/>}
+                    label={
+                      <>
+                        <Typography variant="body2">มี</Typography>
+                      </>
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </RadioGroup>
+          </FormControl>
+        </div>
+        {user.WorkExp?.length !== 0 && user.WorkExp !== undefined && (
+          <>
+            <div className={classes.margin}>
+              <Grid container spacing={1} justify="center" alignItems="center">
+                <Grid item>
+                  <Work />
+                </Grid>
+                <Grid item xs={10}>
+                  <Typography variant="body1">ประสบการณ์การทำงาน</Typography>
+                </Grid>
+              </Grid>
+              <Grid container spacing={1} justify="center" alignItems="center">
+                {user?.WorkExp.map((m) => {
                   return (
                     <>
-                      <Grid item xs={5}>
+                      <Grid item xs={4}>
                         <TextField
                           id="input-with-icon-grid"
-                          label="ชื่อภาษา"
+                          label="ตำแหน่งงาน"
                           fullWidth={true}
-                          value={m.Language}
+                          value={m.JobTitle}
                           disabled={true}
                           type="text"
                         />
                       </Grid>
-                      <Grid item xs={5}>
+                      <Grid item xs={4}>
                         <TextField
                           id="input-with-icon-grid"
-                          label="ระดับความชำนาญ"
+                          label="สถานที่ทำงาน"
                           fullWidth={true}
-                          value={"ระดับ " + m.Level}
+                          value={m.WorkPlace}
                           disabled={true}
                           type="text"
                         />
@@ -318,67 +467,32 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                     </>
                   );
                 })}
-              </>
-            ) : (
-              "-"
-            )}
-          </Grid>
-        </div>
+              </Grid>
+            </div>
+          </>
+        )}
+        <Divider variant="middle" />
         <div className={classes.margin}>
-          <Grid container spacing={1} justify="center" alignItems="center">
-            <Grid item>
-              <Work />
-            </Grid>
-            <Grid item xs={10}>
-              <Typography variant="body1">ประสบการณ์การทำงาน</Typography>
-            </Grid>
-          </Grid>
-          <Grid container spacing={1} justify="center" alignItems="center">
-            {user.WorkExp?.length !== 0 ? (
-              user.WorkExp?.map((m) => {
-                return (
-                  <>
-                    <Grid item xs={5}>
-                      <TextField
-                        id="input-with-icon-grid"
-                        label="ตำแหน่งงาน"
-                        fullWidth={true}
-                        value={m.JobTitle}
-                        disabled={true}
-                        type="text"
-                      />
-                    </Grid>
-                    <Grid item xs={5}>
-                      <TextField
-                        id="input-with-icon-grid"
-                        label="สถานที่ทำงาน"
-                        fullWidth={true}
-                        value={m.WorkPlace}
-                        disabled={true}
-                        type="text"
-                      />
-                    </Grid>
-                  </>
-                );
-              })
-            ) : (
-              <Typography variant="body2">ไม่มีประสบการณ์การทำงาน</Typography>
-            )}
+          <Grid item xs={12}>
+            <Typography variant="h4">Contact</Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              ช่องทางการติดต่อ
+            </Typography>
           </Grid>
         </div>
         <div className={classes.margin}>
           <Grid container spacing={2} justify="center" alignItems="flex-end">
             <Grid item>
-              <Home />
+              <Business />
             </Grid>
             <Grid item xs={10}>
               <TextField
                 id="input-with-icon-grid"
-                label="ที่อยู่ที่ติดต่อได้"
+                label="ที่อยู่ปัจจุบัน"
                 fullWidth={true}
                 value={user.ContactAddress}
                 type="text"
-                disabled={true}
+                disabled
               />
             </Grid>
           </Grid>
@@ -394,8 +508,8 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                 label="เบอร์โทรศัพท์มือถือ"
                 fullWidth={true}
                 value={user.PhoneNumber}
+                disabled
                 type="text"
-                disabled={true}
               />
             </Grid>
           </Grid>
@@ -411,8 +525,7 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                 label="อีเมล์"
                 fullWidth={true}
                 value={user.Email}
-                type="text"
-                disabled={true}
+                disabled
               />
             </Grid>
           </Grid>
@@ -443,7 +556,7 @@ function RegisterSubmit({ user, setStep, setSubmit, displayImg }: RegisterSubmit
                 justify="center"
                 alignItems="center"
               >
-                <NavigateBefore/>
+                <NavigateBefore />
                 <Typography variant="body1">ก่อนหน้า</Typography>
               </Grid>
             </Button>

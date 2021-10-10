@@ -19,6 +19,7 @@ import {
   Button,
   CircularProgress,
   Backdrop,
+  LinearProgress,
 } from "@material-ui/core";
 import { Close, Save } from "@material-ui/icons";
 import moment from "moment";
@@ -262,8 +263,9 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           });
         }
       }
-      console.log(exist?.ScheduleDate + " === " + m.ScheduleDate);
     });
+
+    while (mutationUpdateLoading || mutationLoading) {}
 
     if (mutationError || mutationUpdateError) {
       console.log(mutationError?.graphQLErrors);
@@ -284,14 +286,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         ]);
       }
       setGuideSchedule(data.getAllGuidescheduleByGuide);
-      // if (
-      //   scheduleForm.length === 0 ||
-      //   scheduleForm.find(
-      //     (e) =>
-      //       moment(e.ScheduleDate).format("DD MMMM yyyy") ===
-      //       moment(new Date()).format("DD MMMM yyyy")
-      //   )
-      // ) {
       setScheduleForm([]);
       for (let i = 1; i < 15; i++) {
         let newSch: GuideScheduleForm = {
@@ -324,16 +318,29 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             : false,
         };
         setScheduleForm((s) => [...s, newSch]);
-        // }
 
-        if (error) console.log(error?.graphQLErrors);
+        if (error) {
+          setFailed(true);
+          console.log(error?.graphQLErrors);
+        }
       }
     }
   }, [loading, data, error, id]);
 
+  const [close, setClose] = useState<boolean>(false);
+
   return (
     <Modal open={open} className={classes.modal}>
       <Paper className={classes.paper}>
+        <Submit
+          submit={close}
+          title="ตารางงาน"
+          text="ต้องการปิดตารางงานใช่หรือไม่? ข้อมูลที่ทำการแก้ไขจะไม่ถูกบันทึก กรุณาทำการบันทึกก่อนปิดตารางงาน"
+          denyText="กลับ"
+          submitText="ปิดตารางงาน"
+          denyAction={() => setClose(false)}
+          submitAction={() => setOpen(false)}
+        />
         <Backdrop open={mutationLoading || mutationUpdateLoading}>
           <CircularProgress color="inherit" />
         </Backdrop>
@@ -345,7 +352,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           buttonText="ปิด"
         />
         <Typography align="right">
-          <IconButton onClick={() => setOpen(false)} style={{ padding: "0" }}>
+          <IconButton onClick={() => setClose(true)} style={{ padding: "0" }}>
             <Close />
           </IconButton>
         </Typography>
@@ -393,79 +400,72 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {!loading ? (
-                    <>
-                      {scheduleDate.map((m, key) => {
-                        return (
-                          <ScheduleRow
-                            key={key}
-                            morning={scheduleForm.find(
-                              (s) =>
-                                moment(s.ScheduleDate).format(
-                                  "DD MMMM yyyy"
-                                ) === moment(m).format("DD MMMM yyyy")
-                            )}
-                            morIndex={scheduleForm.findIndex(
-                              (s) =>
-                                moment(s.ScheduleDate).format(
-                                  "DD MMMM yyyy"
-                                ) === moment(m).format("DD MMMM yyyy")
-                            )}
-                            morWork={
-                              guideSchedule.find(
-                                (g) =>
-                                  moment(g.ScheduleDate).format(
-                                    "DD MMMM yyyy"
-                                  ) === moment(m).format("DD MMMM yyyy") &&
-                                  g.WorkOnMorningAppointment !== null &&
-                                  g.WorkOnMorningAppointment?.Status.Tag ===
-                                    "Guide Confirm"
-                              )
-                                ? true
-                                : false
-                            }
-                            afternoon={scheduleForm.find(
-                              (s) =>
-                                moment(s.ScheduleDate).format(
-                                  "DD MMMM yyyy"
-                                ) === moment(m).format("DD MMMM yyyy")
-                            )}
-                            aftIndex={scheduleForm.findIndex(
-                              (s) =>
-                                moment(s.ScheduleDate).format(
-                                  "DD MMMM yyyy"
-                                ) === moment(m).format("DD MMMM yyyy")
-                            )}
-                            aftWork={
-                              guideSchedule.find(
-                                (g) =>
-                                  moment(g.ScheduleDate).format(
-                                    "DD MMMM yyyy"
-                                  ) === moment(m).format("DD MMMM yyyy") &&
-                                  g.WorkOnAfternoonAppointment !== null &&
-                                  g.WorkOnAfternoonAppointment?.Status.Tag ===
-                                    "Guide Confirm"
-                              )
-                                ? true
-                                : false
-                            }
-                            check={updateAvailable}
-                          />
-                        );
-                      })}
-                    </>
-                  ) : (
-                    <Grid
-                      container
-                      direction="row"
-                      alignItems="center"
-                      justify="center"
-                    >
-                      <CircularProgress disableShrink />
-                    </Grid>
-                  )}
+                  {scheduleDate.map((m, key) => {
+                    return (
+                      <ScheduleRow
+                        key={key}
+                        morning={scheduleForm.find(
+                          (s) =>
+                            moment(s.ScheduleDate).format("DD MMMM yyyy") ===
+                            moment(m).format("DD MMMM yyyy")
+                        )}
+                        morIndex={scheduleForm.findIndex(
+                          (s) =>
+                            moment(s.ScheduleDate).format("DD MMMM yyyy") ===
+                            moment(m).format("DD MMMM yyyy")
+                        )}
+                        morWork={
+                          guideSchedule.find(
+                            (g) =>
+                              moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                                moment(m).format("DD MMMM yyyy") &&
+                              g.WorkOnMorningAppointment !== null &&
+                              g.WorkOnMorningAppointment?.Status.Tag ===
+                                "Guide Confirm"
+                          )
+                            ? true
+                            : false
+                        }
+                        afternoon={scheduleForm.find(
+                          (s) =>
+                            moment(s.ScheduleDate).format("DD MMMM yyyy") ===
+                            moment(m).format("DD MMMM yyyy")
+                        )}
+                        aftIndex={scheduleForm.findIndex(
+                          (s) =>
+                            moment(s.ScheduleDate).format("DD MMMM yyyy") ===
+                            moment(m).format("DD MMMM yyyy")
+                        )}
+                        aftWork={
+                          guideSchedule.find(
+                            (g) =>
+                              moment(g.ScheduleDate).format("DD MMMM yyyy") ===
+                                moment(m).format("DD MMMM yyyy") &&
+                              g.WorkOnAfternoonAppointment !== null &&
+                              g.WorkOnAfternoonAppointment?.Status.Tag ===
+                                "Guide Confirm"
+                          )
+                            ? true
+                            : false
+                        }
+                        check={updateAvailable}
+                      />
+                    );
+                  })}
                 </TableBody>
               </Table>
+              {loading && (
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justify="center"
+                >
+                  <Grid item xs={12}>
+                    <LinearProgress />
+                  </Grid>
+                </Grid>
+              )}
             </TableContainer>
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
