@@ -73,7 +73,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (!loading && res !== undefined && token !== undefined) {
-      if (!error && data !== undefined) {
+      if (!error && data.loginGuide) {
         localStorage.setItem("_id", data.loginGuide._id);
         localStorage.setItem("accessToken", res.accessToken);
         history.push(`/appointment&=${localStorage.getItem("accessToken")}`);

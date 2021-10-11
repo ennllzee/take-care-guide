@@ -175,7 +175,6 @@ function AppointmentCard({
       setFailed(true);
       console.log(mutationError.graphQLErrors)
     } else {
-      // setPrice(mutationData.Price)
       setAlert(true);
       refresh();
     }
