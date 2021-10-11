@@ -339,7 +339,10 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           denyText="กลับ"
           submitText="ปิดตารางงาน"
           denyAction={() => setClose(false)}
-          submitAction={() => setOpen(false)}
+          submitAction={() => {
+            setClose(false)
+            setOpen(false)
+          }}
         />
         <Backdrop open={mutationLoading || mutationUpdateLoading}>
           <CircularProgress color="inherit" />
