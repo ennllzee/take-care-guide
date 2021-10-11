@@ -155,6 +155,7 @@ function AppointmentCard({
     useMutation(UPDATE_APPOINTMENT_ENDTIME, {
       onCompleted: (data) => {
         console.log(data)
+        setPrice(data.Price)
       },
     });
 
@@ -167,10 +168,9 @@ function AppointmentCard({
         updateAppointmentEndTimeEndTime: moment(new Date()).format(),
       },
     });
-    while(mutationLoading){
+    while(mutationLoading && !mutationData){
 
     }
-    console.log(mutationData)
     if (mutationError) {
       setFailed(true);
       console.log(mutationError.graphQLErrors)
