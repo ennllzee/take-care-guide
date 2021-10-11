@@ -215,6 +215,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
                   <>
                     <Rating
                       max={5}
+                      disabled
                       value={appointment.Review?.Star}
                       style={{ color: "#FFC300" }}
                     />
