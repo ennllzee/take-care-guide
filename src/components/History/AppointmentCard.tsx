@@ -201,7 +201,7 @@ function AppointmentCard({ appointment }: AppointmentCardProps) {
             </Grid>
             <Grid item xs={7}>
               <Typography variant="body1" align="left">
-                {appointment.Price}
+                {appointment.Price} บาท
               </Typography>
             </Grid>
             <Grid item xs={5}>

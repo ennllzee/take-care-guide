@@ -151,11 +151,11 @@ function AppointmentCard({
   const [alertAdd, setAlertAdd] = useState<boolean>(false);
 
   const { UPDATE_APPOINTMENT_ENDTIME } = useGuideApi();
-  const [endAppointment, { data: mutationData, loading: mutationLoading, error: mutationError }] =
+  const [endAppointment, { loading: mutationLoading, error: mutationError }] =
     useMutation(UPDATE_APPOINTMENT_ENDTIME, {
-      onCompleted: (data) => {
+      onCompleted: async (data) => {
         console.log(data)
-        setPrice(data.Price)
+        await setPrice(data.updateAppointmentEndTim.Price)
       },
     });
 
@@ -168,14 +168,13 @@ function AppointmentCard({
         updateAppointmentEndTimeEndTime: moment(new Date()).format(),
       },
     });
-    while(mutationLoading && !mutationData){
+    while(mutationLoading){
 
     }
     if (mutationError) {
       setFailed(true);
       console.log(mutationError.graphQLErrors)
-    } else if(!mutationData){
-      setPrice(mutationData.Price)
+    } else {
       setAlert(true);
       refresh();
     }
