@@ -268,13 +268,13 @@ function EducationForm({
                 <input
                   type="file"
                   accept="image/*"
-                  id="contained-button-i-file"
+                  id="contained-button-omg-file"
                   onChange={(e: any) => {
                     uploadFile(e);
                   }}
                   hidden
                 />
-                <label htmlFor="contained-button-i-file">
+                <label htmlFor="contained-button-omg-file">
                   <Button
                     component="span"
                     style={{

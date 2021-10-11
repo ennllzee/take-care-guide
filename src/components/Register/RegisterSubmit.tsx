@@ -334,6 +334,8 @@ function RegisterSubmit({
             </Grid>
           </Grid>
         </div>
+        {user.LangSkill?.length !== 0 && user.LangSkill !== undefined && (
+          <>
         <Divider variant="middle" />
         <div className={classes.margin}>
           <Grid item xs={12}>
@@ -343,7 +345,7 @@ function RegisterSubmit({
             </Typography>
           </Grid>
         </div>
-        {user.LangSkill?.length !== 0 && user.LangSkill !== undefined && (
+        
           <div className={classes.margin}>
             <Grid container spacing={1} justify="center" alignItems="center">
               {user?.LangSkill.map((m) => {
@@ -374,6 +376,7 @@ function RegisterSubmit({
               })}
             </Grid>
           </div>
+          </>
         )}
         <Divider variant="middle" />
         <div className={classes.margin}>

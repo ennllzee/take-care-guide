@@ -175,7 +175,7 @@ function ContactForm({ user, setUser, setStep }: ContactFormProps) {
                       }
                       setSame((s) => !s);
                     }}
-                    color="primary"
+                    style={{color: "#508F7F"}}
                   />
                 }
                 label="same as the address"
