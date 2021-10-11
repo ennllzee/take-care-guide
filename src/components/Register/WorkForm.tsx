@@ -171,7 +171,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                 <Grid item xs={5} md={4} lg={4}>
                   <FormControlLabel
                     value={false}
-                    control={<Radio />}
+                    control={<Radio style={{color: "black"}}/>}
                     label={
                       <>
                         <Typography variant="body2">ไม่มี</Typography>
@@ -182,7 +182,7 @@ function WorkForm({ user, setUser, setStep }: WorkFormProps) {
                 <Grid item xs={5} md={4} lg={4}>
                   <FormControlLabel
                     value={true}
-                    control={<Radio />}
+                    control={<Radio style={{color: "black"}}/>}
                     label={
                       <>
                         <Typography variant="body2">มี</Typography>

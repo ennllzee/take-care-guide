@@ -271,7 +271,7 @@ function RegisterPage() {
                   user={user}
                   setStep={setStep}
                   setSubmit={setSubmit}
-                  displayImg={displayCerImg}
+                  displayImg={displayImg}
                 />
               )}
             </Grid>
