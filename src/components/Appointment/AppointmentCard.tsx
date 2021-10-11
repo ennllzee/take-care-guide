@@ -154,13 +154,7 @@ function AppointmentCard({
   const [endAppointment, { data: mutationData, loading: mutationLoading, error: mutationError }] =
     useMutation(UPDATE_APPOINTMENT_ENDTIME, {
       onCompleted: (data) => {
-        while (mutationLoading) {}
-        if (mutationError) {
-          console.log(mutationError.graphQLErrors);
-          setFailed(true);
-        } else {
-          setPrice(data.Price);
-        }
+        console.log(data)
       },
     });
 
@@ -176,7 +170,7 @@ function AppointmentCard({
     while(mutationLoading){
 
     }
-
+    console.log(mutationData)
     if (mutationError) {
       setFailed(true);
       console.log(mutationError.graphQLErrors)

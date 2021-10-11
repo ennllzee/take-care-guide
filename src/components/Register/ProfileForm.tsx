@@ -195,13 +195,13 @@ function ProfileForm({
                 <input
                   type="file"
                   accept="image/*"
-                  id="contained-button-file"
+                  id="contained-button-0-file"
                   onChange={(e: any) => {
                     uploadImage(e);
                   }}
                   hidden
                 />
-                <label htmlFor="contained-button-file">
+                <label htmlFor="contained-button-0-file">
                   <Button
                     component="span"
                     style={{
