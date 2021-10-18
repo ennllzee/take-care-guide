@@ -5,6 +5,7 @@ import { Badge, Grid, IconButton, Typography } from "@material-ui/core";
 import {
   // Business,
   Event,
+  Help,
   // Help,
   History,
   Person,
@@ -190,6 +191,17 @@ function BottomBar({ page }: BottomBarProps) {
                 <History />
                 {page === "History" && (
                   <Typography style={{ fontSize: 8 }}>history</Typography>
+                )}
+              </Typography>
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => history.push(`/customer&service&=${accessToken}`)}
+            >
+              <Typography>
+                <Help />
+                {page === "Customer Service" && (
+                  <Typography style={{ fontSize: 8 }}>help</Typography>
                 )}
               </Typography>
             </IconButton>

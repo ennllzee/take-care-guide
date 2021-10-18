@@ -344,6 +344,7 @@ function ProfilePage() {
   const [failed, setFailed] = useState<boolean>(false);
 
   const editProfile = async () => {
+    setConfirmEdit(false);
     if (
       firstName !== "" &&
       lastName !== "" &&
@@ -443,7 +444,6 @@ function ProfilePage() {
     } else {
       setAlertData(true);
     }
-    setConfirmEdit(false);
   };
 
   const addLang = () => {

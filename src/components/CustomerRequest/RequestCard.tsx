@@ -109,6 +109,7 @@ function RequestCard({
   const [failed, setFailed] = useState<boolean>(false);
 
   const deny = async () => {
+    setDenySubmit(false);
     await sendResponse({
       variables: {
         updateGuideScheduleResponseAppointmentResponse: false,
@@ -121,13 +122,13 @@ function RequestCard({
       console.log(mutationError.graphQLErrors);
       setFailed(true);
     } else {
-      setDenySubmit(false);
       setDenyAlert(true);
       refresh();
     }
   };
 
   const accept = async () => {
+    setAcceptSubmit(false);
     await sendResponse({
       variables: {
         updateGuideScheduleResponseAppointmentResponse: true,
@@ -140,7 +141,6 @@ function RequestCard({
       console.log(mutationError.graphQLErrors);
       setFailed(true);
     } else {
-      setAcceptSubmit(false);
       setAcceptAlert(true);
       refresh();
     }

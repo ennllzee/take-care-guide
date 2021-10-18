@@ -15,6 +15,7 @@ import { history } from "../../helper/history";
 import { useGoogleLogout } from "react-google-login";
 import { ExitToApp } from "@material-ui/icons";
 import { useState } from "react";
+import Submit from "../Submit/Submit";
 
 interface ProfileCardProps {
   name: string;
@@ -50,14 +51,16 @@ const useStyles = makeStyles((theme: Theme) =>
 function ProfileCard({ name, gmail, img }: ProfileCardProps) {
   const classes = useStyles();
   const [load, setLoad] = useState<boolean>(false);
-
   const logout = async () => {
+    setConfirm(false)
     setLoad(true);
     await localStorage.clear();
     setLoad(false);
     history.push("/");
   };
 
+  const [confirm, setConfirm] = useState<boolean>(false);
+  
   const { signOut } = useGoogleLogout({
     clientId:
       "907374215732-jc7l3sk84f05vlsf9e23ceo674ek0sbe.apps.googleusercontent.com",
@@ -69,6 +72,15 @@ function ProfileCard({ name, gmail, img }: ProfileCardProps) {
       <Backdrop open={load}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Submit
+        submit={confirm}
+        title="ลงชื่อออก"
+        text="ต้องการลงชื่อออกระบบใช่หรือไม่"
+        denyText="ยกเลิก"
+        submitText="ยืนยัน"
+        denyAction={() => setConfirm(false)}
+        submitAction={signOut}
+      />
       <CardMedia className={classes.cover} image={img} title={name} />
       <div className={classes.details}>
         <CardContent className={classes.content}>

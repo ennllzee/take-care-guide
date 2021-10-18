@@ -152,6 +152,7 @@ function RegisterPage() {
 
   //NEEDED BACKEND
   const onSubmit = async () => {
+    setSubmit(false)
     await createGuide({
       variables: {
         createdGuideInput: {

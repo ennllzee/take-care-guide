@@ -162,6 +162,7 @@ function AppointmentCard({
   const [failed, setFailed] = useState<boolean>(false);
 
   const accept = async () => {
+    setEnd(false);
     await endAppointment({
       variables: {
         updateAppointmentEndTimeId: appointment._id,
@@ -178,7 +179,6 @@ function AppointmentCard({
       setAlert(true);
       refresh();
     }
-    setEnd(false);
   };
 
   return (

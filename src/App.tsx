@@ -50,7 +50,7 @@ function App() {
         <main>
           <Switch>
             <Route exact path="/" component={LoginPage} />
-            <Route path="/register" component={RegisterPage} />
+            <Route exact path="/register" component={RegisterPage} />
             <Route path="/" component={Home} />
           </Switch>
         </main>

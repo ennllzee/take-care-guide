@@ -71,9 +71,10 @@ function AddRecord({
   const [failed, setFailed] = useState<boolean>(false);
 
   const submit = async () => {
+    setConfirm(false)
     if (title !== undefined) {
       let newRecord: Record = {
-        At: time.toISOString(),
+        At: moment(time).format(),
         Title: title,
         Description: des,
       };
@@ -164,7 +165,7 @@ function AddRecord({
         <DialogActions>
           <Button onClick={() => setAdd(false)}>ยกเลิก</Button>
           <Button
-            onClick={submit}
+            onClick={() => setConfirm(true)}
             style={{
               backgroundColor: "#508F7F",
               color: "white",
@@ -181,7 +182,7 @@ function AddRecord({
         denyText="ยกเลิก"
         submitText="ยืนยัน"
         denyAction={() => setConfirm(false)}
-        submitAction={addRecord}
+        submitAction={submit}
       />
       <Alert
         closeAlert={() => setAlertData(false)}

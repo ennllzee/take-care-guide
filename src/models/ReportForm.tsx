@@ -1,9 +1,7 @@
-import Customer from "./Customer";
-
 interface ReportForm {
     Title : string
     Description : string
-    Reporter : Customer 
+    ByGuide : string | null
 }
 
 export default ReportForm
