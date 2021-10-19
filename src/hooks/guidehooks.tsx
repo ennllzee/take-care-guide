@@ -480,15 +480,20 @@ const useGuideApi = () => {
   `;
 
   const CREATE_REPORT = gql`
-    mutation CREATE_REPORT($createReportInput: ReportInput!) {
-      createReport(input: $createReportInput) {
+    mutation CreateReportMutation($input: ReportInput!) {
+      createReport(input: $input) {
         _id
         Title
         Description
-        ByGuide {
-          _id
+        Reporter {
+          ... on Guide {
+            FirstName
+            LastName
+            Email
+            Gmail
+          }
         }
-        ResponseText
+        Role
         CreatedAt
         UpdatedAt
       }
