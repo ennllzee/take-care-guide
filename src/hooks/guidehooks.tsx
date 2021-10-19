@@ -493,7 +493,6 @@ const useGuideApi = () => {
             Gmail
           }
         }
-        Role
         CreatedAt
         UpdatedAt
       }
