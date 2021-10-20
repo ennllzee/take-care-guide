@@ -93,7 +93,7 @@ function ProfileCard({ name, gmail, img }: ProfileCardProps) {
           </Typography>
         </CardContent>
         <Grid container justify="flex-end" className={classes.logout}>
-          <Button onClick={signOut} style={{ padding: "3%" }}>
+          <Button onClick={() => setConfirm(true)} style={{ padding: "3%" }}>
             <Grid
               container
               direction="row"

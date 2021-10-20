@@ -478,7 +478,10 @@ function ProfilePage() {
           denyText="กลับ"
           submitText="ออก"
           denyAction={() => setClose(false)}
-          submitAction={() => setEdit(false)}
+          submitAction={() => {
+            setEdit(false)
+            setClose(false)
+          }}
         />
       <Backdrop
         open={
@@ -1609,7 +1612,7 @@ function ProfilePage() {
                       <Grid item>
                         {edit && (
                           <Button
-                            onClick={() => setClose(false)}
+                            onClick={() => setClose(true)}
                             type="button"
                             fullWidth={true}
                             style={{

@@ -150,11 +150,11 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
     scheduleForm.forEach(async (m) => {
       const exist = guideSchedule.find((s: any) => {
         return (
-          moment(s.ScheduleDate).startOf("day").format() ===
-          moment(m.ScheduleDate).startOf("day").format()
+          moment(s.ScheduleDate).format("DD MMMM yyyy") ===
+          moment(m.ScheduleDate).format("DD MMMM yyyy")
         );
       });
-
+      console.log(m.ScheduleDate)
       if (exist) {
         if (m.AvailableMorning && m.AvailableAfternoon) {
           if (
