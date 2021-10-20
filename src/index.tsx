@@ -19,6 +19,7 @@ import { createUploadLink } from 'apollo-upload-client';
 
 const link = createUploadLink({
   uri: "http://take-care-api.eastus.azurecontainer.io:4000/graphql",
+  // uri: "http://localhost:4000/graphql",
 })
 
 const client = new ApolloClient({

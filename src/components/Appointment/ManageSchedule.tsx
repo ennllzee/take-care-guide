@@ -147,7 +147,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
 
   const onSubmit = async () => {
     setSubmit(false);
-    scheduleForm.forEach(async (m, key) => {
+    scheduleForm.forEach(async (m) => {
       const exist = guideSchedule.find((s: any) => {
         return (
           moment(s.ScheduleDate).format("DD MMMM yyyy") ===
@@ -286,6 +286,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         ]);
       }
       setGuideSchedule(data.getAllGuidescheduleByGuide);
+      console.log(data.getAllGuidescheduleByGuide); 
       setScheduleForm([]);
       for (let i = 1; i < 15; i++) {
         let newSch: GuideScheduleForm = {
@@ -340,8 +341,8 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           submitText="ปิดตารางงาน"
           denyAction={() => setClose(false)}
           submitAction={() => {
-            setClose(false)
-            setOpen(false)
+            setClose(false);
+            setOpen(false);
           }}
         />
         <Backdrop open={mutationLoading || mutationUpdateLoading}>
