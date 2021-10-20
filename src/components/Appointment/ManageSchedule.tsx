@@ -85,7 +85,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
     UPDATE_GUIDESCHEDULE,
   } = useGuideApi();
 
-  const { loading, error, data } = useQuery(GET_ALL_GUIDESCHEDULE_BYGUIDE, {
+  const { loading, error, data, refetch } = useQuery(GET_ALL_GUIDESCHEDULE_BYGUIDE, {
     variables: { getAllGuidescheduleByGuideGuideId: id },
   });
 
@@ -176,6 +176,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             !exist.WorkOnAfternoonAppointment &&
             exist.AvailableAfternoon !== m.AvailableAfternoon
           ) {
+            console.log("Hello 1")  
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -185,6 +186,7 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             });
           }
           if (!m.AvailableMorning !== !exist.AvailableMorning) {
+            console.log("Hello 2") 
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -263,6 +265,8 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           });
         }
       }
+
+      refetch()
     });
 
     while (mutationUpdateLoading || mutationLoading) {}
