@@ -1,9 +1,10 @@
-import { Paper, Grid, TextField, Button, Typography } from "@material-ui/core";
-import { useState } from "react";
+import { Paper, Grid, TextField, Button, Typography, Backdrop, CircularProgress } from "@material-ui/core";
+import { useEffect, useState } from "react";
 import ReportForm from "../../models/ReportForm";
 import Alert from "../Alert/Alert";
 import { useMutation } from "@apollo/client";
 import useGuideApi from "../../hooks/guidehooks";
+import Submit from "../Submit/Submit";
 
 interface ReportCardProps {
   setAlert: any;
@@ -16,14 +17,16 @@ function ReportCard({ setAlert, setOpen }: ReportCardProps) {
   const id = localStorage.getItem("_id");
   const [dataAlert, setDataAlert] = useState<boolean>(false);
   const [failed, setFailed] = useState<boolean>(false);
+  const [confirm, setConfirm] = useState<boolean>(false);
 
   const { CREATE_REPORT } = useGuideApi();
-  const [sendReport] = useMutation(CREATE_REPORT, {
+  const [sendReport, { loading: mutationLoading }] = useMutation(CREATE_REPORT, {
     onCompleted: (data) => {
       console.log(data);
       setAlert(true); //if success
       setTitle(""); //if success
       setDetail(""); //if success
+      setOpen(false)
     },
     onError: (data) => {
       console.log(data);
@@ -31,7 +34,13 @@ function ReportCard({ setAlert, setOpen }: ReportCardProps) {
     },
   });
 
+  useEffect(() => {
+    setTitle(""); 
+    setDetail(""); 
+  }, [setOpen])
+
   const submit = () => {
+    setConfirm(false)
     if (title !== "" && detail !== "") {
       let newReport: ReportForm = {
         Title: title,
@@ -57,9 +66,18 @@ function ReportCard({ setAlert, setOpen }: ReportCardProps) {
         alignItems="center"
         style={{ padding: "3%" }}
       >
-        {/* <Backdrop open={mutationLoading}>
+        <Submit
+          submit={confirm}
+          title="ข้อมูลส่วนตัว"
+          text="ยืนยันข้อการรายงานปัญหาหรือไม่"
+          denyText="ยกเลิก"
+          submitText="ยืนยัน"
+          denyAction={() => setConfirm(false)}
+          submitAction={submit}
+        />
+        <Backdrop open={mutationLoading}>
           <CircularProgress color="inherit" />
-        </Backdrop> */}
+        </Backdrop>
         <Alert
           closeAlert={() => setFailed(false)}
           alert={failed}
@@ -116,7 +134,7 @@ function ReportCard({ setAlert, setOpen }: ReportCardProps) {
             </Grid>
             <Grid item>
               <Button
-                onClick={submit}
+                onClick={() => setConfirm(true)}
                 type="button"
                 // fullWidth={true}
                 style={{

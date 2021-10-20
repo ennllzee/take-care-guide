@@ -8,6 +8,8 @@ import {
   List,
   ListItem,
   Collapse,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import { DeleteForever, Help } from "@material-ui/icons";
 import { useEffect, useState } from "react";
@@ -69,7 +71,7 @@ function CustomerServicePage() {
   });
 
   const { DELETE_GUIDE } = useGuideApi();
-  const [DeleteAccount] = useMutation(DELETE_GUIDE, {
+  const [DeleteAccount, { loading: mutationLoading }] = useMutation(DELETE_GUIDE, {
     onCompleted: (data) => {
       console.log(data);
       setDeleteAlert(true); // for success case
@@ -121,7 +123,7 @@ function CustomerServicePage() {
           closeAlert={() => setAlert(false)}
           alert={alert}
           title="สำเร็จ"
-          text="ปัญหาสำเร็จ ผู้ดูแลระบบจะทำการติดต่อไปยังอีเมล์"
+          text="รายงานปัญหาสำเร็จ ผู้ดูแลระบบจะทำการติดต่อไปยังอีเมล์"
           buttonText="ปิด"
         />
         <Submit
@@ -133,9 +135,9 @@ function CustomerServicePage() {
           denyAction={() => setDeleteConfirm(false)}
           submitAction={deleteAccount}
         />
-        {/* <Backdrop open={mutationLoading}>
+        <Backdrop open={mutationLoading}>
           <CircularProgress color="inherit" />
-        </Backdrop> */}
+        </Backdrop>
         <Grid item className={classes.main}>
           <List component="nav" aria-label="mailbox folders">
             <Divider />
