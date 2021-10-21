@@ -31,8 +31,8 @@ function RecordRow({ key, record }: RecordRowProps) {
   return (
     <StyledTableRow key={key}>
       <StyledTableCell align="center">{moment(record?.At).format('HH.mm น.')}</StyledTableCell>
-      <StyledTableCell align="center">{record?.Title}</StyledTableCell>
-      <StyledTableCell align="center">{record?.Description}</StyledTableCell>
+      <StyledTableCell align="left">{record?.Title}</StyledTableCell>
+      <StyledTableCell align="left">{record?.Description}</StyledTableCell>
     </StyledTableRow>
   );
 }
