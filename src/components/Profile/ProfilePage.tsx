@@ -103,7 +103,7 @@ function ProfilePage() {
     UPLOAD_FACEWITHIDCARD,
   } = useGuideApi();
 
-  const { loading, error, data } = useQuery(GET_SINGLE_GUIDE, {
+  const { loading, error, data, refetch } = useQuery(GET_SINGLE_GUIDE, {
     variables: { getGuideId: id },
   });
 
@@ -357,32 +357,6 @@ function ProfilePage() {
       idCard !== "" &&
       acadamy !== ""
     ) {
-      //waiting update profile
-      if (avatar !== undefined) {
-        await uploadProfileImg({
-          variables: {
-            guideId: id,
-            file: avatar,
-          },
-        });
-      }
-      if (idCardPic !== undefined) {
-        await uploadProfileFacewuthId({
-          variables: {
-            uploadFaceWithIdcardGuideGuideId: id,
-            uploadFaceWithIdcardGuideFile: idCardPic,
-          },
-        });
-      }
-      if (education !== undefined) {
-        await uploadProfileCer({
-          variables: {
-            uploadCertificateGuideGuideId: id,
-            uploadCertificateGuideFile: education,
-          },
-        });
-      }
-
       await updateProfile({
         variables: {
           id: id,
@@ -410,6 +384,33 @@ function ProfilePage() {
           },
         ],
       });
+
+      if (avatar !== undefined) {
+        await uploadProfileImg({
+          variables: {
+            guideId: id,
+            file: avatar,
+          },
+        });
+      }
+      if (idCardPic !== undefined) {
+        await uploadProfileFacewuthId({
+          variables: {
+            uploadFaceWithIdcardGuideGuideId: id,
+            uploadFaceWithIdcardGuideFile: idCardPic,
+          },
+        });
+      }
+      if (education !== undefined) {
+        await uploadProfileCer({
+          variables: {
+            guideId: id,
+            file: education,
+          },
+        });
+      }
+
+      refetch();
 
       while (
         mutationCerLoading ||
@@ -466,23 +467,23 @@ function ProfilePage() {
     setLangSkill(langSkill?.filter((l) => l !== m));
   };
 
-  const [close,setClose] = useState<boolean>(false)
+  const [close, setClose] = useState<boolean>(false);
 
   return (
     <Grid>
       <TopBar page="ข้อมูลส่วนตัว" />
       <Submit
-          submit={close}
-          title="ข้อมูลส่วนตัว"
-          text="ต้องการปิดตารางงานใช่หรือไม่? ข้อมูลที่ทำการแก้ไขจะไม่ถูกบันทึก กรุณาทำการบันทึกก่อนออกจากโหมดแก้ไข"
-          denyText="กลับ"
-          submitText="ออก"
-          denyAction={() => setClose(false)}
-          submitAction={() => {
-            setEdit(false)
-            setClose(false)
-          }}
-        />
+        submit={close}
+        title="ข้อมูลส่วนตัว"
+        text="ต้องการปิดตารางงานใช่หรือไม่? ข้อมูลที่ทำการแก้ไขจะไม่ถูกบันทึก กรุณาทำการบันทึกก่อนออกจากโหมดแก้ไข"
+        denyText="กลับ"
+        submitText="ออก"
+        denyAction={() => setClose(false)}
+        submitAction={() => {
+          setEdit(false);
+          setClose(false);
+        }}
+      />
       <Backdrop
         open={
           mutationCerLoading ||
@@ -1191,9 +1192,7 @@ function ProfilePage() {
                               <Grid item xs={5} md={4} lg={4}>
                                 <FormControlLabel
                                   value={false}
-                                  control={
-                                    <Radio style={{ color: "black" }} />
-                                  }
+                                  control={<Radio style={{ color: "black" }} />}
                                   label={
                                     <>
                                       <Typography variant="body2">
@@ -1206,9 +1205,7 @@ function ProfilePage() {
                               <Grid item xs={5} md={4} lg={4}>
                                 <FormControlLabel
                                   value={true}
-                                  control={
-                                    <Radio style={{ color: "black" }} />
-                                  }
+                                  control={<Radio style={{ color: "black" }} />}
                                   label={
                                     <>
                                       <Typography variant="body2">

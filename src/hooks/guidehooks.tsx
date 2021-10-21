@@ -506,14 +506,8 @@ const useGuideApi = () => {
   `;
 
   const UPLOAD_CERTIFICATE = gql`
-    mutation UploadCertificateGuideMutation(
-      $uploadCertificateGuideGuideId: ID!
-      $uploadCertificateGuideFile: Upload
-    ) {
-      uploadCertificateGuide(
-        guideId: $uploadCertificateGuideGuideId
-        file: $uploadCertificateGuideFile
-      )
+    mutation UploadCertificateGuideMutation($guideId: ID!, $file: Upload) {
+      uploadCertificateGuide(guideId: $guideId, file: $file)
     }
   `;
 
