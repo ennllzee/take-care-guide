@@ -161,7 +161,7 @@ function CustomerServicePage() {
               </List>
             </Collapse>
             <Divider />
-            <ListItem button onClick={() => setDeleteConfirm(true)}>
+            {/* <ListItem button onClick={() => setDeleteConfirm(true)}>
               <Grid container direction="row" alignItems="center">
                 <Grid item xs={2} md={2} lg={1}>
                   <DeleteForever />
@@ -171,7 +171,7 @@ function CustomerServicePage() {
                 </Grid>
               </Grid>
             </ListItem>
-            <Divider />
+            <Divider /> */}
           </List>
         </Grid>
       </Grid>
