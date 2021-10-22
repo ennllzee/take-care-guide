@@ -8,20 +8,23 @@ import {
   List,
   ListItem,
   Collapse,
-  Backdrop,
-  CircularProgress,
+  // Backdrop,
+  // CircularProgress,
 } from "@material-ui/core";
-import { DeleteForever, Help } from "@material-ui/icons";
+import { 
+  // DeleteForever, 
+  Help 
+} from "@material-ui/icons";
 import { useEffect, useState } from "react";
-import { useGoogleLogout } from "react-google-login";
+// import { useGoogleLogout } from "react-google-login";
 import { history } from "../../helper/history";
 import Alert from "../Alert/Alert";
 import BottomBar from "../BottomBar/BottomBar";
-import Submit from "../Submit/Submit";
+// import Submit from "../Submit/Submit";
 import TopBar from "../TopBar/TopBar";
 import ReportCard from "./ReportCard";
-import { useMutation } from "@apollo/client";
-import useGuideApi from "../../hooks/guidehooks";
+// import { useMutation } from "@apollo/client";
+// import useGuideApi from "../../hooks/guidehooks";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,46 +56,44 @@ function CustomerServicePage() {
     }
   }, [accessToken, id]);
 
-  const [failed, setFailed] = useState<boolean>(false);
-  const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
-  const [deleteAlert, setDeleteAlert] = useState<boolean>(false);
+  // const [failed, setFailed] = useState<boolean>(false);
+  // const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
+  // const [deleteAlert, setDeleteAlert] = useState<boolean>(false);
   const [alert, setAlert] = useState<boolean>(false);
 
-  const logout = async () => {
-    setDeleteAlert(false);
-    await localStorage.clear();
-    history.push("/");
-  };
+  // const logout = async () => {
+  //   setDeleteAlert(false);
+  //   await localStorage.clear();
+  //   history.push("/");
+  // };
 
-  const { signOut } = useGoogleLogout({
-    clientId:
-      "907374215732-b5mgla300uqrmlvkq4gstaq0de9osef7.apps.googleusercontent.com",
-    onLogoutSuccess: logout,
-  });
+  // const { signOut } = useGoogleLogout({
+  //   clientId:
+  //     "907374215732-b5mgla300uqrmlvkq4gstaq0de9osef7.apps.googleusercontent.com",
+  //   onLogoutSuccess: logout,
+  // });
 
-  const { DELETE_GUIDE } = useGuideApi();
-  const [DeleteAccount, { loading: mutationLoading }] = useMutation(DELETE_GUIDE, {
-    onCompleted: (data) => {
-      console.log(data);
-      setDeleteAlert(true); // for success case
-    },
-    onError: (data) => {
-      console.log(data);
-      setFailed(true); // for error
-    },
-  });
+  // const { DELETE_GUIDE } = useGuideApi();
+  // const [DeleteAccount, { loading: mutationLoading }] = useMutation(DELETE_GUIDE, {
+  //   onCompleted: (data) => {
+  //     console.log(data);
+  //     setDeleteAlert(true); // for success case
+  //   },
+  //   onError: (data) => {
+  //     console.log(data);
+  //     setFailed(true); // for error
+  //   },
+  // });
 
-  const deleteAccount = () => {
-    //wait for delete
-    setDeleteConfirm(false);
-    DeleteAccount({
-      variables: {
-        deleteGuideId: id
-      }
-    })
-    
-    
-  };
+  // const deleteAccount = () => {
+  //   //wait for delete
+  //   setDeleteConfirm(false);
+  //   DeleteAccount({
+  //     variables: {
+  //       deleteGuideId: id
+  //     }
+  //   })
+  // };
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -105,7 +106,7 @@ function CustomerServicePage() {
         alignItems="center"
         justify="space-between"
       >
-        <Alert
+        {/* <Alert
           closeAlert={() => setFailed(false)}
           alert={failed}
           title="ผิดพลาด"
@@ -118,7 +119,7 @@ function CustomerServicePage() {
           title="สำเร็จ"
           text="ลบบัญชีผู้ใช้สำเร็จ"
           buttonText="ปิด"
-        />
+        /> */}
         <Alert
           closeAlert={() => setAlert(false)}
           alert={alert}
@@ -126,7 +127,7 @@ function CustomerServicePage() {
           text="รายงานปัญหาสำเร็จ ผู้ดูแลระบบจะทำการติดต่อไปยังอีเมล์"
           buttonText="ปิด"
         />
-        <Submit
+        {/* <Submit
           submit={deleteConfirm}
           title="ลบบัญชีผู้ใช้"
           text="ยืนยันการลบบัญชีผู้ใช้?"
@@ -137,7 +138,7 @@ function CustomerServicePage() {
         />
         <Backdrop open={mutationLoading}>
           <CircularProgress color="inherit" />
-        </Backdrop>
+        </Backdrop> */}
         <Grid item className={classes.main}>
           <List component="nav" aria-label="mailbox folders">
             <Divider />
