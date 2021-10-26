@@ -5,6 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Router } from "react-router-dom";
 import { history } from "./helper/history";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+
 
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 // import { BatchHttpLink } from "@apollo/client/link/batch-http";
@@ -42,3 +44,9 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.register();

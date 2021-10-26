@@ -154,7 +154,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
           moment(m.ScheduleDate).format("DD MMMM yyyy")
         );
       });
-      console.log(m.ScheduleDate)
       if (exist) {
         if (m.AvailableMorning && m.AvailableAfternoon) {
           if (
@@ -176,7 +175,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             !exist.WorkOnAfternoonAppointment &&
             exist.AvailableAfternoon !== m.AvailableAfternoon
           ) {
-            console.log("Hello 1")  
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -186,7 +184,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
             });
           }
           if (!m.AvailableMorning !== !exist.AvailableMorning) {
-            console.log("Hello 2") 
             await updateGuideSchedule({
               variables: {
                 updateGuideScheduleId: exist._id,
@@ -290,7 +287,6 @@ function ManageSchedule({ open, setOpen }: ManageScheduleProps) {
         ]);
       }
       setGuideSchedule(data.getAllGuidescheduleByGuide);
-      console.log(data.getAllGuidescheduleByGuide); 
       setScheduleForm([]);
       for (let i = 1; i < 15; i++) {
         let newSch: GuideScheduleForm = {

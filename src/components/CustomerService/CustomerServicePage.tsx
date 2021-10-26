@@ -56,44 +56,7 @@ function CustomerServicePage() {
     }
   }, [accessToken, id]);
 
-  // const [failed, setFailed] = useState<boolean>(false);
-  // const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
-  // const [deleteAlert, setDeleteAlert] = useState<boolean>(false);
   const [alert, setAlert] = useState<boolean>(false);
-
-  // const logout = async () => {
-  //   setDeleteAlert(false);
-  //   await localStorage.clear();
-  //   history.push("/");
-  // };
-
-  // const { signOut } = useGoogleLogout({
-  //   clientId:
-  //     "907374215732-b5mgla300uqrmlvkq4gstaq0de9osef7.apps.googleusercontent.com",
-  //   onLogoutSuccess: logout,
-  // });
-
-  // const { DELETE_GUIDE } = useGuideApi();
-  // const [DeleteAccount, { loading: mutationLoading }] = useMutation(DELETE_GUIDE, {
-  //   onCompleted: (data) => {
-  //     console.log(data);
-  //     setDeleteAlert(true); // for success case
-  //   },
-  //   onError: (data) => {
-  //     console.log(data);
-  //     setFailed(true); // for error
-  //   },
-  // });
-
-  // const deleteAccount = () => {
-  //   //wait for delete
-  //   setDeleteConfirm(false);
-  //   DeleteAccount({
-  //     variables: {
-  //       deleteGuideId: id
-  //     }
-  //   })
-  // };
 
   const [open, setOpen] = useState<boolean>(false);
 

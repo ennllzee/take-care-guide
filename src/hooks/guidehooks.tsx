@@ -556,7 +556,7 @@ const useGuideApi = () => {
   `;
 
   const GET_ALL_RECORDTITLE = gql`
-    query Query {
+    query GET_ALL_RECORDTITLE {
       getAllRecordTitles {
         Title
       }

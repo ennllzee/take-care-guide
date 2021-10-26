@@ -37,9 +37,8 @@ function AddRecord({
   setAlert,
   refresh,
 }: AddRecordProps) {
-
   const { GET_ALL_RECORDTITLE } = useGuideApi();
-  const { loading, error, data } = useQuery(GET_ALL_RECORDTITLE, {});
+  const { loading, error, data } = useQuery(GET_ALL_RECORDTITLE);
 
   const [title, setTitle] = useState<string | undefined>();
   const [des, setDes] = useState<string | undefined>();
@@ -60,7 +59,7 @@ function AddRecord({
     }
   }, [loading, data, error]);
 
-  const { UPDATE_APPOINTMENT_RECORD } = useGuideApi();
+  const { UPDATE_APPOINTMENT_RECORD, UPDATE_RECORDTITLE } = useGuideApi();
   const [addRecord, { loading: mutationLoading, error: mutationError }] =
     useMutation(UPDATE_APPOINTMENT_RECORD, {
       onCompleted: (data) => {
@@ -68,16 +67,29 @@ function AddRecord({
       },
     });
 
+  const [addRecordTitle] = useMutation(UPDATE_RECORDTITLE);
+
   const [failed, setFailed] = useState<boolean>(false);
 
   const submit = async () => {
-    setConfirm(false)
+    setConfirm(false);
     if (title !== undefined) {
       let newRecord: Record = {
         At: moment(time).format(),
         Title: title,
         Description: des,
       };
+
+      const existTitle = data.getAllRecordTitles.find(
+        (data: any) => data.title === newRecord.Title
+      );
+      if (!existTitle) {
+        await addRecordTitle({
+          variables: {
+            postnewRecordTitlesNewTitle: newRecord.Title,
+          },
+        });
+      }
 
       await addRecord({
         variables: {
